@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     const data = await resend.emails.send({
       from: "Aleksandra Wejer <psycholog@aleksandrawejer.pl>",
-      to: "sz.wejer@wp.pl",
+      to: "alexandra.paszylk@wp.pl",
       subject: "🌿 Nowe zgłoszenie ze strony",
       html: `
         <h2>Nowe zgłoszenie ze strony</h2>
