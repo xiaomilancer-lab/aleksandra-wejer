@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aleksandra Wejer | Psycholog",
+  title: "Aleksandra Wejer | Psycholog | Starogard Gdański",
   description:
     "Wsparcie psychologiczne dla dzieci, młodzieży, dorosłych, par i rodzin.",
 };
