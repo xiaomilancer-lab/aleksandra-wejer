@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Aleksandra Wejer | Psycholog | Starogard Gdański",
   description:
-    "Wsparcie psychologiczne dla dzieci, młodzieży, dorosłych, par i rodzin.",
+  "Aleksandra Wejer – psycholog w Starogardzie Gdańskim. Pomoc psychologiczna dla dzieci, młodzieży, dorosłych, par i rodzin. Konsultacje stacjonarne oraz online.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="pl"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
