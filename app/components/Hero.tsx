@@ -28,8 +28,8 @@ export default function Hero() {
   </span>
 
   <span className="sm:hidden">
-    Nowa Wieś Rzeczna k. Starogardu
-  </span>
+  Nowa Wieś Rzeczna • Starogard Gdański
+</span>
 
 </div>
 
