@@ -3,7 +3,7 @@ export default function LocalBusinessSchema() {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "additionalType": "https://schema.org/MedicalBusiness",
-  "@id": "https://aleksandrawejer.pl/#psychologist",
+  "@id": "https://aleksandrawejer.pl/#professional-service",
 
     name: "Aleksandra Wejer – Psycholog",
 
