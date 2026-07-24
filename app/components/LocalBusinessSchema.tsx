@@ -1,8 +1,9 @@
 export default function LocalBusinessSchema() {
   const schema = {
-    "@context": "https://schema.org",
-    "@type": "Psychologist",
-    "@id": "https://aleksandrawejer.pl/#psychologist",
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "additionalType": "https://schema.org/MedicalBusiness",
+  "@id": "https://aleksandrawejer.pl/#psychologist",
 
     name: "Aleksandra Wejer – Psycholog",
 
