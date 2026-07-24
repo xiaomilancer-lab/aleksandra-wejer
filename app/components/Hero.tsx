@@ -1,26 +1,38 @@
 import Image from "next/image";
+import {
+  MapPin,
+  Phone,
+  MessageCircle,
+  Check,
+  ArrowRight,
+} from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="max-w-7xl mx-auto px-8 py-20">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8F5F0] via-white to-[#F8F5F0]">
 
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+  <div className="max-w-7xl mx-auto px-8 py-20">
+
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
 
         {/* LEWA STRONA */}
 
         <div>
 
-          <div className="inline-block px-4 py-2 rounded-full bg-[#EDE8DF] text-[#6D7A62] font-semibold mb-6">
-            🌿 Konsultacje od 3 sierpnia
-          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#D8D2C7] bg-white/80 backdrop-blur-sm px-5 py-2 text-sm font-medium text-[#6D7A62] shadow-sm mb-8">
+  <MapPin size={16} />
+  Gabinet psychologiczny • Nowa Wieś Rzeczna
+</div>
 
-          <h1 className="text-5xl lg:text-6xl font-bold text-[#4B4338] leading-tight">
-            Aleksandra Wejer
-          </h1>
+<h1 className="text-5xl lg:text-6xl font-bold tracking-tight text-[#4B4338] leading-tight">
+  Aleksandra Wejer
+</h1>
 
-          <h2 className="text-3xl text-[#6D7A62] mt-5 font-semibold">
-            Psycholog
-          </h2>
+<h2 className="mt-5 text-2xl lg:text-3xl font-medium leading-relaxed text-[#6D7A62]">
+  Psycholog dla dzieci, młodzieży,
+  <br />
+  dorosłych, par i rodzin.
+</h2>
 
           <p className="mt-8 text-xl leading-9 text-gray-600">
 
@@ -59,7 +71,7 @@ export default function Hero() {
     inline-block
     "
   >
-    🌿 Umów pierwszą konsultację
+     Umów pierwszą konsultację
   </a>
 
   <a
@@ -78,7 +90,7 @@ export default function Hero() {
     font-semibold
     "
   >
-    📞 510 777 469
+     510 777 469
   </a>
 
   <a
@@ -98,7 +110,7 @@ export default function Hero() {
     font-semibold
     "
   >
-    💬 WhatsApp
+     WhatsApp
   </a>
 
 </div>
@@ -124,21 +136,44 @@ export default function Hero() {
 
           <div className="relative overflow-hidden rounded-[40px] shadow-2xl">
 
-            <Image
-              src="/images/aleksandra.jpeg"
-              alt="Aleksandra Wejer"
-              width={700}
-              height={900}
-              className="w-full h-auto"
-              priority
-            />
+  <Image
+    src="/images/aleksandra.jpeg"
+    alt="Aleksandra Wejer"
+    width={700}
+    height={900}
+    className="w-full h-auto"
+    priority
+  />
 
-          </div>
+  <div className="absolute bottom-6 left-10 right-10 rounded-[28px] bg-white/75 backdrop-blur-md border border-white/60 p-7 shadow-lg">
+
+    <div className="flex items-center gap-2 text-[#4B4338] font-semibold">
+      <MapPin size={18} />
+      <span>Nowa Wieś Rzeczna</span>
+    </div>
+
+    <p className="mt-2 text-gray-600">
+      Wizyty po wcześniejszym umówieniu
+    </p>
+
+    <div className="my-4 h-px bg-gray-200"></div>
+
+    <p className="text-sm text-gray-600">
+      Dzieci • Młodzież • Dorośli
+      <br />
+      Pary • Rodziny
+    </p>
+
+  </div>
+
+</div>
 
         </div>
 
       </div>
 
-    </section>
+    </div>
+
+</section>
   );
 }
