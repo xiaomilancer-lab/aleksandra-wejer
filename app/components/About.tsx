@@ -81,11 +81,31 @@ wpływu na własne życie.
 
 
 
-    <div className="absolute bottom-8 right-6 w-72 rounded-2xl bg-white/80 backdrop-blur-md px-5 py-1.5 shadow-lg">
+    <div
+  className="
+    absolute
+    bottom-3
+    left-4
+    right-4
+    rounded-2xl
+    bg-white/80
+    backdrop-blur-md
+    px-4
+    py-3
+    shadow-lg
 
-  <div className="mt-6 flex justify-center items-center gap-1 text-[#4B4338] font-semibold">
+    md:bottom-8
+    md:left-auto
+    md:right-6
+    md:w-72
+    md:px-5
+    md:py-2
+  "
+>
 
-    <MapPin size={15} />
+  <div className="flex justify-center items-center gap-2 text-[#4B4338] font-semibold">
+
+    <MapPin size={14} />
 
     <span className="whitespace-nowrap">
       Gabinet psychologiczny
@@ -97,7 +117,7 @@ wpływu na własne życie.
     Nowa Wieś Rzeczna
   </p>
 
-    <div className="my-4 h-px bg-gray-200"></div>
+    <div className="hidden md:block my-4 h-px bg-gray-200"></div>
 
 
   </div>
