@@ -20,8 +20,17 @@ export default function Hero() {
         <div>
 
           <div className="inline-flex items-center gap-2 rounded-full border border-[#D8D2C7] bg-white/80 backdrop-blur-sm px-5 py-2 text-sm font-medium text-[#6D7A62] shadow-sm mb-8">
+
   <MapPin size={16} />
-  Gabinet psychologiczny • Nowa Wieś Rzeczna
+
+  <span className="hidden sm:inline">
+    Gabinet psychologiczny • Nowa Wieś Rzeczna k. Starogardu Gdańskiego
+  </span>
+
+  <span className="sm:hidden">
+    Nowa Wieś Rzeczna k. Starogardu
+  </span>
+
 </div>
 
 <h1 className="text-5xl lg:text-6xl font-bold tracking-tight text-[#4B4338] leading-tight">
