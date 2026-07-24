@@ -145,26 +145,43 @@ export default function Hero() {
     priority
   />
 
-  <div className="absolute bottom-6 left-10 right-10 rounded-[28px] bg-white/75 backdrop-blur-md border border-white/60 p-7 shadow-lg">
+  <div className="
+absolute
+bottom-4
+left-4
+right-4
+rounded-3xl
+bg-white/75
+backdrop-blur-md
+border
+border-white/60
+p-4
+shadow-lg
 
-    <div className="flex items-center gap-2 text-[#4B4338] font-semibold">
-      <MapPin size={18} />
-      <span>Nowa Wieś Rzeczna</span>
-    </div>
+md:bottom-6
+md:left-10
+md:right-10
+md:p-7
+">
 
-    <p className="mt-2 text-gray-600">
-      Wizyty po wcześniejszym umówieniu
-    </p>
-
-    <div className="my-4 h-px bg-gray-200"></div>
-
-    <p className="text-sm text-gray-600">
-      Dzieci • Młodzież • Dorośli
-      <br />
-      Pary • Rodziny
-    </p>
-
+  <div className="flex items-center gap-2 text-[#4B4338] font-semibold">
+    <MapPin size={16} className="md:w-[18px] md:h-[18px]" />
+    <span>Nowa Wieś Rzeczna</span>
   </div>
+
+  <p className="mt-1 text-sm text-gray-600 md:mt-2 md:text-base">
+    Wizyty po wcześniejszym umówieniu
+  </p>
+
+  <div className="hidden md:block my-4 h-px bg-gray-200"></div>
+
+  <p className="hidden md:block text-sm text-gray-600">
+    Dzieci • Młodzież • Dorośli
+    <br />
+    Pary • Rodziny
+  </p>
+
+</div>
 
 </div>
 
