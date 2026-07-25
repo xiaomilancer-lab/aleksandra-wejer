@@ -2,6 +2,7 @@ import Quote from "./components/Quote";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Services from "./components/Services";
+import FAQ from "./components/FAQ";
 import Contact from "./components/Contact";
 import LocalBusinessSchema from "./components/LocalBusinessSchema";
 
@@ -13,13 +14,15 @@ export default function Home() {
 
       <Quote />
 
-      <Hero />
+<Hero />
 
-      <About />
+<About />
 
-      <Services />
+<Services />
 
-      <Contact />
+<FAQ />
+
+<Contact />
 
     </main>
   );
