@@ -4,6 +4,7 @@ import About from "./components/About";
 import Services from "./components/Services";
 import FAQ from "./components/FAQ";
 import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 import LocalBusinessSchema from "./components/LocalBusinessSchema";
 
 export default function Home() {
@@ -12,17 +13,19 @@ export default function Home() {
 
       <LocalBusinessSchema />
 
-      <Quote />
+     <Quote />
 
-<Hero />
+      <Hero />
 
-<About />
+      <About />
 
-<Services />
+      <Services />
 
-<FAQ />
+      <FAQ />
 
-<Contact />
+      <Contact />
+
+      <Footer />
 
     </main>
   );
