@@ -58,10 +58,7 @@ export default function Contact() {
   }
 
   return (
-    <section
-      id="kontakt"
-      className="bg-[#F8F5F0] py-24"
-    >
+    <section id="kontakt" className="bg-[#F8F5F0] py-24">
       <div className="max-w-4xl mx-auto bg-white rounded-[40px] shadow-2xl p-12">
 
         <div className="text-center">

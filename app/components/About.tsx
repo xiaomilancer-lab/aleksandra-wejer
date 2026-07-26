@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 
 export default function About() {
   return (
-    <section className="bg-white py-28">
+    <section id="omnie" className="bg-white py-28">
       <div className="max-w-7xl mx-auto px-8">
 
         {/* Nagłówek */}

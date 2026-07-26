@@ -9,7 +9,9 @@ import {
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8F5F0] via-white to-[#F8F5F0]">
+    <section
+     id="start"
+    className="relative overflow-hidden bg-gradient-to-b from-[#F8F5F0] via-white to-[#F8F5F0]">
 
   <div className="max-w-7xl mx-auto px-8 py-20">
 
