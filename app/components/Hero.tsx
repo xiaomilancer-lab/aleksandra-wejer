@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import BookingChoice from "./BookingChoice";
 import {
@@ -65,24 +67,47 @@ export default function Hero() {
 
           </p>
 
-          <div className="flex flex-wrap gap-4 mt-10">
+          <div className="mt-10 flex flex-wrap items-end gap-4">
 
-  <BookingChoice />
+  <BookingChoice
+  onCalendarClick={() => {
+    setTimeout(() => {
+      document.getElementById("kalendarz")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+    }, 300);
+  }}
+  onContactClick={() => {
+    setTimeout(() => {
+      document
+        .getElementById("kontakt")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+    }, 300);
+  }}
+/>
 
   <a
     href="tel:510777469"
     className="
-    border-2
-    border-[#6D7A62]
-    text-[#6D7A62]
-    px-8
-    py-4
-    rounded-2xl
-    hover:bg-[#6D7A62]
-    hover:text-white
-    transition
-    text-lg
-    font-semibold
+flex
+items-center
+justify-center
+border-2
+border-[#6D7A62]
+text-[#6D7A62]
+h-14
+px-8
+rounded-2xl
+hover:bg-[#6D7A62]
+hover:text-white
+transition
+text-lg
+font-semibold
     "
   >
     📞 510 777 469
@@ -93,16 +118,19 @@ export default function Hero() {
     target="_blank"
     rel="noopener noreferrer"
     className="
-    bg-[#25D366]
-    hover:bg-[#1FAE57]
-    transition
-    text-white
-    px-8
-    py-4
-    rounded-2xl
-    shadow-xl
-    text-lg
-    font-semibold
+flex
+items-center
+justify-center
+bg-[#25D366]
+hover:bg-[#1FAE57]
+transition
+text-white
+h-14
+px-8
+rounded-2xl
+shadow-xl
+text-lg
+font-semibold
     "
   >
     WhatsApp

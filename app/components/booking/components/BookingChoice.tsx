@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-export default function BookingChoice() {
+interface BookingChoiceProps {
+  onCalendarClick: () => void;
+  onContactClick: () => void;
+}
+
+export default function BookingChoice({
+  onCalendarClick,
+  onContactClick,
+}: BookingChoiceProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,17 +35,29 @@ export default function BookingChoice() {
 
     <div className="mt-8 space-y-4">
 
-      <button className="w-full rounded-2xl bg-[#6D7A62] px-6 py-4 text-lg font-semibold text-white transition hover:bg-[#5d6954]">
-        📅 Samodzielnie wybiorę termin
-      </button>
+      <button
+  onClick={() => {
+    setIsOpen(false);
+    onCalendarClick();
+  }}
+  className="w-full rounded-2xl bg-[#6D7A62] px-6 py-4 text-lg font-semibold text-white transition hover:bg-[#5d6954]"
+>
+  📅 Samodzielnie wybiorę termin
+</button>
 
       <div className="text-center text-sm text-gray-400">
         lub
       </div>
 
-      <button className="w-full rounded-2xl border border-[#6D7A62] px-6 py-4 text-lg font-semibold text-[#6D7A62] transition hover:bg-[#F8F5F0]">
-        💬 Chcę napisać wiadomość
-      </button>
+      <button
+  onClick={() => {
+    setIsOpen(false);
+    onContactClick();
+  }}
+  className="w-full rounded-2xl border border-[#6D7A62] px-6 py-4 text-lg font-semibold text-[#6D7A62] transition hover:bg-[#F8F5F0]"
+>
+  💬 Chcę napisać wiadomość
+</button>
 
     </div>
   </div>
