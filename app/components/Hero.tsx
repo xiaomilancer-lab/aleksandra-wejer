@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BookingChoice from "./BookingChoice";
 import {
   MapPin,
   Phone,
@@ -66,24 +67,7 @@ export default function Hero() {
 
           <div className="flex flex-wrap gap-4 mt-10">
 
-  <a
-    href="#kontakt"
-    className="
-    bg-[#6D7A62]
-    hover:bg-[#56614C]
-    transition
-    text-white
-    px-8
-    py-4
-    rounded-2xl
-    shadow-xl
-    text-lg
-    font-semibold
-    inline-block
-    "
-  >
-     Umów pierwszą konsultację
-  </a>
+  <BookingChoice />
 
   <a
     href="tel:510777469"
@@ -101,7 +85,7 @@ export default function Hero() {
     font-semibold
     "
   >
-     510 777 469
+    📞 510 777 469
   </a>
 
   <a
@@ -121,7 +105,7 @@ export default function Hero() {
     font-semibold
     "
   >
-     WhatsApp
+    WhatsApp
   </a>
 
 </div>

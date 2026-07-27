@@ -14,7 +14,18 @@ export default function LocationCard({
 }: LocationCardProps) {
   return (
   <div
-    onClick={onSelect}
+    onClick={() => {
+  onSelect();
+
+  setTimeout(() => {
+    document
+      .getElementById("step-date")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  }, 350);
+}}
     className={`overflow-hidden rounded-3xl border bg-white shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl ${
       selected
         ? "border-green-600 ring-2 ring-green-200"
