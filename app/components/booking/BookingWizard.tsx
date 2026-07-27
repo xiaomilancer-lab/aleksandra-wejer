@@ -3,6 +3,7 @@
 import { useState } from "react";
 import StepLocation from "./StepLocation";
 import StepSummary from "./StepSummary";
+import StepDate from "./StepDate";
 
 export default function BookingWizard() {
 
@@ -16,13 +17,17 @@ export default function BookingWizard() {
   setSelectedLocation={setSelectedLocation}
 />
 {selectedLocation && (
-  <StepSummary
-    locationName={
-      selectedLocation === "zielinscy-premium"
-        ? "Centrum Medyczno-Estetyczne Zielińscy Premium"
-        : "Nowa lokalizacja"
-    }
-  />
+  <>
+    <StepSummary
+      locationName={
+        selectedLocation === "zielinscy-premium"
+          ? "Centrum Medyczno-Estetyczne Zielińscy Premium"
+          : "Nowa lokalizacja"
+      }
+    />
+
+    <StepDate />
+  </>
 )}
 
     </section>
