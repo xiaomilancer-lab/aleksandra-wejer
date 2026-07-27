@@ -67,7 +67,7 @@ export default function Hero() {
 
           </p>
 
-          <div className="mt-10 flex flex-wrap items-end gap-4">
+          <div className="flex flex-wrap gap-4 mt-10">
 
   <BookingChoice
   onCalendarClick={() => {
@@ -141,7 +141,7 @@ font-semibold
           <p className="mt-6 text-sm text-gray-500 leading-6">
 
             Pierwsza wiadomość nie zobowiązuje
-            do rozpoczęcia konsultacji.
+            do wizyty.
 
             <br />
 
