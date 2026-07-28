@@ -5,6 +5,7 @@ import StepLocation from "./StepLocation";
 import StepSummary from "./StepSummary";
 import StepDate from "./StepDate";
 import StepTime from "./StepTime";
+import { locations } from "./location";
 
 export default function BookingWizard() {
 
@@ -35,17 +36,16 @@ useEffect(() => {
 {selectedLocation && (
   <>
   <StepSummary
-    locationName={
-      selectedLocation === "zielinscy-premium"
-        ? "Centrum Medyczno-Estetyczne Zielińscy Premium"
-        : "Nowa lokalizacja"
-    }
-  />
+  locationName={
+    locations.find((l) => l.id === selectedLocation)?.name ?? ""
+  }
+/>
 
   <StepDate
-    selectedDay={selectedDay}
-    setSelectedDay={setSelectedDay}
-  />
+  selectedLocation={selectedLocation}
+  selectedDay={selectedDay}
+  setSelectedDay={setSelectedDay}
+/>
 
   {selectedDay && <StepTime />}
 </>

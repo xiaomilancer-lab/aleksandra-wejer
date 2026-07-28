@@ -4,8 +4,10 @@ import {
   generateMonthDays,
   getFirstDayOfMonth,
 } from "./monthHelpers";
+import { availableWeekDays } from "./constants/availableWeekDays";
 
 interface CalendarGridProps {
+  selectedLocation: string;
   selectedDay: number | null;
   setSelectedDay: React.Dispatch<
     React.SetStateAction<number | null>
@@ -13,11 +15,14 @@ interface CalendarGridProps {
 }
 
 export default function CalendarGrid({
+  selectedLocation,
   selectedDay,
   setSelectedDay,
 }: CalendarGridProps) {
   const days = generateMonthDays(2026, 6);
   const firstDay = getFirstDayOfMonth(2026, 6);
+  const allowedWeekDays =
+  availableWeekDays[selectedLocation] ?? [];
 
   return (
     <>
@@ -33,18 +38,30 @@ export default function CalendarGrid({
       </div>
 
       <div className="mt-3 grid grid-cols-7 gap-3">
-       {Array.from({ length: firstDay }).map((_, index) => (
-  <div key={`empty-${index}`} />
-))}
-        {days.map((day) => (
-          <CalendarDay
-  key={day}
-  day={day}
-  selected={selectedDay === day}
-  onClick={() => setSelectedDay(day)}
-/>
-        ))}
-      </div>
+  {Array.from({ length: firstDay }).map((_, index) => (
+    <div key={`empty-${index}`} />
+  ))}
+
+  {days.map((day) => {
+    const weekDay = new Date(2026, 6, day).getDay();
+
+    const available = allowedWeekDays.includes(weekDay);
+
+    return (
+      <CalendarDay
+        key={day}
+        day={day}
+        available={available}
+        selected={selectedDay === day}
+        onClick={() => {
+          if (available) {
+            setSelectedDay(day);
+          }
+        }}
+      />
+    );
+  })}
+</div>
     </>
   );
 }

@@ -5,11 +5,13 @@ import CalendarHeader from "./calendar/CalendarHeader";
 import CalendarGrid from "./calendar/CalendarGrid";
 
 interface StepDateProps {
+  selectedLocation: string;
   selectedDay: number | null;
   setSelectedDay: Dispatch<SetStateAction<number | null>>;
 }
 
 export default function StepDate({
+  selectedLocation,
   selectedDay,
   setSelectedDay,
 }: StepDateProps) {
@@ -33,9 +35,10 @@ export default function StepDate({
         />
 
         <CalendarGrid
-          selectedDay={selectedDay}
-          setSelectedDay={setSelectedDay}
-        />
+  selectedLocation={selectedLocation}
+  selectedDay={selectedDay}
+  setSelectedDay={setSelectedDay}
+/>
       </div>
     </div>
   );

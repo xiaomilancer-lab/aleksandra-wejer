@@ -29,11 +29,11 @@ export default function Hero() {
   <MapPin size={16} />
 
   <span className="hidden sm:inline">
-    Gabinet psychologiczny • Nowa Wieś Rzeczna k. Starogardu Gdańskiego
+    Gabinety psychologiczne • Starogard Gdański • Nowa Wieś Rzeczna
   </span>
 
   <span className="sm:hidden">
-  Nowa Wieś Rzeczna • Starogard Gdański
+  Starogard Gdański • Nowa Wieś Rzeczna
 </span>
 
 </div>
