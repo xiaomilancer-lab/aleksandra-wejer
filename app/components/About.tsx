@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { MapPin } from "lucide-react";
+import { Phone } from "lucide-react";
 
 export default function About() {
   return (
@@ -87,51 +87,91 @@ wpływu na własne życie.
 <div
   className="
     absolute
-    bottom-3
-    right-4
-    w-80
+    bottom-5 right-2 md:bottom-3 md:right-4
+    w-60 md:w-72
     rounded-3xl
-    bg-white/90
-    backdrop-blur-md
-    p-6
-    shadow-xl
+    bg-white/60
+    backdrop-blur-2xl
+    p-4 md:p-5
+    shadow-2xl
   "
 >
   <div className="flex items-center gap-3">
-    <MapPin className="text-[#6D7A62]" size={22} />
+    <Phone className="text-[#6D7A62]" size={20} />
 
     <div>
-      <h4 className="font-bold text-[#4B4338]">
-        Przyjmuję w dwóch lokalizacjach
+      <h4 className="text-base md:text-lg font-bold text-[#4B4338]">
+        Umów wizytę telefonicznie
       </h4>
     </div>
   </div>
 
-  <div className="my-5 h-px bg-gray-200" />
+  <div className="my-3 h-px bg-gray-200" />
 
   <div>
-    <p className="font-semibold text-[#4B4338]">
+    <p className="text-xs md:text-sm font-semibold text-[#4B4338]">
       ArthroCure Clinic
     </p>
 
     <p className="text-sm text-gray-600">
       Starogard Gdański
     </p>
+
+    <a
+      href="tel:+48508439666"
+      className="
+mt-1
+block
+text-base
+font-bold
+text-[#6D7A62]
+hover:text-[#4B4338]
+transition-colors"
+    >
+      ☎ +48 508 439 666
+    </a>
   </div>
 
   <div className="my-4 h-px bg-gray-200" />
 
   <div>
-    <p className="font-semibold text-[#4B4338]">
+    <p className="text-xs md:text-sm font-semibold text-[#4B4338]">
       Centrum Medyczno-Estetyczne
       <br />
       Zielińscy Premium
     </p>
 
-    <p className="text-sm text-gray-600">
+    <p className="text-xs md:text-sm text-gray-600">
       Nowa Wieś Rzeczna
     </p>
+
+    <a
+      href="tel:+48735110077"
+      className="
+mt-1
+block
+text-base
+font-bold
+text-[#6D7A62]
+hover:text-[#4B4338]
+transition-colors"
+    >
+      ☎ +48 735 110 077
+    </a>
   </div>
+
+  <div className="my-5 h-px bg-gray-200" />
+
+  <p className="
+hidden
+md:block
+
+text-xs
+leading-5
+text-gray-500
+">
+    Możesz również skorzystać z formularza rezerwacji dostępnego na tej stronie.
+  </p>
 </div>
 
           </div>
