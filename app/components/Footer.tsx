@@ -72,9 +72,7 @@ export default function Footer() {
                   </p>
 
                   <p className="mt-1 leading-7 text-gray-600">
-                    Nowa Wieś Rzeczna
-                    <br />
-                    okolice Starogardu Gdańskiego
+                    Starogard Gdański • Nowa Wieś Rzeczna
                   </p>
 
                 </div>

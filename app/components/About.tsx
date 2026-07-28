@@ -109,7 +109,7 @@ wpływu na własne życie.
 
                 <div>
                   <p className="text-xs md:text-sm font-semibold text-[#4B4338]">
-                    ArthroCure Clinic
+                    Arthro Cure Clinic
                   </p>
 
                   <p className="text-xs md:text-sm text-gray-600">
@@ -170,7 +170,7 @@ wpływu na własne życie.
 
                 <div>
                   <p className="font-semibold text-[#4B4338]">
-                    ArthroCure Clinic
+                    Arthro Cure Clinic
                   </p>
 
                   <p className="text-sm text-gray-600">
@@ -202,7 +202,7 @@ wpływu na własne życie.
                     href="tel:+48735110077"
                     className="mt-2 block text-lg font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
                   >
-                    ☎ +48 735 110 077
+                    ☎ +48 510 777 469
                   </a>
                 </div>
               </div>
