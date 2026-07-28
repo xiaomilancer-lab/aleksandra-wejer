@@ -187,10 +187,14 @@ md:right-10
 md:p-7
 ">
 
-  <div className="flex items-center gap-2 text-[#4B4338] font-semibold">
-    <MapPin size={16} className="md:w-[18px] md:h-[18px]" />
-    <span>Nowa Wieś Rzeczna</span>
-  </div>
+  <div className="flex items-center gap-2 font-semibold text-[#4B4338]">
+  <MapPin size={16} className="md:h-[18px] md:w-[18px]" />
+  <span>
+    Gabinety psychologiczne
+    <br />
+    Starogard Gdański • Nowa Wieś Rzeczna
+  </span>
+</div>
 
   <p className="mt-1 text-sm text-gray-600 md:mt-2 md:text-base">
     Wizyty po wcześniejszym umówieniu

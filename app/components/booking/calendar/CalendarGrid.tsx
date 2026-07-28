@@ -5,6 +5,7 @@ import {
   getFirstDayOfMonth,
 } from "./monthHelpers";
 import { availableWeekDays } from "./constants/availableWeekDays";
+import { locationStartDates } from "./constants/locationStartDates";
 
 interface CalendarGridProps {
   selectedLocation: string;
@@ -19,10 +20,15 @@ export default function CalendarGrid({
   selectedDay,
   setSelectedDay,
 }: CalendarGridProps) {
-  const days = generateMonthDays(2026, 6);
-  const firstDay = getFirstDayOfMonth(2026, 6);
+
+  const calendarYear = 2026;
+  const calendarMonth = 7; // sierpień
+
+  const days = generateMonthDays(calendarYear, calendarMonth);
+  const firstDay = getFirstDayOfMonth(calendarYear, calendarMonth);
+
   const allowedWeekDays =
-  availableWeekDays[selectedLocation] ?? [];
+    availableWeekDays[selectedLocation] ?? [];
 
   return (
     <>
@@ -43,9 +49,14 @@ export default function CalendarGrid({
   ))}
 
   {days.map((day) => {
-    const weekDay = new Date(2026, 6, day).getDay();
+ const currentDate = new Date(calendarYear, calendarMonth, day);
+const weekDay = currentDate.getDay();
 
-    const available = allowedWeekDays.includes(weekDay);
+const startDate = locationStartDates[selectedLocation];
+
+const available =
+  allowedWeekDays.includes(weekDay) &&
+  currentDate >= startDate;
 
     return (
       <CalendarDay

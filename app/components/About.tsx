@@ -45,7 +45,7 @@ export default function About() {
             <p className="mt-8 text-lg leading-8 text-gray-600">
               Jestem psychologiem, absolwentką pięcioletnich
               studiów magisterskich na Uniwersytecie Gdańskim
-              oraz mamą dwóch chłopców.
+              oraz mamą dwójki chłopców.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -69,59 +69,69 @@ wpływu na własne życie.
 
             <div className="absolute -inset-5 bg-[#F3EFE8] rounded-[40px] -rotate-2"></div>
 
-            <div className="relative overflow-hidden rounded-[40px] shadow-xl">
+            <div className="relative overflow-hidden rounded-[40px] shadow-2xl">
 
   <Image
-    src="/images/gabinet.jpg"
-    alt="Gabinet psychologiczny Aleksandry Wejer"
-    width={700}
-    height={500}
-    className="w-full h-auto"
-  />
+  src="/images/about-aleksandra-v2.png"
+  alt="Aleksandra Wejer podczas konsultacji"
+  width={800}
+  height={1000}
+  className="w-full h-auto"
+ />
 
 
 
-    <div
+
+</div>
+
+<div
   className="
     absolute
     bottom-3
-    left-4
     right-4
-    rounded-2xl
-    bg-white/80
+    w-80
+    rounded-3xl
+    bg-white/90
     backdrop-blur-md
-    px-4
-    py-3
-    shadow-lg
-
-    md:bottom-8
-    md:left-auto
-    md:right-6
-    md:w-72
-    md:px-5
-    md:py-2
+    p-6
+    shadow-xl
   "
 >
+  <div className="flex items-center gap-3">
+    <MapPin className="text-[#6D7A62]" size={22} />
 
-  <div className="flex justify-center items-center gap-2 text-[#4B4338] font-semibold">
-
-    <MapPin size={14} />
-
-    <span className="whitespace-nowrap">
-      Gabinet psychologiczny
-    </span>
-
+    <div>
+      <h4 className="font-bold text-[#4B4338]">
+        Przyjmuję w dwóch lokalizacjach
+      </h4>
+    </div>
   </div>
 
-  <p className="mt-0.5 text-center text-gray-600 text-sm">
-    Nowa Wieś Rzeczna
-  </p>
+  <div className="my-5 h-px bg-gray-200" />
 
-    <div className="hidden md:block my-4 h-px bg-gray-200"></div>
+  <div>
+    <p className="font-semibold text-[#4B4338]">
+      ArthroCure Clinic
+    </p>
 
-
+    <p className="text-sm text-gray-600">
+      Starogard Gdański
+    </p>
   </div>
 
+  <div className="my-4 h-px bg-gray-200" />
+
+  <div>
+    <p className="font-semibold text-[#4B4338]">
+      Centrum Medyczno-Estetyczne
+      <br />
+      Zielińscy Premium
+    </p>
+
+    <p className="text-sm text-gray-600">
+      Nowa Wieś Rzeczna
+    </p>
+  </div>
 </div>
 
           </div>
