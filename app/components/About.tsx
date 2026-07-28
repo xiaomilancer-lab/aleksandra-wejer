@@ -67,7 +67,7 @@ wpływu na własne życie.
 
           <div className="relative">
 
-            <div className="absolute -inset-5 bg-[#F3EFE8] rounded-[40px] -rotate-2"></div>
+            <div className="hidden md:block absolute -inset-5 bg-[#F3EFE8] rounded-[40px] -rotate-2"></div>
 
             <div className="relative overflow-hidden rounded-[40px] shadow-2xl">
 
