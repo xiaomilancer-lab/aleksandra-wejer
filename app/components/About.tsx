@@ -141,7 +141,7 @@ wpływu na własne życie.
                     href="tel:+48735110077"
                     className="mt-1 block text-base font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
                   >
-                    ☎ +48 735 110 077
+                    ☎ +48 510 777 469
                   </a>
                 </div>
 
