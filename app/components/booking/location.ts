@@ -3,10 +3,10 @@ import { Location } from "./types";
 export const locations: Location[] = [
   {
     id: "arthrocure",
-    name: "ArthroCure Clinic",
+    name: "Arthro Cure Clinic",
     city: "Starogard Gdański",
     street: "Al. Jana Pawła II 1/U9",
-    image: "/images/offices/arthro.jpg",
+    image: "/images/offices/arthro1.jpg",
     active: true,
     available: true,
   },
