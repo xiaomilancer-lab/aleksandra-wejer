@@ -15,17 +15,30 @@ interface CalendarGridProps {
   >;
 }
 
+interface CalendarGridProps {
+  selectedLocation: string;
+  selectedDay: number | null;
+  setSelectedDay: React.Dispatch<
+    React.SetStateAction<number | null>
+  >;
+
+  currentMonth: number;
+  currentYear: number;
+}
+
 export default function CalendarGrid({
   selectedLocation,
   selectedDay,
   setSelectedDay,
+  currentMonth,
+  currentYear,
 }: CalendarGridProps) {
 
-  const calendarYear = 2026;
-  const calendarMonth = 7; // sierpień
 
-  const days = generateMonthDays(calendarYear, calendarMonth);
-  const firstDay = getFirstDayOfMonth(calendarYear, calendarMonth);
+
+  const days = generateMonthDays(currentYear, currentMonth);
+  const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
+
 
   const allowedWeekDays =
     availableWeekDays[selectedLocation] ?? [];
@@ -49,7 +62,7 @@ export default function CalendarGrid({
   ))}
 
   {days.map((day) => {
- const currentDate = new Date(calendarYear, calendarMonth, day);
+ const currentDate = new Date(currentYear, currentMonth, day);
 const weekDay = currentDate.getDay();
 
 const startDate = locationStartDates[selectedLocation];
