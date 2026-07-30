@@ -6,13 +6,20 @@ import StepSummary from "./StepSummary";
 import StepDate from "./StepDate";
 import StepTime from "./StepTime";
 import { locations } from "./location";
+import StepForm from "./StepForm";
 
 export default function BookingWizard() {
 
-  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [selectedLocation, setSelectedLocation] =
+  useState<string | null>(null);
+
 const [selectedDay, setSelectedDay] =
   useState<number | null>(null);
-useEffect(() => {
+
+const [selectedTime, setSelectedTime] =
+  useState<string | null>(null);
+
+  useEffect(() => {
   if (!selectedDay) return;
 
   const timer = setTimeout(() => {
@@ -42,12 +49,27 @@ useEffect(() => {
 />
 
   <StepDate
-  selectedLocation={selectedLocation}
-  selectedDay={selectedDay}
-  setSelectedDay={setSelectedDay}
-/>
+    selectedLocation={selectedLocation}
+    selectedDay={selectedDay}
+    setSelectedDay={setSelectedDay}
+  />
 
-  {selectedDay && <StepTime />}
+  {selectedDay && (
+    <StepTime
+      selectedTime={selectedTime}
+      setSelectedTime={setSelectedTime}
+    />
+  )}
+
+  {selectedTime && (
+    <StepForm
+      selectedLocation={
+        locations.find((l) => l.id === selectedLocation)?.name ?? ""
+      }
+      selectedDay={selectedDay!}
+      selectedTime={selectedTime}
+    />
+  )}
 </>
 )}
 

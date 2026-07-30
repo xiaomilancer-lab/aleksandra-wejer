@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { availableTimes } from "./data/availableTimes";
 
-export default function StepTime() {
-  const [selectedTime, setSelectedTime] =
-    useState<string | null>(null);
+interface StepTimeProps {
+  selectedTime: string | null;
+  setSelectedTime: (time: string) => void;
+}
 
+export default function StepTime({
+  selectedTime,
+  setSelectedTime,
+}: StepTimeProps) {
   return (
     <div
-  id="step-time"
-  className="mt-8 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm"
->
-
+      id="step-time"
+      className="mt-8 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm"
+    >
       <h2 className="text-2xl font-bold text-[#2D4739]">
         🕒 Wybierz godzinę wizyty
       </h2>
@@ -22,9 +25,7 @@ export default function StepTime() {
       </p>
 
       <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-
         {availableTimes.map((time) => (
-
           <button
             key={time}
             onClick={() => setSelectedTime(time)}
@@ -36,11 +37,8 @@ export default function StepTime() {
           >
             {time}
           </button>
-
         ))}
-
       </div>
-
     </div>
   );
 }
