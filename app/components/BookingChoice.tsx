@@ -35,7 +35,7 @@ export default function BookingChoice({
           min-w-[320px]
         "
       >
-        <span>🌿 Umów wizytę</span>
+        <span>🌿 Kliknij by umówić wizytę</span>
 
         <span
           className={`transition-transform duration-300 ${
@@ -49,12 +49,11 @@ export default function BookingChoice({
       {isOpen && (
         <div className="mt-6 rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
           <h2 className="text-2xl font-bold text-[#4B4338]">
-            🌿 Jak chcesz umówić wizytę?
+            🌿 Kliknij poniżej, aby umówić się na wizytę
           </h2>
 
           <p className="mt-3 text-gray-600">
-            Możesz samodzielnie wybrać dogodny termin lub napisać wiadomość.
-            Wybierz opcję, która będzie dla Ciebie najwygodniejsza.
+            Wybierz sposób kontaktu. Możesz samodzielnie wybrać termin wizyty lub wysłać wiadomość do do mnie.
           </p>
 
           <div className="mt-8 space-y-4">
@@ -65,7 +64,7 @@ export default function BookingChoice({
               }}
               className="w-full rounded-2xl bg-[#6D7A62] px-6 py-4 text-lg font-semibold text-white transition hover:bg-[#5d6954]"
             >
-              📅 Samodzielnie wybiorę termin
+              📅 Wybierz termin wizyty
             </button>
 
             <div className="text-center text-sm text-gray-400">
@@ -79,7 +78,7 @@ export default function BookingChoice({
               }}
               className="w-full rounded-2xl border border-[#6D7A62] px-6 py-4 text-lg font-semibold text-[#6D7A62] transition hover:bg-[#F8F5F0]"
             >
-              💬 Chcę napisać wiadomość
+              💬 Wyślij wiadomość
             </button>
           </div>
         </div>

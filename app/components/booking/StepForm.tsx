@@ -18,6 +18,11 @@ export default function StepForm({
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const phoneDigits = phone.replace(/\D/g, "");
+
+const isFormValid =
+  name.trim().length > 2 &&
+  phoneDigits.length >= 9;
   const visitDate = new Date(2026, 7, selectedDay);
 
 const formattedDate = visitDate.toLocaleDateString("pl-PL", {
@@ -31,6 +36,9 @@ const displayDate =
   formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
 
   async function handleBooking() {
+
+  if (!isFormValid) return;
+
   setLoading(true);
 
   try {
@@ -103,7 +111,7 @@ const displayDate =
 
         <div>
           <label className="mb-2 block font-medium text-[#4B4338]">
-            Imię i nazwisko
+            Imię i nazwisko *
           </label>
 
           <input
@@ -111,13 +119,13 @@ const displayDate =
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Jan Kowalski"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#6D7A62]"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-[#4B4338] placeholder:text-gray-600 outline-none focus:border-[#6D7A62]"
           />
         </div>
 
         <div>
           <label className="mb-2 block font-medium text-[#4B4338]">
-            Telefon
+            Telefon *
           </label>
 
           <input
@@ -125,7 +133,7 @@ const displayDate =
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+48..."
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#6D7A62]"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-[#4B4338] placeholder:text-gray-600 outline-none focus:border-[#6D7A62]"
           />
         </div>
 
@@ -139,7 +147,7 @@ const displayDate =
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="adres@email.pl"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#6D7A62]"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-[#4B4338] placeholder:text-gray-600 outline-none focus:border-[#6D7A62]"
           />
         </div>
 
@@ -153,18 +161,27 @@ const displayDate =
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Kilka słów o tym, z czym chciałbyś/chciałabyś się zgłosić..."
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#6D7A62]"
+            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-[#4B4338] placeholder:text-gray-600 outline-none focus:border-[#6D7A62]"
           />
         </div>
 
         <button
           type="button"
 onClick={handleBooking}
-disabled={loading}
-          className="w-full rounded-xl bg-[#6D7A62] py-4 text-lg font-semibold text-white transition hover:opacity-90"
+disabled={loading || !isFormValid}
+          className={`w-full rounded-xl py-4 text-lg font-semibold text-white transition
+${
+  loading || !isFormValid
+    ? "cursor-not-allowed bg-gray-400"
+    : "bg-[#6D7A62] hover:opacity-90"
+}`}
         >
           {loading ? "Wysyłanie..." : "Umów wizytę"}
         </button>
+
+        <p className="mt-3 text-sm text-gray-500">
+  * Pola oznaczone gwiazdką są obowiązkowe.
+</p>
 
       </div>
     </section>
