@@ -76,10 +76,11 @@ useEffect(() => {
     />
 
     {selectedDay && (
-      <StepTime
-        selectedTime={selectedTime}
-        setSelectedTime={setSelectedTime}
-      />
+     <StepTime
+  selectedDay={selectedDay}
+  selectedTime={selectedTime}
+  setSelectedTime={setSelectedTime}
+/>
     )}
 
     {selectedTime && (

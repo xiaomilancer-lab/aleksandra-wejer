@@ -1,18 +1,3 @@
-const monthNames = [
-  "Styczeń",
-  "Luty",
-  "Marzec",
-  "Kwiecień",
-  "Maj",
-  "Czerwiec",
-  "Lipiec",
-  "Sierpień",
-  "Wrzesień",
-  "Październik",
-  "Listopad",
-  "Grudzień",
-];
-
 import { useState } from "react";
 
 export default function useCalendar() {

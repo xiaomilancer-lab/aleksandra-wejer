@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -14,19 +15,63 @@ export async function POST(req: Request) {
       message,
     } = await req.json();
 
-    const visitDate = new Date(2026, 7, selectedDay);
+    const visitDate = `2026-08-${String(selectedDay).padStart(2, "0")}`;
 
-    const formattedDate = visitDate.toLocaleDateString("pl-PL", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+const displayDate = new Date(
+  `${visitDate}T12:00:00`
+).toLocaleDateString("pl-PL", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 
-    const displayDate =
-      formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+const { data: existingBooking } = await supabaseAdmin
+  .from("bookings")
+  .select("id")
+  .eq("visit_date", visitDate)
+  .eq("visit_time", selectedTime)
+  .maybeSingle();
 
-    const data = await resend.emails.send({
+if (existingBooking) {
+  return Response.json(
+    {
+      success: false,
+      message: "Wybrana godzina jest już zajęta.",
+    },
+    {
+      status: 409,
+    }
+  );
+} 
+
+const { error: dbError } = await supabaseAdmin
+  .from("bookings")
+  .insert({
+    location: selectedLocation,
+    visit_date: visitDate,
+    visit_time: selectedTime,
+    name,
+    phone,
+    email,
+    message,
+    status: "Nowe",
+  });
+
+if (dbError) {
+  console.error(dbError);
+
+  return Response.json(
+    {
+      success: false,
+      message: "Nie udało się zapisać rezerwacji.",
+    },
+    {
+      status: 500,
+    }
+  );
+}
+      const data = await resend.emails.send({
       from: "Aleksandra Wejer <psycholog@aleksandrawejer.pl>",
       to: "psycholog@aleksandrawejer.pl",
       replyTo: email,
