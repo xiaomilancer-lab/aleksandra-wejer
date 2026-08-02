@@ -10,13 +10,20 @@ export default function Contact() {
   const [message, setMessage] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const phoneDigits = phone.replace(/\D/g, "");
+
+const isFormValid =
+  name.trim().length > 2 &&
+  phoneDigits.length >= 9;
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  e.preventDefault();
 
-    setLoading(true);
+  if (!isFormValid) return;
+
+  setLoading(true);
     setError("");
     setSuccess(false);
 
@@ -108,20 +115,20 @@ export default function Contact() {
 
           <input
             type="text"
-            placeholder="Imię i nazwisko"
+            placeholder="Imię i nazwisko *"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg outline-none focus:ring-2 focus:ring-[#6D7A62]"
+           
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
           />
 
           <input
             type="tel"
-            placeholder="Telefon"
+            placeholder="Telefon *"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            required
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
           />
 
           <input
@@ -129,13 +136,13 @@ export default function Contact() {
             placeholder="Adres e-mail (opcjonalnie)"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] outline-none focus:ring-2 focus:ring-[#6D7A62]"
           >
             <option>Dziecko</option>
             <option>Nastolatek</option>
@@ -149,17 +156,28 @@ export default function Contact() {
             placeholder="Krótko opisz, z czym chciałbyś/chciałabyś się zgłosić."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            required
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg outline-none resize-none focus:ring-2 focus:ring-[#6D7A62]"
+          
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
           />
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-[#6D7A62] hover:bg-[#55614C] transition text-white text-xl font-semibold py-5 rounded-2xl shadow-xl disabled:opacity-70"
+           disabled={loading || !isFormValid}
+            className={`w-full text-xl font-semibold py-5 rounded-2xl shadow-xl transition
+${
+  loading || !isFormValid
+    ? "cursor-not-allowed bg-gray-400 text-white"
+    : "bg-[#6D7A62] hover:bg-[#55614C] text-white"
+}`}
           >
             {loading ? "⏳ Wysyłanie..." : "🌿 Wyślij zgłoszenie"}
           </button>
+
+          <p className="text-sm text-gray-500">
+  * Pola oznaczone gwiazdką są obowiązkowe.
+  <br />
+  Odpowiadamy zazwyczaj w ciągu 24 godzin roboczych.
+</p>
 
         </form>
 
