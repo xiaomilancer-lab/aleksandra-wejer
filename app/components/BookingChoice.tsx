@@ -58,6 +58,7 @@ export default function BookingChoice({
           </p>
 
           <div className="mt-8 space-y-4">
+
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -66,20 +67,24 @@ export default function BookingChoice({
               className="w-full rounded-2xl bg-[#6D7A62] px-6 py-4 text-lg font-semibold text-white transition hover:bg-[#5d6954]"
             >
               📅 Wybierz termin wizyty
+
+              <span className="mt-1 block text-sm font-normal text-green-100">
+                🌿 Polecana forma rezerwacji • dostępna dla obu lokalizacji gabinetu
+              </span>
             </button>
 
             <a
-  href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/starogard-gdanski"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="block w-full rounded-2xl border border-[#2E7D32] bg-white px-6 py-4 text-center text-lg font-semibold text-[#2E7D32] transition hover:bg-[#F4FBF4]"
->
-  🩺 Umów przez ZnanyLekarz
+              href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/starogard-gdanski"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-2xl border border-[#2E7D32] bg-white px-6 py-4 text-center text-lg font-semibold text-[#2E7D32] transition hover:bg-[#F4FBF4]"
+            >
+              🩺 Umów przez ZnanyLekarz
 
-  <span className="mt-1 block text-sm font-normal text-[#5E8F65]">
-    📍 Dostępne 2 lokalizacje gabinetu
-  </span>
-</a>
+              <span className="mt-1 block text-sm font-normal text-[#5E8F65]">
+                📍 Rezerwacja dostępna wyłącznie dla Arthro Cure Clinic
+              </span>
+            </a>
 
             <div className="text-center text-sm text-gray-400">
               lub
@@ -94,6 +99,7 @@ export default function BookingChoice({
             >
               💬 Wyślij wiadomość
             </button>
+
           </div>
         </div>
       )}
