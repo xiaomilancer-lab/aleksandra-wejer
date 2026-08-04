@@ -53,7 +53,8 @@ export default function BookingChoice({
           </h2>
 
           <p className="mt-3 text-gray-600">
-            Wybierz sposób kontaktu. Możesz samodzielnie wybrać termin wizyty lub wysłać wiadomość do do mnie.
+            Wybierz sposób kontaktu. Możesz samodzielnie wybrać termin wizyty
+            lub wysłać wiadomość.
           </p>
 
           <div className="mt-8 space-y-4">
@@ -66,6 +67,19 @@ export default function BookingChoice({
             >
               📅 Wybierz termin wizyty
             </button>
+
+            <a
+  href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/starogard-gdanski"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="block w-full rounded-2xl border border-[#2E7D32] bg-white px-6 py-4 text-center text-lg font-semibold text-[#2E7D32] transition hover:bg-[#F4FBF4]"
+>
+  🩺 Umów przez ZnanyLekarz
+
+  <span className="mt-1 block text-sm font-normal text-[#5E8F65]">
+    📍 Dostępne 2 lokalizacje gabinetu
+  </span>
+</a>
 
             <div className="text-center text-sm text-gray-400">
               lub
