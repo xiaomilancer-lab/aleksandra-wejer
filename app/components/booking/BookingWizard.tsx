@@ -7,7 +7,6 @@ import StepDate from "./StepDate";
 import StepTime from "./StepTime";
 import { locations } from "./location";
 import StepForm from "./StepForm";
-import ZnanyLekarzWidget from "./ZnanyLekarzWidget";
 
 export default function BookingWizard() {
 
@@ -35,20 +34,6 @@ const [selectedTime, setSelectedTime] =
   return () => clearTimeout(timer);
 }, [selectedDay]);
 
-useEffect(() => {
-  if (selectedLocation !== "arthrocure") return;
-
-  const timer = setTimeout(() => {
-    document
-      .getElementById("znanylekarz-widget")
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-  }, 300);
-
-  return () => clearTimeout(timer);
-}, [selectedLocation]);
 
   return (
     <section className="space-y-10">
@@ -65,9 +50,6 @@ useEffect(() => {
   }
 />
 
-  {selectedLocation === "arthrocure" ? (
-  <ZnanyLekarzWidget />
-) : (
   <>
     <StepDate
       selectedLocation={selectedLocation}
@@ -93,7 +75,6 @@ useEffect(() => {
       />
     )}
   </>
-)}
 </>
 )}
 
