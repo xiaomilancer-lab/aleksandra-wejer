@@ -2,9 +2,11 @@ import Dashboard from "./components/Dashboard";
 import VisitTable from "./components/VisitTable";
 import Today from "./components/Today";
 import Stats from "./components/Stats";
+import AuthGuard from "./components/AuthGuard";
 
 export default function PanelPage() {
   return (
+  <AuthGuard>
     <Dashboard>
       <h1 className="text-4xl font-bold text-[#2D4739]">
         👋 Witaj Aleksandro
@@ -19,6 +21,7 @@ export default function PanelPage() {
       <Today />
 
       <VisitTable />
-    </Dashboard>
-  );
+        </Dashboard>
+  </AuthGuard>
+);
 }
