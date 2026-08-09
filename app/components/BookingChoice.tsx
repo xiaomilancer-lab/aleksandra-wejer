@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 type BookingChoiceProps = {
-  onCalendarClick: () => void;
+  onCalendarClick?: () => void;
 };
 
 export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
@@ -13,7 +13,7 @@ export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
     <div className="w-full max-w-md">
       <button
         type="button"
-        onClick={onCalendarClick}
+        onClick={() => (onCalendarClick ?? (() => document.getElementById("step-date")?.scrollIntoView({ behavior: "smooth", block: "start" })))()}
         className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-[#E63946] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#E63946]/20 transition duration-200 hover:-translate-y-0.5 hover:bg-[#cc2f3c] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2"
       >
         <span aria-hidden="true">📅</span>

@@ -1,4 +1,5 @@
 import BookingWizard from "./booking/BookingWizard";
+import BookingChoice from "./BookingChoice";
 import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function Calendar() {
@@ -26,6 +27,10 @@ export default function Calendar() {
             i wybierz dzień, który najbardziej Ci odpowiada.
           </p>
 
+        </div>
+
+        <div className="mx-auto mt-8 flex justify-center">
+          <BookingChoice />
         </div>
 
         <BookingWizard />

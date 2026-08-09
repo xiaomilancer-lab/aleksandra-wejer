@@ -15,6 +15,7 @@ export default function LoginPage() {
     const response = await fetch("/api/auth/panel-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
       body: JSON.stringify({ accessToken }),
     });
     return response.ok;

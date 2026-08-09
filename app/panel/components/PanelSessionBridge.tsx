@@ -15,7 +15,7 @@ async function syncPanelSession(accessToken: string) {
 export default function PanelSessionBridge() {
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session) {
+      if ((event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session) {
         void syncPanelSession(session.access_token);
       }
       if (event === "SIGNED_OUT") {
