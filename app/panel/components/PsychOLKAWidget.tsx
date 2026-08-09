@@ -107,7 +107,7 @@ export default function PsycholkaWidget({
           />
         ) : (
           <Image
-            src={PsycholkaAssets.legacy.greetingDefault}
+            src={PsycholkaAssets.greeting}
             width={320}
             height={400}
             alt="PsychOLKA"

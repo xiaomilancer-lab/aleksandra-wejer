@@ -23,6 +23,10 @@ export async function POST(request: Request) {
     .select("role")
     .eq("id", data.user.id)
     .maybeSingle();
+  if (profileError?.code === "PGRST205") {
+    if (process.env.NODE_ENV !== "production") console.error("Panel profiles table is missing.");
+    return NextResponse.json({ message: "Panel wymaga jednorazowej konfiguracji dostępu." }, { status: 503 });
+  }
   if (profileError || profile?.role !== "psychologist") {
     return NextResponse.json({ message: "To konto nie ma dostępu do panelu." }, { status: 403 });
   }

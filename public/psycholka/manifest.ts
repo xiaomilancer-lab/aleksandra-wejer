@@ -29,22 +29,4 @@ export const PsycholkaAssets = {
   system: {
     sleep: "/psycholka/system/6_sleep_spi.png",
   },
-  legacy: {
-    greetingDefault: "/psycholka/greeting/greeting-default-v1.webp",
-    openArmsDefault: "/psycholka/open-arms/open-arms-default-v1.webp",
-    pointBookingDefault: "/psycholka/point-booking/point-booking-default-v1.webp",
-    idleDefault: "/psycholka/idle/idle-default-v1.webp",
-    waveDefault: "/psycholka/wave/wave-default-v1.webp",
-    coffeeDefault: "/psycholka/coffee/coffee-default-v1.webp",
-    searchDefault: "/psycholka/search/search-default-v1.webp",
-    sadDefault: "/psycholka/sad/sad-default-v1.webp",
-    happyDefault: "/psycholka/happy/happy-default-v1.webp",
-    meetAleksandraDefault: "/psycholka/meet-aleksandra/meet-aleksandra-default-v1.webp",
-    helpPathDefault: "/psycholka/help-path/help-path-default-v1.webp",
-    locationsDefault: "/psycholka/locations/locations-default-v1.webp",
-    reviewsDefault: "/psycholka/reviews/reviews-default-v1.webp",
-    accountWhisperDefault: "/psycholka/account-whisper/account-whisper-default-v1.webp",
-    bookingChoiceDefault: "/psycholka/booking-choice/booking-choice-default-v1.webp",
-    goodbyeDefault: "/psycholka/goodbye/goodbye-default-v1.webp",
-  },
 } as const;
