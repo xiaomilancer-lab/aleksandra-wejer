@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
@@ -11,16 +11,40 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  async function establishPanelSession(accessToken: string) {
+    const response = await fetch("/api/auth/panel-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ accessToken }),
+    });
+    return response.ok;
+  }
+
+  useEffect(() => {
+    async function restorePanelSession() {
+      const { data } = await supabase.auth.getSession();
+      if (data.session && await establishPanelSession(data.session.access_token)) {
+        router.replace("/panel");
+      }
+    }
+    void restorePanelSession();
+  }, [router]);
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
       alert("Nieprawidłowy e-mail lub hasło.");
+      return;
+    }
+
+    if (!data.session || !(await establishPanelSession(data.session.access_token))) {
+      alert("Nie udało się bezpiecznie rozpocząć sesji panelu.");
       return;
     }
 

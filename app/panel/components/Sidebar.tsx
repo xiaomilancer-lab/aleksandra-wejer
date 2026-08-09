@@ -1,45 +1,5 @@
+import { BarChart3, BookOpen, CalendarClock, CalendarDays, FolderKanban, Settings, Users } from "lucide-react";
+import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-
-export default function Sidebar() {
-  return (
-    <aside className="flex h-screen w-72 flex-col border-r border-gray-200 bg-white p-6 shadow-sm">
-
-      <h2 className="text-2xl font-bold text-[#2D4739]">
-        🌿 Gabinet
-      </h2>
-
-      <p className="mt-2 text-gray-500">
-        Aleksandra Wejer
-      </p>
-
-      <nav className="mt-10 flex flex-1 flex-col">
-
-        <div className="space-y-3">
-
-          <button className="w-full rounded-xl bg-[#6D7A62] px-4 py-3 text-left font-semibold text-white">
-            📅 Wizyty
-          </button>
-
-          <button className="w-full rounded-xl px-4 py-3 text-left font-semibold text-[#2D4739] hover:bg-[#F8F5F0]">
-            👥 Pacjenci
-          </button>
-
-          <button className="w-full rounded-xl px-4 py-3 text-left font-semibold text-[#2D4739] hover:bg-[#F8F5F0]">
-            📊 Statystyki
-          </button>
-
-          <button className="w-full rounded-xl px-4 py-3 text-left font-semibold text-[#2D4739] hover:bg-[#F8F5F0]">
-            ⚙️ Ustawienia
-          </button>
-
-        </div>
-
-        <div className="mt-auto">
-          <LogoutButton />
-        </div>
-
-      </nav>
-
-    </aside>
-  );
-}
+const navItems = [{ href: "/panel", label: "Wizyty", icon: CalendarDays }, { href: "/panel/patients", label: "Pacjenci", icon: Users }, { href: "/panel/availability", label: "Grafik i dostępność", icon: CalendarClock }, { href: "/panel/templates", label: "Szablony", icon: FolderKanban }, { href: "/panel/library", label: "Biblioteka", icon: BookOpen }];
+export default function Sidebar() { return <aside className="flex h-screen w-72 flex-col border-r border-[#E5E1D8] bg-white p-6 shadow-sm"><div><h2 className="text-2xl font-bold text-[#2D4739]">Gabinet</h2><p className="mt-2 text-sm text-gray-500">Aleksandra Wejer</p></div><nav className="mt-10 flex flex-1 flex-col"><div className="space-y-2">{navItems.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0] hover:text-[#6D7A62]"><Icon size={18} aria-hidden="true" />{label}</Link>)}<button type="button" className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]"><BarChart3 size={18} aria-hidden="true" />Statystyki</button><Link href="/panel/settings" className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]"><Settings size={18} aria-hidden="true" />Ustawienia</Link></div><div className="mt-auto"><LogoutButton /></div></nav></aside>; }

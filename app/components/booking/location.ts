@@ -2,7 +2,7 @@ import { Location } from "./types";
 
 export const locations: Location[] = [
   {
-    id: "arthrocure",
+    id: "arthro-cure-clinic",
     name: "Arthro Cure Clinic",
     city: "Starogard Gdański",
     street: "Al. Jana Pawła II 1/U9",
@@ -12,7 +12,7 @@ export const locations: Location[] = [
   },
 
   {
-    id: "zielinscy-premium",
+    id: "nowa-wies-rzeczna",
     name: "Centrum Medyczno-Estetyczne Zielińscy Premium",
     city: "Nowa Wieś Rzeczna",
     street: "Kasztanowa 1",

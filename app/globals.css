@@ -25,6 +25,93 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@keyframes psycholka-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.psycholka-fade-in { animation: psycholka-fade-in 220ms ease-out both; }
+
+.psycholka-visual { width: 120px; height: 140px; max-width: 100%; transform-origin: center bottom; }
+.psycholka-visual-small { width: 84px; height: 96px; }
+.psycholka-visual-session { width: 68px; height: 76px; opacity: .72; }
+@keyframes psycholka-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes psycholka-wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(2deg); } }
+@keyframes psycholka-coffee { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.psycholka-idle { animation: none; }
+.psycholka-breath { transform-origin: center bottom; animation: psycholka-breath 5.6s ease-in-out infinite; }
+.psycholka-wave { animation: psycholka-wave 1.8s ease-in-out infinite; }
+.psycholka-coffee { animation: psycholka-coffee 2.4s ease-in-out infinite; }
+.psycholka-greeting-appear { opacity: 0; animation: psycholka-greeting-in 500ms ease-out forwards; }
+.psycholka-greeting-wave { animation: psycholka-wave 1s ease-in-out 1; }
+.psycholka-greeting { animation: psycholka-greeting-sway 2.8s ease-in-out infinite; }
+.psycholka-open-arms { animation: psycholka-open-arms 1s ease-in-out both; }
+.psycholka-point-booking { animation: psycholka-point-booking 2.4s ease-in-out infinite; }
+@keyframes psycholka-greeting-in { to { opacity: 1; } }
+@keyframes psycholka-breath { 0%, 100% { transform: translateY(0) scale(1) rotate(0deg); } 50% { transform: translateY(-2px) scale(1.015) rotate(.6deg); } }
+@keyframes psycholka-greeting-sway { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-2px) rotate(.5deg); } }
+@keyframes psycholka-open-arms { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+@keyframes psycholka-point-booking { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+@keyframes booking-time-psycholka-jump { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-7px); } 70% { transform: translateY(-2px); } }
+.booking-time-psycholka { animation: booking-time-psycholka-jump 620ms ease-out 1; }
+.booking-time-psycholka .psycholka-point-booking { animation-iteration-count: 1; }
+.psycholka-confetti { color: #C76E76; font-size: 1.15rem; animation: psycholka-confetti-fall 1.8s ease-in both; }
+.psycholka-confetti-delay-1 { animation-delay: 0ms; }.psycholka-confetti-delay-2 { animation-delay: 120ms; color: #B7791F; }.psycholka-confetti-delay-3 { animation-delay: 220ms; }.psycholka-confetti-delay-4 { animation-delay: 80ms; color: #6D7A62; }.psycholka-confetti-delay-5 { animation-delay: 180ms; }
+@keyframes psycholka-confetti-fall { from { opacity: 0; transform: translateY(-10px) rotate(0deg); } 20% { opacity: .85; } to { opacity: 0; transform: translateY(78px) rotate(12deg); } }
+@media (max-width: 640px) { .psycholka-visual { width: 88px; height: 100px; } .psycholka-visual-small { width: 72px; height: 82px; } .psycholka-visual-session { width: 60px; height: 70px; } }
+@media (prefers-reduced-motion: reduce) { .psycholka-idle, .psycholka-breath, .psycholka-wave, .psycholka-coffee, .psycholka-greeting, .psycholka-greeting-appear, .psycholka-open-arms, .psycholka-point-booking, .psycholka-confetti, .booking-time-psycholka, .psycholka-desk-look .psycholka-visual, .psycholka-desk-blink .psycholka-visual, .psycholka-desk-smile .psycholka-visual, .psycholka-desk-coffee .psycholka-visual, .psycholka-desk-wave .psycholka-visual, .psycholka-desk-rare .psycholka-visual { animation: none; opacity: 1; transform: none; } }
+.psycholka-onboarding-widget .psycholka-visual { width: 180px; height: 220px; }
+@media (max-width: 640px) { .psycholka-onboarding-widget .psycholka-visual { width: 130px; height: 160px; } }
+.public-psycholka-widget .psycholka-visual { width: 150px; height: 170px; }
+@media (max-width: 640px) { .public-psycholka-widget .psycholka-visual { width: 140px; height: 160px; } }
+.public-psycholka-welcome .psycholka-visual { width: 300px; height: 330px; }
+.public-psycholka-point-booking { position: absolute; right: calc(100% + .125rem); bottom: -1.7rem; z-index: 20; pointer-events: none; }
+.public-psycholka-point-booking .psycholka-visual { width: 92px; height: 116px; }
+.public-psycholka-guide .psycholka-visual { width: 70px; height: 82px; }
+.public-psycholka-guide-end { display: flex; justify-content: center; }
+.public-psycholka-guide-end .psycholka-visual { width: 80px; height: 94px; }
+@media (max-width: 640px) {
+  .public-psycholka-welcome .psycholka-visual { width: 200px; height: 240px; }
+  .public-psycholka-point-booking { right: calc(100% + .125rem); bottom: -1.15rem; }
+  .public-psycholka-point-booking .psycholka-visual { width: 68px; height: 84px; }
+  .public-psycholka-guide .psycholka-visual { width: 56px; height: 66px; }
+  .public-psycholka-guide-end .psycholka-visual { width: 70px; height: 80px; }
+}
+.psycholka-desk { position: relative; width: 150px; min-height: 136px; }
+.psycholka-desk-character { position: relative; z-index: 1; display: block; border: 0; padding: 0; background: transparent; cursor: pointer; text-align: left; }
+.psycholka-desk-character:focus-visible { outline: 2px solid #DDE6D7; outline-offset: 4px; border-radius: 1rem; }
+.psycholka-desk .psycholka-visual { width: 128px; height: 142px; }
+.psycholka-desk-surface { position: absolute; right: 0; bottom: 5px; left: 0; height: 14px; border-radius: 999px; background: rgba(255,255,255,.18); }
+.psycholka-desk-surface span { display: none; }
+.psycholka-desk-message { min-height: 1.25rem; margin-top: .35rem; color: #DDE6D7; font-size: .75rem; opacity: 0; transition: opacity 180ms ease-out; }
+.psycholka-desk-message-visible { opacity: 1; }
+.psycholka-desk:hover .psycholka-visual { animation-play-state: paused; }
+.psycholka-desk-look .psycholka-visual { animation: psycholka-desk-look 1.4s ease-in-out both; }
+.psycholka-desk-blink .psycholka-visual { animation: psycholka-desk-blink 420ms ease-in-out both; }
+.psycholka-desk-smile .psycholka-visual { animation: psycholka-desk-smile 1.4s ease-in-out both; }
+.psycholka-desk-coffee .psycholka-visual { animation: psycholka-desk-coffee 1.4s ease-in-out both; }
+.psycholka-desk-wave .psycholka-visual { animation: psycholka-desk-wave 1.4s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="peek_from_card"] .psycholka-visual { animation: psycholka-rare-peek 3s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="adjust_coffee"] .psycholka-visual { animation: psycholka-rare-coffee 3s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="straighten_book"] .psycholka-visual { animation: psycholka-rare-book 3s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="water_plant"] .psycholka-visual { animation: psycholka-rare-plant 3s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="look_for_pencil"] .psycholka-visual { animation: psycholka-rare-pencil 3s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="look_for_shoes"] .psycholka-visual { animation: psycholka-rare-shoes 3s ease-in-out both; }
+.psycholka-desk-rare[data-psycholka-rare-moment="private_smile"] .psycholka-visual { animation: psycholka-rare-smile 3s ease-in-out both; }
+@keyframes psycholka-desk-look { 0%,100% { transform: translateX(0); } 45% { transform: translateX(3px); } }
+@keyframes psycholka-desk-blink { 0%,100% { opacity: 1; } 45% { opacity: .82; } }
+@keyframes psycholka-desk-smile { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px) scale(1.01); } }
+@keyframes psycholka-desk-coffee { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-1deg); } }
+@keyframes psycholka-desk-wave { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(1.5deg); } }
+@keyframes psycholka-rare-peek { 0%,100% { transform: translateX(0); } 45%,65% { transform: translateX(7px); } }
+@keyframes psycholka-rare-coffee { 0%,100% { transform: rotate(0deg); } 45%,65% { transform: rotate(-2deg) translateY(-1px); } }
+@keyframes psycholka-rare-book { 0%,100% { transform: translateY(0); } 45%,65% { transform: translateY(-3px) rotate(-.5deg); } }
+@keyframes psycholka-rare-plant { 0%,100% { transform: translateX(0); } 45%,65% { transform: translateX(-3px) rotate(.6deg); } }
+@keyframes psycholka-rare-pencil { 0%,100% { transform: rotate(0deg); } 45%,65% { transform: rotate(1.5deg) translateX(2px); } }
+@keyframes psycholka-rare-shoes { 0%,100% { transform: translateY(0); } 45%,65% { transform: translateY(2px); } }
+@keyframes psycholka-rare-smile { 0%,100% { transform: scale(1); } 45%,65% { transform: scale(1.015); } }
+@media (max-width: 640px) { .psycholka-desk { width: 124px; min-height: 116px; } .psycholka-desk .psycholka-visual { width: 108px; height: 120px; } }
+
 
 html,
 body {

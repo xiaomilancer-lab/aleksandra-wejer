@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { Phone } from "lucide-react";
+import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function About() {
   return (
     <section id="omnie" className="bg-white py-28">
       <div className="max-w-7xl mx-auto px-8">
+        <PublicPsycholkaGuide action="meet_aleksandra" message="Chcesz poznać Aleksandrę? ❤️" />
 
         {/* Nagłówek */}
 

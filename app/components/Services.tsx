@@ -6,6 +6,7 @@ import {
   Users,
   Brain,
 } from "lucide-react";
+import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 const services = [
   {
@@ -86,6 +87,7 @@ export default function Services() {
   return (
     <section id="oferta" className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-8">
+        <PublicPsycholkaGuide action="help_path" message="Zobacz, w czym Aleksandra może Ci pomóc." />
 
         <div className="text-center mb-16">
 

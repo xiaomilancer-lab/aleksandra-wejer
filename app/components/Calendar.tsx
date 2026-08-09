@@ -1,4 +1,5 @@
 import BookingWizard from "./booking/BookingWizard";
+import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function Calendar() {
   return (
@@ -8,6 +9,7 @@ export default function Calendar() {
     >
 
       <div className="max-w-7xl mx-auto px-8">
+        <PublicPsycholkaGuide action="locations" message="Zobacz, gdzie możesz spotkać Aleksandrę." />
 
         <div className="text-center">
 

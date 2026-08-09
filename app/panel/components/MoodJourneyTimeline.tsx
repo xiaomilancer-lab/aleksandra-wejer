@@ -1,0 +1,14 @@
+"use client";
+
+import { Angry, Frown, Meh, Smile, Sparkles } from "lucide-react";
+import { useState, useTransition } from "react";
+import { getMoodEntriesAction } from "../actions/moodEntryActions";
+import type { Mood, MoodEntry } from "../domain";
+
+const moods: Record<Mood, { label: string; Icon: typeof Smile; color: string }> = { happy: { label: "Radośnie", Icon: Sparkles, color: "bg-[#E7F4DE] text-[#4A7C3D]" }, good: { label: "Dobrze", Icon: Smile, color: "bg-[#EEF1EB] text-[#6D7A62]" }, neutral: { label: "Neutralnie", Icon: Meh, color: "bg-[#F1EFEB] text-[#6B665F]" }, sad: { label: "Smutno", Icon: Frown, color: "bg-[#E8EEF8] text-[#587199]" }, angry: { label: "Złość", Icon: Angry, color: "bg-[#FBE8E8] text-[#B65A5A]" }, anxious: { label: "Niepokój", Icon: Frown, color: "bg-[#F9EEDC] text-[#9A7040]" } };
+
+export default function MoodJourneyTimeline({ patientId, entries: initialEntries, showFilter = true }: { patientId: string; entries: MoodEntry[]; showFilter?: boolean }) {
+  const [entries, setEntries] = useState(initialEntries); const [days, setDays] = useState(14); const [isPending, startTransition] = useTransition();
+  const updateRange = (value: number) => { setDays(value); startTransition(async () => setEntries(await getMoodEntriesAction(patientId, value))); };
+  return <section className="rounded-2xl border border-[#D5DCCF] bg-white p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm text-[#55624D]">Mood Journey</p><h2 className="font-bold text-[#2D4739]">Ostatnie samopoczucie</h2></div>{showFilter && <select value={days} onChange={(event) => updateRange(Number(event.target.value))} className="rounded-xl border border-[#D5DCCF] bg-white px-3 py-2 text-sm font-semibold text-[#2D4739]"><option value={14}>Ostatnie 14 dni</option><option value={7}>7 dni</option><option value={30}>30 dni</option><option value={90}>90 dni</option></select>}</div>{isPending ? <p className="mt-4 text-sm text-gray-500">Odświeżanie wpisów…</p> : entries.length === 0 ? <p className="mt-4 rounded-xl bg-[#F8F5F0] px-4 py-5 text-center text-sm text-gray-500">Pierwsze wpisy samopoczucia pojawią się tutaj.</p> : <ol className="mt-5 space-y-3 border-l border-[#D5DCCF] pl-5">{entries.map((entry) => { const mood = moods[entry.mood]; const Icon = mood.Icon; return <li key={entry.id} className="relative"><span className="absolute -left-[27px] top-2 h-3 w-3 rounded-full bg-[#6D7A62]" /><div className="flex gap-3"><span className={`rounded-xl p-2 ${mood.color}`}><Icon size={18} aria-hidden="true" /></span><div><p className="text-sm font-semibold text-[#2D4739]">{mood.label}</p><p className="mt-0.5 text-xs text-gray-500">{new Date(`${entry.date}T00:00:00`).toLocaleDateString("pl-PL")}</p>{entry.note && <p className="mt-1 text-sm text-gray-600">{entry.note}</p>}</div></div></li>; })}</ol>}<p className="mt-5 text-xs text-gray-500">Wpisy są prezentowane bez analizy i interpretacji.</p></section>;
+}

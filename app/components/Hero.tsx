@@ -79,16 +79,6 @@ export default function Hero() {
         });
     }, 300);
   }}
-  onContactClick={() => {
-    setTimeout(() => {
-      document
-        .getElementById("kontakt")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-    }, 300);
-  }}
 />
 
   <a

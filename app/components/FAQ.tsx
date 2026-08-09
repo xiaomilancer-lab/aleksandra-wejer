@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, MessageCircleQuestion } from "lucide-react";
+import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 const faqItems = [
   {
@@ -49,6 +50,8 @@ export default function FAQ() {
       className="bg-[#F8F5F0] py-24"
     >
       <div className="mx-auto max-w-4xl px-6">
+
+        <PublicPsycholkaGuide message="Tu znajdziesz odpowiedzi na najczęstsze pytania." />
 
         <div className="mb-16 text-center">
 

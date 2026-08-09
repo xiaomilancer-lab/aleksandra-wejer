@@ -1,0 +1,4 @@
+"use client";
+import { RotateCcw } from "lucide-react";
+import { useRouter } from "next/navigation";
+export default function PsycholkaSettings() { const router = useRouter(); const replay = () => { window.localStorage.removeItem("psycholka-onboarding-seen"); router.push("/panel?onboarding=1"); }; return <section className="rounded-3xl border border-[#E5E1D8] bg-white p-6"><h2 className="text-xl font-bold text-[#2D4739]">PsychOLKA</h2><p className="mt-3 text-sm leading-relaxed text-gray-600">Możesz ponownie obejrzeć krótkie powitanie PsychOLKI. Ustawienie jest zapisywane tylko w tej przeglądarce.</p><button type="button" onClick={replay} className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#EEF1EB] px-4 py-2.5 text-sm font-semibold text-[#2D4739]"><RotateCcw size={17} />Pokaż onboarding ponownie</button></section>; }

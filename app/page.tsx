@@ -7,6 +7,11 @@ import FAQ from "./components/FAQ";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import LocalBusinessSchema from "./components/LocalBusinessSchema";
+import PublicPsycholkaWelcome from "./components/PublicPsycholkaWelcome";
+import PublicBookingAccess from "./components/PublicBookingAccess";
+import PublicWelcomeReplay from "./components/PublicWelcomeReplay";
+import PatientAccountTeaser from "./components/PatientAccountTeaser";
+import PublicGuidedJourneyEnd from "./components/PublicGuidedJourneyEnd";
 
 export default function Home() {
   return (
@@ -14,11 +19,16 @@ export default function Home() {
 
       <LocalBusinessSchema />
 
+      <PublicBookingAccess />
+      <PublicPsycholkaWelcome />
+
      <Quote />
 
       <Hero />
 
       <About />
+
+      <PatientAccountTeaser />
 
       <Services />
 
@@ -28,6 +38,10 @@ export default function Home() {
 
 
       <Contact />
+
+      <PublicGuidedJourneyEnd />
+
+      <div className="bg-[#F8F5F0] pb-6 text-center"><PublicWelcomeReplay /></div>
 
       <Footer />
 

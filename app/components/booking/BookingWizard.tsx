@@ -9,75 +9,14 @@ import { locations } from "./location";
 import StepForm from "./StepForm";
 
 export default function BookingWizard() {
-
-  const [selectedLocation, setSelectedLocation] =
-  useState<string | null>(null);
-
-const [selectedDay, setSelectedDay] =
-  useState<number | null>(null);
-
-const [selectedTime, setSelectedTime] =
-  useState<string | null>(null);
-
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null); const [selectedDate, setSelectedDate] = useState<string | null>(null); const [selectedTime, setSelectedTime] = useState<string | null>(null);
   useEffect(() => {
-  if (!selectedDay) return;
-
-  const timer = setTimeout(() => {
-    document
-      .getElementById("step-time")
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-  }, 350);
-
-  return () => clearTimeout(timer);
-}, [selectedDay]);
-
-
-  return (
-    <section className="space-y-10">
-
-      <StepLocation
-  selectedLocation={selectedLocation}
-  setSelectedLocation={setSelectedLocation}
-/>
-{selectedLocation && (
-  <>
-  <StepSummary
-  locationName={
-    locations.find((l) => l.id === selectedLocation)?.name ?? ""
-  }
-/>
-
-  <>
-    <StepDate
-      selectedLocation={selectedLocation}
-      selectedDay={selectedDay}
-      setSelectedDay={setSelectedDay}
-    />
-
-    {selectedDay && (
-     <StepTime
-  selectedDay={selectedDay}
-  selectedTime={selectedTime}
-  setSelectedTime={setSelectedTime}
-/>
-    )}
-
-    {selectedTime && (
-      <StepForm
-        selectedLocation={
-          locations.find((l) => l.id === selectedLocation)?.name ?? ""
-        }
-        selectedDay={selectedDay!}
-        selectedTime={selectedTime}
-      />
-    )}
-  </>
-</>
-)}
-
-    </section>
-  );
+    if (!selectedDate) return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("step-time")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedDate]);
+  const location = locations.find((item) => item.id === selectedLocation);
+  return <section className="space-y-10"><StepLocation selectedLocation={selectedLocation} setSelectedLocation={(value) => { setSelectedLocation(value); setSelectedDate(null); setSelectedTime(null); }} />{selectedLocation && location && <><StepSummary locationName={location.name} /><StepDate selectedDate={selectedDate} setSelectedDate={(value) => { setSelectedDate(value); setSelectedTime(null); }} />{selectedDate && <StepTime key={selectedDate} selectedLocation={selectedLocation} selectedDate={selectedDate} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}{selectedTime && <StepForm selectedLocation={location.name} locationId={selectedLocation} selectedDate={selectedDate!} selectedTime={selectedTime} />}</>}</section>;
 }

@@ -7,6 +7,7 @@ export default function LogoutButton() {
   const router = useRouter();
 
   async function handleLogout() {
+    await fetch("/api/auth/panel-session", { method: "DELETE" });
     await supabase.auth.signOut();
 
     router.replace("/login");

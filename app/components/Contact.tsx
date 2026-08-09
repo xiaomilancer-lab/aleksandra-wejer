@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -67,6 +68,7 @@ const isFormValid =
   return (
     <section id="kontakt" className="bg-[#F8F5F0] py-24">
       <div className="max-w-4xl mx-auto bg-white rounded-[40px] shadow-2xl p-12">
+        <PublicPsycholkaGuide message="Jeżeli masz pytania, jesteśmy tutaj." />
 
         <div className="text-center">
 
