@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { PsycholkaAssets } from "@/public/psycholka";
 import { getPsycholkaAsset, getPsycholkaGreetingFallback, getPsycholkaIdleFallback } from "../psycholka/psycholkaAssets";
 import { getPsycholkaBehavior, PSYCHOLKA_DEBUG } from "../psycholka/psycholkaConfig";
 import type { PsycholkaAction, PsycholkaContext, PsycholkaEventHooks, PsycholkaMood } from "../psycholka/psycholkaTypes";
@@ -106,7 +107,7 @@ export default function PsycholkaWidget({
           />
         ) : (
           <Image
-            src="/psycholka/greeting/greeting-default-v1.webp"
+            src={PsycholkaAssets.legacy.greetingDefault}
             width={320}
             height={400}
             alt="PsychOLKA"
