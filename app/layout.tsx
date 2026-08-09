@@ -14,9 +14,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://aleksandrawejer.pl"),
   title: "Aleksandra Wejer | Psycholog | Starogard Gdański",
   description:
   "Aleksandra Wejer – psycholog w Starogardzie Gdańskim. Pomoc psychologiczna dla dzieci, młodzieży, dorosłych, par i rodzin. Konsultacje stacjonarne oraz online.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "pl_PL",
+    url: "/",
+    title: "Aleksandra Wejer | Psycholog | Starogard Gdański",
+    description: "Aleksandra Wejer – psycholog w Starogardzie Gdańskim. Pomoc psychologiczna dla dzieci, młodzieży, dorosłych, par i rodzin. Konsultacje stacjonarne oraz online.",
+  },
+  twitter: {
+    card: "summary",
+    title: "Aleksandra Wejer | Psycholog | Starogard Gdański",
+    description: "Aleksandra Wejer – psycholog w Starogardzie Gdańskim. Pomoc psychologiczna dla dzieci, młodzieży, dorosłych, par i rodzin. Konsultacje stacjonarne oraz online.",
+  },
 
     verification: {
     google: "kLEduvFtYgx4dlLGe1VlMiF9U7yNxqWnhg-cQy92ZHg",

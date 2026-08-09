@@ -24,6 +24,11 @@ export default function CalendarDay({
   border
   font-semibold
   transition
+  focus-visible:outline-none
+  focus-visible:ring-2
+  focus-visible:ring-[#6D7A62]
+  focus-visible:ring-offset-2
+  active:scale-[0.97]
 
   ${
     !available

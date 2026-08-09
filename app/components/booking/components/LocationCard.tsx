@@ -13,20 +13,19 @@ export default function LocationCard({
   onSelect,
 }: LocationCardProps) {
   return (
-  <div
+  <button
+    type="button"
     onClick={() => {
-  onSelect();
-
-  setTimeout(() => {
-    document
-      .getElementById("step-date")
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-  }, 350);
-}}
-    className={`overflow-hidden rounded-3xl border bg-white shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-2 hover:shadow-2xl ${
+      onSelect();
+      window.setTimeout(() => {
+        document.getElementById("step-date")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 350);
+    }}
+    aria-pressed={selected}
+    className={`w-full overflow-hidden rounded-3xl border bg-white text-left shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 active:translate-y-0 ${
       selected
         ? "border-green-600 ring-2 ring-green-200"
         : "border-gray-200"
@@ -66,18 +65,18 @@ export default function LocationCard({
 
         </div>
 
-        <button
-  className={`w-full rounded-xl px-5 py-3 font-medium text-white transition-all duration-300 ${
+        <span
+  className={`block w-full rounded-xl px-5 py-3 text-center font-medium text-white transition-all duration-300 ${
     selected
       ? "bg-green-700 hover:bg-green-800"
       : "bg-[#6D7A62] hover:bg-[#5A6651]"
   }`}
 >
   {selected ? "✓ Wybrano lokalizację" : "Wybierz lokalizację"}
-</button>
+        </span>
 
       </div>
 
-    </div>
+    </button>
   );
 }

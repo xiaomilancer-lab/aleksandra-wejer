@@ -7,6 +7,7 @@ async function syncPanelSession(accessToken: string) {
   await fetch("/api/auth/panel-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
     body: JSON.stringify({ accessToken }),
   });
 }
@@ -19,7 +20,7 @@ export default function PanelSessionBridge() {
         void syncPanelSession(session.access_token);
       }
       if (event === "SIGNED_OUT") {
-        void fetch("/api/auth/panel-session", { method: "DELETE" });
+        void fetch("/api/auth/panel-session", { method: "DELETE", credentials: "same-origin" });
       }
     });
     return () => listener.subscription.unsubscribe();

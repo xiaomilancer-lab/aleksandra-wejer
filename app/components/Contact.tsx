@@ -56,7 +56,7 @@ const isFormValid =
       setEmail("");
       setCategory("Dorosły");
       setMessage("");
-    } catch (err) {
+    } catch {
       setError(
         "Nie udało się wysłać wiadomości. Spróbuj ponownie za chwilę."
       );
