@@ -32,7 +32,7 @@ export default function LocationCard({
     }`}
   >
 
-      <div className="relative h-56 w-full">
+      <div className="relative h-44 w-full sm:h-56">
         <Image
           src={location.image}
           alt={location.name}

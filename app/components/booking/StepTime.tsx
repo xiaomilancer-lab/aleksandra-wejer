@@ -55,7 +55,7 @@ export default function StepTime({ selectedLocation, selectedDate, selectedTime,
   return (
     <section
       id="step-time"
-      className={`mt-8 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm transition-shadow duration-500 ${highlighted ? "ring-4 ring-[#DDEEDB] shadow-[0_0_32px_rgba(109,122,98,0.16)]" : ""}`}
+      className={`mt-8 rounded-3xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow duration-500 sm:p-8 ${highlighted ? "ring-4 ring-[#DDEEDB] shadow-[0_0_32px_rgba(109,122,98,0.16)]" : ""}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div>

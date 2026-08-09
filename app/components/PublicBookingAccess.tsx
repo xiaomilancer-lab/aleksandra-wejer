@@ -25,6 +25,6 @@ export default function PublicBookingAccess() {
         <CalendarDays size={17} aria-hidden="true" />Umów wizytę
       </button>
     </div>
-    {!hideMobile && <button type="button" onClick={scrollToCalendar} className="fixed inset-x-4 bottom-4 z-40 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 text-sm font-semibold text-white shadow-xl md:hidden"><CalendarDays size={18} aria-hidden="true" />Umów wizytę</button>}
+    {!hideMobile && <button type="button" onClick={scrollToCalendar} className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 text-sm font-semibold text-white shadow-xl transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 md:hidden"><CalendarDays size={18} aria-hidden="true" />Umów wizytę</button>}
   </>;
 }
