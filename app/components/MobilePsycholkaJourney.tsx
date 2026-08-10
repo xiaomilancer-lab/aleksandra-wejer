@@ -25,11 +25,11 @@ export default function MobilePsycholkaJourney() {
             <p className="text-sm font-semibold text-[#6D7A62]">Poznaj Aleksandrę</p>
             <h2 className="mt-1 text-2xl font-bold text-[#2D4739]">Aleksandra Wejer</h2>
             <p className="mt-1 text-sm font-medium text-[#55624D]">Psycholog</p>
-            <p className="mt-3 text-sm leading-6 text-gray-600">Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.</p>
-            <p className="mt-2 text-sm leading-6 text-gray-600">Wspieram dzieci, młodzież, dorosłych, pary<br />oraz rodziny.</p>
           </div>
         </div>
         <div className="mt-4 space-y-3 text-sm leading-6 text-gray-600">
+          <p>Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.</p>
+          <p>Wspieram dzieci, młodzież,<br /><span className="whitespace-nowrap">dorosłych, pary oraz rodziny.</span></p>
           <p>Ważne jest dla mnie stworzenie spokojnej, bezpiecznej przestrzeni do rozmowy bez oceniania — z uważnością i indywidualnym podejściem do każdej osoby.</p>
           <p>Prywatnie jestem mamą dwóch chłopców, dlatego bliskie są mi również codzienne wyzwania rodzicielstwa i życia rodzinnego.</p>
         </div>

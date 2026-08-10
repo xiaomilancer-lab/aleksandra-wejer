@@ -217,7 +217,7 @@ export default function FAQ() {
               </p>
 
               <a
-                href="#kontakt"
+                href="#kalendarz"
                 className="
                   mt-8
                   inline-flex
