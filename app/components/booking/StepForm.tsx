@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface StepFormProps {
   selectedLocation: string;
@@ -17,6 +17,7 @@ export default function StepForm({ selectedLocation, locationId, selectedDate, s
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [completed, setCompleted] = useState(false);
+  const successRef = useRef<HTMLElement>(null);
   const isFormValid = name.trim().length > 2 && phone.replace(/\D/g, "").length >= 9;
   const displayDate = new Date(`${selectedDate}T12:00:00`).toLocaleDateString("pl-PL", {
     weekday: "long",
@@ -24,6 +25,19 @@ export default function StepForm({ selectedLocation, locationId, selectedDate, s
     month: "long",
     year: "numeric",
   });
+
+  useEffect(() => {
+    if (!completed || !window.matchMedia("(max-width: 767px)").matches) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      successRef.current?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [completed]);
 
   async function handleBooking() {
     if (!isFormValid || loading) return;
@@ -56,7 +70,7 @@ export default function StepForm({ selectedLocation, locationId, selectedDate, s
 
   if (completed) {
     return (
-      <section id="step-form" className="mt-12 rounded-3xl border border-[#D5DCCF] bg-white p-8 shadow-xl" aria-live="polite">
+      <section ref={successRef} id="step-form" className="mt-12 scroll-mt-6 rounded-3xl border border-[#D5DCCF] bg-white p-8 shadow-xl" aria-live="polite">
         <h2 className="text-2xl font-bold text-[#2D4739]">Dziękujemy ❤️</h2>
         <p className="mt-2 text-gray-600">{status}</p>
         <p className="mt-4 text-sm text-[#55624D]">{displayDate} · {selectedTime} · {selectedLocation}</p>
