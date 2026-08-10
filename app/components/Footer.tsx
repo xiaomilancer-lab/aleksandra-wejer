@@ -166,7 +166,17 @@ export default function Footer() {
               © 2026 Aleksandra Wejer. Wszelkie prawa zastrzeżone.
             </p>
 
-            <p className="text-xs text-gray-400">Wykonał Mężuś ❤️</p>
+            <p className="text-xs text-gray-400">
+              Projekt i realizacja{" "}
+              <a
+                href="https://3d-projekt.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-[#6D7A62] focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62]"
+              >
+                3D-Projekt.com
+              </a>
+            </p>
 
           </div>
 

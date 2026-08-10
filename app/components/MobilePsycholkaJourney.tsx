@@ -1,23 +1,11 @@
 import Image from "next/image";
-import { HeartHandshake, MapPin, Sparkles } from "lucide-react";
+import { HeartHandshake, MapPin } from "lucide-react";
 import { PsycholkaAssets } from "@/public/psycholka";
 import HelpAccordion from "./HelpAccordion";
 
 export default function MobilePsycholkaJourney() {
   return (
     <div className="space-y-4 bg-[#F9F6F1] px-4 pb-[calc(5rem+env(safe-area-inset-bottom))] md:hidden">
-      <section id="mobile-pomoc" data-scroll-anchor="oferta" className="scroll-mt-6 rounded-3xl bg-white p-5 shadow-sm">
-        <div className="flex items-center gap-4">
-          <Image src={PsycholkaAssets.booking.search} alt="PsychOLKA pomaga znaleźć właściwe wsparcie" width={96} height={96} className="h-20 w-20 object-contain" />
-          <div>
-            <p className="text-sm font-semibold text-[#6D7A62]">W czym mogę Ci pomóc?</p>
-            <h2 className="mt-1 text-2xl font-bold text-[#2D4739]">Znajdźmy dobry pierwszy krok.</h2>
-          </div>
-        </div>
-        <div className="mt-5"><HelpAccordion /></div>
-        <a href="#mobile-aleksandra" className="mt-4 flex min-h-14 items-center gap-3 rounded-2xl border border-[#DCE8E2] bg-[#F7FBF9] p-4 text-left transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]"><Sparkles size={22} className="text-[#6D7A62]" aria-hidden="true" /><span className="font-semibold text-[#2D4739]">Poznaj Aleksandrę</span></a>
-      </section>
-
       <section id="mobile-aleksandra" data-scroll-anchor="omnie" className="scroll-mt-6 rounded-3xl bg-white p-5 shadow-sm">
         <div className="flex items-start gap-4">
           <Image src="/images/about-aleksandra-v2.png" alt="Aleksandra Wejer w gabinecie" width={160} height={200} className="h-36 w-28 rounded-2xl object-cover" />
@@ -47,6 +35,17 @@ export default function MobilePsycholkaJourney() {
           <p className="flex items-start gap-2"><MapPin size={17} className="mt-0.5 shrink-0 text-[#6D7A62]" aria-hidden="true" /><span>Arthro Cure Clinic<br />Starogard Gdański</span></p>
           <p className="flex items-start gap-2"><MapPin size={17} className="mt-0.5 shrink-0 text-[#6D7A62]" aria-hidden="true" /><span>Centrum Zielińscy Premium<br />Nowa Wieś Rzeczna</span></p>
         </div>
+      </section>
+
+      <section id="mobile-pomoc" data-scroll-anchor="oferta" className="scroll-mt-6 rounded-3xl bg-white p-5 shadow-sm">
+        <div className="flex items-center gap-4">
+          <Image src={PsycholkaAssets.booking.search} alt="PsychOLKA pomaga znaleźć właściwe wsparcie" width={96} height={96} className="h-20 w-20 object-contain" />
+          <div>
+            <p className="text-sm font-semibold text-[#6D7A62]">W czym mogę Ci pomóc?</p>
+            <h2 className="mt-1 text-2xl font-bold text-[#2D4739]">Znajdźmy dobry pierwszy krok.</h2>
+          </div>
+        </div>
+        <div className="mt-5"><HelpAccordion /></div>
       </section>
 
       <section className="relative z-10 overflow-visible rounded-3xl bg-white p-5 shadow-sm">

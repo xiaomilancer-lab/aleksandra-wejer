@@ -10,7 +10,7 @@ export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
       <button
         type="button"
         onClick={() => (onCalendarClick ?? (() => document.getElementById("booking-wizard")?.scrollIntoView({ behavior: "smooth", block: "start" })))()}
-        className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-[#E63946] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#E63946]/20 transition duration-200 hover:-translate-y-0.5 hover:bg-[#cc2f3c] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2"
+        className="group hidden w-full items-center justify-center gap-3 rounded-2xl bg-[#E63946] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#E63946]/20 transition duration-200 hover:-translate-y-0.5 hover:bg-[#cc2f3c] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2 md:flex"
       >
         <span aria-hidden="true">📅</span>
         Umów wizytę
@@ -19,11 +19,11 @@ export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
         </span>
       </button>
 
-      <p className="mt-3 text-center text-sm text-stone-600">
+      <p className="mt-3 hidden text-center text-sm text-stone-600 md:block">
         Wybierz dogodny termin w kalendarzu.
       </p>
 
-      <div className="mt-5 rounded-2xl border border-stone-200 bg-white/75 p-4 text-left">
+      <div className="rounded-2xl border border-stone-200 bg-white/75 p-4 text-left md:mt-5">
         <p className="text-center text-sm font-medium text-stone-600">Wolisz inną formę kontaktu?</p>
         <div className="mt-2 grid gap-1">
           <a
