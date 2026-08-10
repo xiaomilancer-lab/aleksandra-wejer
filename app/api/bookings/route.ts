@@ -2,7 +2,7 @@ import { isSlotAvailable, AvailabilityError } from "@/app/booking/server/availab
 import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locations";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
-const allowedSources = new Set(["main-site", "zielinscy"]);
+const allowedSources = new Set(["main-site", "zielinscy", "arthro"]);
 const conflictMessage = "Ten termin został właśnie zajęty. ❤️ Wybierzmy inny.";
 
 export async function POST(request: Request) {
