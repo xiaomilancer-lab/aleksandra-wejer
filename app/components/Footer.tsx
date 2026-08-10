@@ -5,9 +5,20 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
+const navigationItems: ReadonlyArray<{ label: string; href: string; visibility?: string }> = [
+  { label: "Start", href: "#start" },
+  { label: "O mnie", href: "#omnie", visibility: "hidden md:flex" },
+  { label: "O mnie", href: "#mobile-aleksandra", visibility: "flex md:hidden" },
+  { label: "Oferta", href: "#oferta", visibility: "hidden md:flex" },
+  { label: "Oferta", href: "#mobile-pomoc", visibility: "flex md:hidden" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Kontakt", href: "#kontakt", visibility: "hidden md:flex" },
+  { label: "Kontakt", href: "#kontakt-mobile", visibility: "flex md:hidden" },
+];
+
 export default function Footer() {
   return (
-    <footer className="border-t border-[#E5E2DB] bg-[#F8F5F0]">
+    <footer id="kontakt-mobile" className="scroll-mt-24 border-t border-[#E5E2DB] bg-[#F8F5F0]">
       <div className="mx-auto max-w-7xl px-6 py-20">
 
         <div className="grid gap-16 lg:grid-cols-3">
@@ -137,60 +148,10 @@ export default function Footer() {
 
             <nav className="mt-8 flex flex-col gap-5">
 
-              <a
-                href="#start"
-                className="group flex items-center justify-between text-gray-600 transition-colors hover:text-[#6D7A62]"
-              >
-                <span>Start</span>
-                <ArrowUpRight
-                  size={18}
-                  className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
-                />
-              </a>
-
-              <a
-                href="#omnie"
-                className="group flex items-center justify-between text-gray-600 transition-colors hover:text-[#6D7A62]"
-              >
-                <span>O mnie</span>
-                <ArrowUpRight
-                  size={18}
-                  className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
-                />
-              </a>
-
-              <a
-                href="#oferta"
-                className="group flex items-center justify-between text-gray-600 transition-colors hover:text-[#6D7A62]"
-              >
-                <span>Oferta</span>
-                <ArrowUpRight
-                  size={18}
-                  className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
-                />
-              </a>
-
-              <a
-                href="#faq"
-                className="group flex items-center justify-between text-gray-600 transition-colors hover:text-[#6D7A62]"
-              >
-                <span>FAQ</span>
-                <ArrowUpRight
-                  size={18}
-                  className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
-                />
-              </a>
-
-              <a
-                href="#kontakt"
-                className="group flex items-center justify-between text-gray-600 transition-colors hover:text-[#6D7A62]"
-              >
-                <span>Kontakt</span>
-                <ArrowUpRight
-                  size={18}
-                  className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
-                />
-              </a>
+              {navigationItems.map((item) => <a key={`${item.label}-${item.href}`} href={item.href} className={`group items-center justify-between text-gray-600 transition-colors hover:text-[#6D7A62] ${item.visibility ?? "flex"}`}>
+                <span>{item.label}</span>
+                <ArrowUpRight size={18} className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100" />
+              </a>)}
 
             </nav>
 
@@ -205,24 +166,7 @@ export default function Footer() {
               © 2026 Aleksandra Wejer. Wszelkie prawa zastrzeżone.
             </p>
 
-            <a
-              href="https://3d-projekt.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 transition-colors hover:text-[#6D7A62]"
-            >
-              <span>Projekt i wykonanie</span>
-
-              <span className="font-semibold text-[#4B4338] transition-colors group-hover:text-[#6D7A62]">
-                3D-Projekt.com
-              </span>
-
-              <ArrowUpRight
-                size={16}
-                className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
-              />
-
-            </a>
+            <p className="text-xs text-gray-400">Z miłością zrobił Mężuś ❤️</p>
 
           </div>
 

@@ -4,7 +4,7 @@ import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function About() {
   return (
-    <section id="omnie" className="bg-white py-28">
+    <section id="omnie" data-scroll-anchor="omnie" className="scroll-mt-24 bg-white py-28">
       <div className="max-w-7xl mx-auto px-8">
         <PublicPsycholkaGuide action="meet_aleksandra" message="Chcesz poznać Aleksandrę? ❤️" />
 
@@ -45,22 +45,22 @@ export default function About() {
             </h3>
 
             <p className="mt-8 text-lg leading-8 text-gray-600">
-              Jestem mgr psychologii, absolwentką pięcioletnich studiów
-              magisterskich na Uniwersytecie Gdańskim, a prywatnie mamą
-              dwóch chłopców. To doświadczenie przypomina mi każdego dnia,
-              jak ważne jest uważne słuchanie i miejsce na własne tempo.
+              Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.
+              W swojej pracy wspieram dzieci, młodzież, osoby dorosłe, pary i rodziny.
+              Ważne jest dla mnie stworzenie spokojnej, bezpiecznej przestrzeni,
+              w której można bez oceniania porozmawiać o trudnościach.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Pracuję z dziećmi, młodzieżą, dorosłymi, parami i rodzinami.
               Każdą osobę i każdą relację staram się zobaczyć indywidualnie —
               z jej historią, zasobami, trudnościami i tym, co jest ważne właśnie teraz.
+              Wspólnie szukamy najlepszego rozwiązania, w tempie odpowiednim dla Ciebie.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Zależy mi na spokojnym, życzliwym podejściu. Tworzę przestrzeń,
-              w której można opowiedzieć o emocjach i doświadczeniach bez oceniania
-              i pośpiechu, a potem wspólnie szukać małych, realnych kroków.
+              Prywatnie jestem mamą dwóch chłopców, dlatego bliskie są mi również
+              codzienne wyzwania rodzicielstwa i życia rodzinnego. W pracy łączę
+              wiedzę psychologiczną z uważnością, spokojem i indywidualnym podejściem.
             </p>
 
           </div>

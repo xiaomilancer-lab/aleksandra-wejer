@@ -36,7 +36,7 @@ export default function Home() {
 
       <Calendar />
       
-      <div className="hidden md:block"><FAQ /></div>
+      <FAQ />
 
 
       <div className="hidden md:block"><Contact /></div>

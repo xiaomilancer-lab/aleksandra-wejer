@@ -3,7 +3,7 @@ import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function Services() {
   return (
-    <section id="oferta" className="bg-white py-24">
+    <section id="oferta" data-scroll-anchor="oferta" className="scroll-mt-24 bg-white py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <PublicPsycholkaGuide action="help_path" message="Zobacz, w czym Aleksandra może Ci pomóc." />
         <div className="mx-auto mb-12 max-w-3xl text-center">
