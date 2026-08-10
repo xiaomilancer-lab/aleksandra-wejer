@@ -72,9 +72,9 @@ export default function ZielinscyPage() {
           <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-14">
             <span className="mx-auto inline-flex items-center gap-2 rounded-full bg-[#EEF1EB] px-4 py-2 text-sm font-semibold text-[#55624D]"><CheckCircle2 size={17} aria-hidden="true" />Rezerwacja online</span>
             <h2 id="zielinscy-booking-title" className="mt-5 text-3xl font-bold text-[#2D4739] sm:text-4xl lg:text-5xl">Wybierz dogodny termin</h2>
-            <p className="mx-auto mt-4 max-w-2xl leading-7 text-gray-600 sm:text-lg">Wybierz lokalizację, dzień i godzinę. Korzystasz z aktualnego kalendarza Aleksandry.</p>
+            <p className="mx-auto mt-4 max-w-2xl leading-7 text-gray-600 sm:text-lg">Centrum Medyczno-Estetyczne Zielińscy Premium · Kasztanowa 1 · Nowa Wieś Rzeczna</p>
           </div>
-          <BookingWizard source="zielinscy" />
+          <BookingWizard source="zielinscy" fixedLocationId="nowa-wies-rzeczna" />
         </div>
       </section>
 
