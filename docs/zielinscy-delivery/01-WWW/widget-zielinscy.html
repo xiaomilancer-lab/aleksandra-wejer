@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Psycholog Aleksandra Wejer — widget Centrum Zielińscy</title>
+  <style>
+    .aw-zielinscy-widget, .aw-zielinscy-widget * { box-sizing: border-box; }
+    .aw-zielinscy-widget { width: 100%; max-width: 640px; margin: 0 auto; color: #2d4739; font-family: Arial, Helvetica, sans-serif; }
+    .aw-zielinscy-widget .aw-card { display: grid; grid-template-columns: 220px minmax(0, 1fr); width: 100%; overflow: hidden; border: 1px solid #e5e1d8; border-radius: 24px; background: #fff; box-shadow: 0 16px 45px rgba(45, 71, 57, .09); }
+    .aw-zielinscy-widget .aw-card__photo { display: block; width: 100%; height: 100%; min-height: 330px; object-fit: cover; object-position: center; }
+    .aw-zielinscy-widget .aw-card__content { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 28px; background: #f8f5f0; }
+    .aw-zielinscy-widget .aw-card__eyebrow { margin: 0; color: #6d7a62; font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+    .aw-zielinscy-widget .aw-card__title { margin: 8px 0 0; color: #23332f; font-family: Georgia, "Times New Roman", serif; font-size: 30px; font-weight: 600; line-height: 1.15; }
+    .aw-zielinscy-widget .aw-card__copy { margin: 16px 0 0; color: #59645d; font-size: 14px; line-height: 1.6; }
+    .aw-zielinscy-widget .aw-card__place { margin: 12px 0 0; color: #6d7a62; font-size: 12px; line-height: 1.55; }
+    .aw-zielinscy-widget .aw-card__cta { display: flex; min-height: 48px; margin-top: 24px; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 12px; background: #6d7a62; color: #fff; font-size: 16px; font-weight: 700; text-align: center; text-decoration: none; transition: background-color .2s ease, transform .2s ease; }
+    .aw-zielinscy-widget .aw-card__cta:hover { background: #58644f; transform: translateY(-1px); }
+    .aw-zielinscy-widget .aw-card__cta:focus-visible { outline: 3px solid rgba(109, 122, 98, .35); outline-offset: 3px; }
+    @media (max-width: 599px) {
+      .aw-zielinscy-widget .aw-card { grid-template-columns: 1fr; border-radius: 20px; }
+      .aw-zielinscy-widget .aw-card__photo { height: 220px; min-height: 0; object-position: center 30%; }
+      .aw-zielinscy-widget .aw-card__content { padding: 22px; }
+      .aw-zielinscy-widget .aw-card__title { font-size: 27px; }
+      .aw-zielinscy-widget .aw-card__place { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="aw-zielinscy-widget">
+    <aside class="aw-card" aria-labelledby="aw-card-title">
+      <img class="aw-card__photo" src="https://aleksandrawejer.pl/images/about-aleksandra-v2.png" width="440" height="660" alt="Aleksandra Wejer siedząca w fotelu" loading="lazy">
+      <div class="aw-card__content">
+        <p class="aw-card__eyebrow">Psycholog</p>
+        <h2 class="aw-card__title" id="aw-card-title">Aleksandra Wejer</h2>
+        <p class="aw-card__copy">Wsparcie dzieci, młodzieży, dorosłych, par i rodzin.</p>
+        <p class="aw-card__place">Przyjmuje w Centrum Medyczno-Estetycznym Zielińscy Premium.</p>
+        <a class="aw-card__cta" href="https://aleksandrawejer.pl/zielinscy?source=zielinscy&amp;utm_source=zielinscy&amp;utm_medium=partner_widget&amp;utm_campaign=rezerwacja" target="_blank" rel="noopener noreferrer">Sprawdź wolne terminy →</a>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
