@@ -45,22 +45,22 @@ export default function About() {
             </h3>
 
             <p className="mt-8 text-lg leading-8 text-gray-600">
-              Jestem psychologiem, absolwentką pięcioletnich
-              studiów magisterskich na Uniwersytecie Gdańskim
-              oraz mamą dwójki chłopców.
+              Jestem mgr psychologii, absolwentką pięcioletnich studiów
+              magisterskich na Uniwersytecie Gdańskim, a prywatnie mamą
+              dwóch chłopców. To doświadczenie przypomina mi każdego dnia,
+              jak ważne jest uważne słuchanie i miejsce na własne tempo.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              W swojej pracy spotykam się z dziećmi, młodzieżą, osobami dorosłymi,
-parami i rodzinami. Wierzę, że każda historia jest wyjątkowa i wymaga
-indywidualnego podejścia, uważności oraz wzajemnego zaufania.
+              Pracuję z dziećmi, młodzieżą, dorosłymi, parami i rodzinami.
+              Każdą osobę i każdą relację staram się zobaczyć indywidualnie —
+              z jej historią, zasobami, trudnościami i tym, co jest ważne właśnie teraz.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Tworzę przestrzeń, w której można spokojnie opowiedzieć o swoich
-trudnościach, emocjach i doświadczeniach, bez oceniania i pośpiechu.
-Wspólnie szukamy sposobów, które pomogą odzyskać równowagę i poczucie
-wpływu na własne życie.
+              Zależy mi na spokojnym, życzliwym podejściu. Tworzę przestrzeń,
+              w której można opowiedzieć o emocjach i doświadczeniach bez oceniania
+              i pośpiechu, a potem wspólnie szukać małych, realnych kroków.
             </p>
 
           </div>

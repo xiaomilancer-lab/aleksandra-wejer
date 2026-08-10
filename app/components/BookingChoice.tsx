@@ -34,14 +34,14 @@ export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
           onClick={() => setShowAlternatives((current) => !current)}
           className="text-sm font-medium text-[#2F6B5F] underline-offset-4 transition hover:text-[#245448] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F] focus-visible:ring-offset-2"
         >
-          {showAlternatives ? "Ukryj inne sposoby kontaktu" : "Masz pytanie? Zobacz inne sposoby kontaktu"}
+          {showAlternatives ? "Ukryj inne sposoby rezerwacji" : "Wolisz zarezerwować przez ZnanyLekarz lub napisać wiadomość?"}
         </button>
       </div>
 
       {showAlternatives && (
         <div className="mt-3 grid gap-2 rounded-2xl border border-stone-200 bg-white/80 p-3 text-left shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
           <a
-            href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/warszawa"
+            href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/starogard-gdanski"
             target="_blank"
             rel="noreferrer"
             className="rounded-xl px-4 py-3 text-sm font-medium text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F]"

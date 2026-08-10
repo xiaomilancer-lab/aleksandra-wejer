@@ -1,13 +1,7 @@
 import Image from "next/image";
-import { CalendarDays, HeartHandshake, MapPin, Sparkles } from "lucide-react";
+import { HeartHandshake, MapPin, Sparkles } from "lucide-react";
 import { PsycholkaAssets } from "@/public/psycholka";
-
-const helpCards = [
-  { label: "Dziecko", image: PsycholkaAssets.children },
-  { label: "Nastolatek", image: PsycholkaAssets.ideas.idea },
-  { label: "Dorosły", image: PsycholkaAssets.lifestyle.coffee },
-  { label: "Para", image: PsycholkaAssets.couples },
-];
+import HelpAccordion from "./HelpAccordion";
 
 export default function MobilePsycholkaJourney() {
   return (
@@ -20,11 +14,8 @@ export default function MobilePsycholkaJourney() {
             <h2 className="mt-1 text-2xl font-bold text-[#2D4739]">Znajdźmy dobry pierwszy krok.</h2>
           </div>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          {helpCards.map((card) => <a key={card.label} href="#kalendarz" className="flex min-h-28 flex-col justify-between rounded-2xl bg-[#F8F5F0] p-3 text-left transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2"><Image src={card.image} alt="" width={52} height={52} className="h-12 w-12 object-contain" /><span className="font-semibold text-[#2D4739]">{card.label}</span></a>)}
-          <a href="#mobile-aleksandra" className="flex min-h-28 flex-col justify-between rounded-2xl border border-[#DCE8E2] bg-[#F7FBF9] p-3 text-left transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2"><Sparkles size={22} className="text-[#6D7A62]" aria-hidden="true" /><span className="font-semibold text-[#2D4739]">Poznaj Aleksandrę</span></a>
-          <a href="#kalendarz" className="flex min-h-28 flex-col justify-between rounded-2xl bg-[#E63946] p-3 text-left text-white shadow-sm transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2"><CalendarDays size={23} aria-hidden="true" /><span className="font-semibold">Umów wizytę</span></a>
-        </div>
+        <div className="mt-5"><HelpAccordion /></div>
+        <a href="#mobile-aleksandra" className="mt-4 flex min-h-14 items-center gap-3 rounded-2xl border border-[#DCE8E2] bg-[#F7FBF9] p-4 text-left transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]"><Sparkles size={22} className="text-[#6D7A62]" aria-hidden="true" /><span className="font-semibold text-[#2D4739]">Poznaj Aleksandrę</span></a>
       </section>
 
       <section id="mobile-aleksandra" className="rounded-3xl bg-white p-5 shadow-sm">

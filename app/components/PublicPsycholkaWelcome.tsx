@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import { Phone, Smartphone, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import PsycholkaWidget from "../panel/components/PsychOLKAWidget";
 import PsycholkaGreetingSequence from "../panel/components/PsycholkaGreetingSequence";
@@ -50,6 +50,7 @@ export default function PublicPsycholkaWelcome() {
   const [firstVisit, setFirstVisit] = useState(true);
   const [greeting, setGreeting] = useState<(typeof greetings)[number]>(greetings[0]);
   const [interactionMessage, setInteractionMessage] = useState<string | null>(null);
+  const [isAppInfoOpen, setIsAppInfoOpen] = useState(false);
   const interactionTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -99,6 +100,7 @@ export default function PublicPsycholkaWelcome() {
 
   return (
     <section aria-labelledby="public-psycholka-welcome-title" className="relative min-h-screen overflow-hidden bg-[#F9F6F1] px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-8 sm:px-6 md:py-14">
+      <button type="button" onClick={() => setIsAppInfoOpen(true)} className="absolute right-4 top-4 z-20 inline-flex max-w-40 items-center gap-2 rounded-2xl border border-[#DCE8E2] bg-white/90 px-3 py-2 text-left text-xs font-semibold leading-4 text-[#31584F] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8] sm:right-6 sm:top-6 md:max-w-48"><Smartphone size={17} className="shrink-0" aria-hidden="true" />Aplikacja dla pacjentów<br />już powstaje ❤️</button>
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 text-center md:gap-8">
         <div className="md:hidden"><Image src={PsycholkaAssets.greeting} alt="PsychOLKA wita Cię na stronie" width={220} height={220} priority className="h-40 w-40 object-contain" /></div>
         <div className="hidden md:block">{firstVisit ? <PsycholkaGreetingSequence className="public-psycholka-welcome" /> : <PsycholkaWidget context="welcome" action="wave" fallbackAction="greeting" className="public-psycholka-welcome" />}</div>
@@ -113,7 +115,6 @@ export default function PublicPsycholkaWelcome() {
         </div>
         <div className="grid w-full max-w-xl grid-cols-2 justify-center gap-3 md:grid-cols-2 md:items-start">
           <div className="relative inline-flex items-center justify-center">
-            <Image src={PsycholkaAssets.booking.calendar} alt="" width={72} height={72} className="pointer-events-none absolute bottom-0 left-3 z-0 h-16 w-16 object-contain md:hidden" />
             <PsycholkaWidget context="welcome" action="point_booking" fallbackAction="greeting" className="public-psycholka-point-booking hidden md:block" />
             <a href="#kalendarz" onClick={() => showInteractionMessage("❤️ Trzymam kciuki.")} className="relative z-10 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#E63946] px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#cc2f3c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2">📅 Umów wizytę</a>
           </div>
@@ -129,6 +130,14 @@ export default function PublicPsycholkaWelcome() {
           {paths.map((path) => <Link key={path.label} href={path.href} className="group flex min-h-24 items-center gap-4 rounded-2xl border border-stone-200 bg-white p-5 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#9CC6B9] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F] focus-visible:ring-offset-2"><span aria-hidden="true" className="text-2xl">{path.icon}</span><span className="font-semibold text-[#23332F] transition group-hover:text-[#2F6B5F]">{path.label}</span></Link>)}
         </div>
       </div>
+      {isAppInfoOpen && <div className="fixed inset-0 z-50 grid place-items-center bg-[#23332F]/25 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="patient-app-title">
+        <div className="relative w-full max-w-md rounded-3xl border border-[#DCE8E2] bg-white p-6 text-left shadow-2xl">
+          <button type="button" onClick={() => setIsAppInfoOpen(false)} aria-label="Zamknij" className="absolute right-4 top-4 rounded-xl p-2 text-[#55624D] transition hover:bg-[#F8F5F0] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]"><X size={18} aria-hidden="true" /></button>
+          <div className="flex items-center gap-3 pr-10"><span className="rounded-2xl bg-[#EEF1EB] p-3 text-[#6D7A62]"><Smartphone size={22} aria-hidden="true" /></span><h2 id="patient-app-title" className="text-xl font-bold text-[#2D4739]">Aplikacja psychOLKA powstaje</h2></div>
+          <p className="mt-5 text-sm leading-6 text-gray-600">Przygotowujemy spokojne miejsce, w którym pacjent będzie mieć pod ręką to, co potrzebne między wizytami.</p>
+          <ul className="mt-5 grid grid-cols-2 gap-2 text-sm text-[#55624D]">{["Dokumenty", "Historia wizyt", "Przypomnienia", "Ćwiczenia", "Materiały od psychologa", "Kontakt z gabinetem", "PsychOLKA"].map((item) => <li key={item} className="rounded-xl bg-[#F8F5F0] px-3 py-2">{item}</li>)}</ul>
+        </div>
+      </div>}
     </section>
   );
 }

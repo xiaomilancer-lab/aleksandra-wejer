@@ -41,10 +41,9 @@ export default function Footer() {
             </div>
 
             <p className="mt-8 max-w-md leading-8 text-gray-600">
-              Pomagam dzieciom, młodzieży, dorosłym oraz rodzinom
-              odnaleźć spokój, zrozumienie i równowagę.
-              Każde spotkanie rozpoczyna się od rozmowy
-              i wspólnego poszukiwania najlepszych rozwiązań.
+              Wierzę, że dobra pomoc zaczyna się od uważnej rozmowy,
+              bez pośpiechu i gotowych ocen. Wspólnie szukamy rozwiązań,
+              które są możliwe i ważne w codziennym życiu.
             </p>
 
           </div>
