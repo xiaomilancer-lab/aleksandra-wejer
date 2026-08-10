@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR — Centrum Medyczno-Estetyczne Zielińscy Premium</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: #eeeae3; font-family: Arial, Helvetica, sans-serif; }
+    .card { width: min(100%, 760px); padding: 56px; border: 1px solid #e5e1d8; border-radius: 36px; background: #f8f5f0; color: #2d4739; text-align: center; box-shadow: 0 24px 70px rgba(45, 71, 57, .12); }
+    .qr { display: block; width: min(100%, 500px); height: auto; margin: 0 auto; padding: 24px; border-radius: 28px; background: #fff; }
+    h1 { margin: 34px auto 0; max-width: 600px; font-family: Georgia, "Times New Roman", serif; font-size: 40px; line-height: 1.15; }
+    p { margin: 16px 0 0; color: #5c675f; font-size: 22px; line-height: 1.45; }
+    @media (max-width: 560px) { .card { padding: 28px; border-radius: 26px; } h1 { font-size: 30px; } p { font-size: 18px; } }
+    @media print { @page { margin: 12mm; } body { min-height: auto; padding: 0; background: #fff; } .card { box-shadow: none; } }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <img class="qr" src="../public/materials/zielinscy/zielinscy-booking-qr.svg" alt="Kod QR prowadzący do rezerwacji wizyty z Aleksandrą Wejer">
+    <h1>Umów wizytę z psycholog Aleksandrą Wejer</h1>
+    <p>Zeskanuj kod i wybierz dogodny termin.</p>
+  </main>
+</body>
+</html>

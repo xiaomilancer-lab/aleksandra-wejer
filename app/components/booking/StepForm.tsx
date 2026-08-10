@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { BookingSource } from "@/app/booking/bookingContext";
 
 interface StepFormProps {
   selectedLocation: string;
   locationId: string;
   selectedDate: string;
   selectedTime: string;
+  source: BookingSource;
 }
 
-export default function StepForm({ selectedLocation, locationId, selectedDate, selectedTime }: StepFormProps) {
+export default function StepForm({ selectedLocation, locationId, selectedDate, selectedTime, source }: StepFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -49,7 +51,7 @@ export default function StepForm({ selectedLocation, locationId, selectedDate, s
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ locationId, date: selectedDate, time: selectedTime, name, phone, email, message, source: "main-site" }),
+        body: JSON.stringify({ locationId, date: selectedDate, time: selectedTime, name, phone, email, message, source }),
       });
       const data = await response.json();
       const nextStatus = data.message ?? (data.success ? "Gotowe. ❤️ Aleksandra otrzymała Twoją rezerwację." : "Nie udało się zapisać rezerwacji.");
