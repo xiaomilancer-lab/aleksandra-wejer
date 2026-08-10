@@ -166,7 +166,7 @@ export default function Footer() {
               © 2026 Aleksandra Wejer. Wszelkie prawa zastrzeżone.
             </p>
 
-            <p className="text-xs text-gray-400">Z miłością zrobił Mężuś ❤️</p>
+            <p className="text-xs text-gray-400">Wykonał Mężuś ❤️</p>
 
           </div>
 

@@ -5,7 +5,7 @@ import HelpAccordion from "./HelpAccordion";
 
 export default function MobilePsycholkaJourney() {
   return (
-    <div className="space-y-4 bg-[#F9F6F1] px-4 pb-12 md:hidden">
+    <div className="space-y-4 bg-[#F9F6F1] px-4 pb-[calc(5rem+env(safe-area-inset-bottom))] md:hidden">
       <section id="mobile-pomoc" data-scroll-anchor="oferta" className="scroll-mt-6 rounded-3xl bg-white p-5 shadow-sm">
         <div className="flex items-center gap-4">
           <Image src={PsycholkaAssets.booking.search} alt="PsychOLKA pomaga znaleźć właściwe wsparcie" width={96} height={96} className="h-20 w-20 object-contain" />
@@ -25,7 +25,8 @@ export default function MobilePsycholkaJourney() {
             <p className="text-sm font-semibold text-[#6D7A62]">Poznaj Aleksandrę</p>
             <h2 className="mt-1 text-2xl font-bold text-[#2D4739]">Aleksandra Wejer</h2>
             <p className="mt-1 text-sm font-medium text-[#55624D]">Psycholog</p>
-            <p className="mt-3 text-sm leading-6 text-gray-600">Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego. Wspieram dzieci, młodzież, dorosłych, pary i rodziny.</p>
+            <p className="mt-3 text-sm leading-6 text-gray-600">Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.</p>
+            <p className="mt-2 text-sm leading-6 text-gray-600">Wspieram dzieci, młodzież, dorosłych, pary<br />oraz rodziny.</p>
           </div>
         </div>
         <div className="mt-4 space-y-3 text-sm leading-6 text-gray-600">
@@ -48,9 +49,9 @@ export default function MobilePsycholkaJourney() {
         </div>
       </section>
 
-      <section className="rounded-3xl bg-white p-5 shadow-sm">
+      <section className="relative z-10 overflow-visible rounded-3xl bg-white p-5 shadow-sm">
         <div className="flex items-center gap-4">
-          <Image src={PsycholkaAssets.booking.calendar} alt="PsychOLKA pomaga umówić termin" width={96} height={96} className="h-20 w-20 shrink-0 object-contain" />
+          <Image src={PsycholkaAssets.booking.calendar} alt="PsychOLKA pomaga umówić termin" width={112} height={112} className="-mt-3 h-24 w-24 shrink-0 object-contain" />
           <div className="min-w-0">
             <p className="text-sm font-semibold text-[#6D7A62]">Umów termin</p>
             <h2 className="mt-1 text-xl font-bold text-[#2D4739]">Zobaczmy wolne terminy.</h2>
