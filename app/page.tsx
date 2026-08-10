@@ -21,7 +21,7 @@ export default function Home() {
       <LocalBusinessSchema />
 
       <PublicBookingAccess />
-      <PublicPsycholkaWelcome desktopHelpSection={<Services />} />
+      <PublicPsycholkaWelcome />
       <MobilePsycholkaJourney />
 
      <div className="hidden md:block"><Quote /></div>
@@ -29,6 +29,8 @@ export default function Home() {
       <div className="hidden md:block"><Hero /></div>
 
       <div className="hidden md:block"><About /></div>
+
+      <div className="hidden md:block"><Services /></div>
 
       <div className="hidden md:block"><PatientAccountTeaser /></div>
 

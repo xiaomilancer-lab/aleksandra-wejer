@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { Phone, Smartphone, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { ReactNode } from "react";
 import PsycholkaWidget from "../panel/components/PsychOLKAWidget";
 import PsycholkaGreetingSequence from "../panel/components/PsycholkaGreetingSequence";
 import { PSYCHOLKA_DEBUG } from "../panel/psycholka/psycholkaConfig";
@@ -37,7 +36,7 @@ function pickMessage<T extends readonly string[]>(messages: T): T[number] {
   return messages[Math.floor(Math.random() * messages.length)]!;
 }
 
-export default function PublicPsycholkaWelcome({ desktopHelpSection }: { desktopHelpSection: ReactNode }) {
+export default function PublicPsycholkaWelcome() {
   const [firstVisit, setFirstVisit] = useState(true);
   const [greeting, setGreeting] = useState<(typeof greetings)[number]>(greetings[0]);
   const [interactionMessage, setInteractionMessage] = useState<string | null>(null);
@@ -115,7 +114,6 @@ export default function PublicPsycholkaWelcome({ desktopHelpSection }: { desktop
           <a href="https://wa.me/48510777469" target="_blank" rel="noreferrer" className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#1FAE57] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2">📱 WhatsApp</a>
         </div>
       </div>
-      <div className="hidden w-full md:block">{desktopHelpSection}</div>
       {isAppInfoOpen && <div className="fixed inset-0 z-50 grid place-items-center bg-[#23332F]/25 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="patient-app-title">
         <div className="relative w-full max-w-md rounded-3xl border border-[#DCE8E2] bg-white p-6 text-left shadow-2xl">
           <button type="button" onClick={() => setIsAppInfoOpen(false)} aria-label="Zamknij" className="absolute right-4 top-4 rounded-xl p-2 text-[#55624D] transition hover:bg-[#F8F5F0] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]"><X size={18} aria-hidden="true" /></button>
