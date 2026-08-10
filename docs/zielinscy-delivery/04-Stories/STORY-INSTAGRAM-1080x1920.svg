@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs><clipPath id="photo"><rect x="0" y="0" width="1080" height="910"/></clipPath></defs>
+  <rect width="1080" height="1920" fill="#F8F5F0"/>
+  <image x="0" y="0" width="1080" height="910" xlink:href="../01-WWW/zdjecie-aleksandra.png" preserveAspectRatio="xMidYMin slice" clip-path="url(#photo)"/>
+  <rect y="790" width="1080" height="180" fill="#F8F5F0" opacity="0.92"/>
+  <text x="72" y="858" fill="#6D7A62" font-family="Arial, sans-serif" font-size="23" font-weight="700" letter-spacing="3">CENTRUM MEDYCZNO-ESTETYCZNE ZIELIŃSCY PREMIUM</text>
+  <text x="72" y="1060" fill="#23332F" font-family="Georgia, serif" font-size="86" font-weight="600">Aleksandra Wejer</text>
+  <text x="76" y="1130" fill="#6D7A62" font-family="Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="6">PSYCHOLOG</text>
+  <text x="76" y="1248" fill="#59645D" font-family="Arial, sans-serif" font-size="34">
+    <tspan x="76" dy="0">Konsultacje dla dzieci, młodzieży,</tspan>
+    <tspan x="76" dy="52">dorosłych, par i rodzin.</tspan>
+  </text>
+  <text x="76" y="1438" fill="#23332F" font-family="Arial, sans-serif" font-size="38" font-weight="700">Umów wizytę online</text>
+  <rect x="150" y="1515" width="780" height="210" rx="34" fill="#FFFFFF" stroke="#6D7A62" stroke-width="4" stroke-dasharray="14 12"/>
+  <text x="540" y="1594" text-anchor="middle" fill="#6D7A62" font-family="Arial, sans-serif" font-size="23" font-weight="700" letter-spacing="3">MIEJSCE NA NAKLEJKĘ LINK</text>
+  <text x="540" y="1668" text-anchor="middle" fill="#23332F" font-family="Arial, sans-serif" font-size="38" font-weight="700">UMÓW WIZYTĘ</text>
+  <text x="540" y="1812" text-anchor="middle" fill="#6D7A62" font-family="Arial, sans-serif" font-size="23">Kasztanowa 1 · Nowa Wieś Rzeczna</text>
+</svg>
