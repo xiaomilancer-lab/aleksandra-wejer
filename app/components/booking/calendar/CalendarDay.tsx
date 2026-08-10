@@ -17,13 +17,19 @@ export default function CalendarDay({
   onClick={onClick}
       className={`
   flex
-  h-14
+  h-11
   items-center
   justify-center
   rounded-xl
   border
   font-semibold
   transition
+  focus-visible:outline-none
+  focus-visible:ring-2
+  focus-visible:ring-[#6D7A62]
+  focus-visible:ring-offset-2
+  active:scale-[0.97]
+  sm:h-14
 
   ${
     !available

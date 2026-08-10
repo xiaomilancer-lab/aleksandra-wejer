@@ -72,8 +72,8 @@ body {
 .public-psycholka-guide-end .psycholka-visual { width: 80px; height: 94px; }
 @media (max-width: 640px) {
   .public-psycholka-welcome .psycholka-visual { width: 200px; height: 240px; }
-  .public-psycholka-point-booking { right: calc(100% + .125rem); bottom: -1.15rem; }
-  .public-psycholka-point-booking .psycholka-visual { width: 68px; height: 84px; }
+  .public-psycholka-point-booking { left: .75rem; right: auto; bottom: -.55rem; z-index: 0; }
+  .public-psycholka-point-booking .psycholka-visual { width: 62px; height: 76px; }
   .public-psycholka-guide .psycholka-visual { width: 56px; height: 66px; }
   .public-psycholka-guide-end .psycholka-visual { width: 70px; height: 80px; }
 }

@@ -15,7 +15,7 @@ export default function ZielinscyBookingTeaser({ variant }: ZielinscyBookingTeas
       <div className={`overflow-hidden rounded-3xl border border-[#D5DCCF] bg-white shadow-sm ${isEmbed ? "p-5" : "p-6 sm:p-10"}`}>
         <div className={`grid items-center gap-5 ${isEmbed ? "sm:grid-cols-[110px_1fr]" : "md:grid-cols-[180px_1fr]"}`}>
           <div className="flex justify-center">
-            <PsycholkaWidget context="welcome" action="point_booking" fallbackAction="greeting" className={isEmbed ? "w-[100px]" : "w-[160px]"} />
+            <PsycholkaWidget context="welcome" action="greeting" className={isEmbed ? "w-[100px]" : "w-[160px]"} />
           </div>
           <div>
             <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#6D7A62]"><MapPin size={16} aria-hidden="true" />Nowa Wieś Rzeczna</p>

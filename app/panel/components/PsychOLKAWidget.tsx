@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { PsycholkaAssets } from "@/public/psycholka";
 import { getPsycholkaAsset, getPsycholkaGreetingFallback, getPsycholkaIdleFallback } from "../psycholka/psycholkaAssets";
 import { getPsycholkaBehavior, PSYCHOLKA_DEBUG } from "../psycholka/psycholkaConfig";
 import type { PsycholkaAction, PsycholkaContext, PsycholkaEventHooks, PsycholkaMood } from "../psycholka/psycholkaTypes";
@@ -84,11 +86,12 @@ export default function PsycholkaWidget({
     <div className={`max-w-full ${breathEnabled ? "psycholka-breath" : ""} ${behavior.interactive ? "" : "pointer-events-none"} ${className ?? ""}`} aria-label="PsychOLKA" data-psycholka-mood={resolvedMood}>
       <div className={`psycholka-visual ${visualClass} ${animationClass}`}>
         {showAsset ? (
-          <img
+          <Image
             src={displayedAsset.src}
             width={displayedAsset.width}
             height={displayedAsset.height}
             alt=""
+            unoptimized
             onError={() => {
               if (!usesFallback) {
                 setPrimaryFailed(true);
@@ -103,11 +106,12 @@ export default function PsycholkaWidget({
             className="h-full w-full object-contain"
           />
         ) : (
-          <img
-            src="/psycholka/greeting/greeting-default-v1.webp"
+          <Image
+            src={PsycholkaAssets.greeting}
             width={320}
             height={400}
             alt="PsychOLKA"
+            unoptimized
             className="h-full w-full object-contain"
           />
         )}

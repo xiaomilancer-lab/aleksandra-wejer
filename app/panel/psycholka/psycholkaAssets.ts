@@ -1,39 +1,38 @@
 import type { PsycholkaAnimationAsset, PsycholkaAction, PsycholkaContext } from "./psycholkaTypes";
+import { PsycholkaAssets } from "@/public/psycholka";
 
-// Final assets will use the approved PsychOLKA character reference:
-// adult woman, dark-blonde/light-brown hair, pink blazer, black top, jeans,
-// warm playful expression.
+// The registry is the single mapping between a semantic PsychOLKA action and
+// the current renderer asset. A future renderer can add Rive, Lottie or Live2D
+// without changing consumers of PsycholkaWidget.
 export const psycholkaAssets: PsycholkaAnimationAsset[] = [
-  { id: "idle-default-v1", action: "idle", src: "/psycholka/idle/idle-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2600, contextAllowlist: ["welcome", "today", "before_visit", "session", "after_visit", "empty_state", "homework"] },
-  { id: "wave-default-v1", action: "wave", src: "/psycholka/wave/wave-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 1800, contextAllowlist: ["welcome", "dashboard", "today", "after_visit", "success"] },
-  { id: "coffee-default-v1", action: "coffee", src: "/psycholka/coffee/coffee-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["dashboard", "day_closing"] },
-  { id: "greeting-default-v1", action: "greeting", src: "/psycholka/greeting/greeting-default-v1.webp", format: "webp", width: 320, height: 400, loop: false, durationMs: 2500, contextAllowlist: ["welcome"] },
-  { id: "open-arms-default-v1", action: "open_arms", src: "/psycholka/open-arms/open-arms-default-v1.webp", format: "webp", width: 320, height: 400, loop: false, durationMs: 1000, contextAllowlist: ["welcome"] },
-  { id: "point-booking-default-v1", action: "point_booking", src: "/psycholka/point-booking/point-booking-default-v1.webp", format: "webp", width: 320, height: 400, loop: false, durationMs: null, contextAllowlist: ["welcome"] },
-  // Planned context assets. Until the WebP files are delivered, PsycholkaWidget
-  // safely switches to the explicit fallback passed by the calling section.
-  { id: "search-default-v1", action: "search", src: "/psycholka/search/search-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["dashboard"] },
-  { id: "sad-default-v1", action: "sad", src: "/psycholka/sad/sad-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["today"] },
-  { id: "happy-default-v1", action: "happy", src: "/psycholka/happy/happy-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["today"] },
-  { id: "meet-aleksandra-default-v1", action: "meet_aleksandra", src: "/psycholka/meet-aleksandra/meet-aleksandra-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
-  { id: "help-path-default-v1", action: "help_path", src: "/psycholka/help-path/help-path-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
-  { id: "locations-default-v1", action: "locations", src: "/psycholka/locations/locations-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
-  { id: "reviews-default-v1", action: "reviews", src: "/psycholka/reviews/reviews-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
-  { id: "account-whisper-default-v1", action: "account_whisper", src: "/psycholka/account-whisper/account-whisper-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
-  { id: "booking-choice-default-v1", action: "booking_choice", src: "/psycholka/booking-choice/booking-choice-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
-  { id: "goodbye-default-v1", action: "goodbye", src: "/psycholka/goodbye/goodbye-default-v1.webp", format: "webp", width: 320, height: 400, loop: true, durationMs: 2400, contextAllowlist: ["welcome"] },
+  { id: "work-idle", action: "idle", src: PsycholkaAssets.work, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome", "today", "before_visit", "session", "after_visit", "empty_state", "homework"] },
+  { id: "greeting-wave", action: "wave", src: PsycholkaAssets.greeting, format: "png", width: 320, height: 400, loop: false, durationMs: null, contextAllowlist: ["welcome", "dashboard", "today", "after_visit", "success"] },
+  { id: "coffee-break", action: "coffee", src: PsycholkaAssets.lifestyle.coffee, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["dashboard", "day_closing"] },
+  { id: "greeting", action: "greeting", src: PsycholkaAssets.greeting, format: "png", width: 320, height: 400, loop: false, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "greeting-open-arms", action: "open_arms", src: PsycholkaAssets.greeting, format: "png", width: 320, height: 400, loop: false, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "booking-calendar", action: "point_booking", src: PsycholkaAssets.booking.calendar, format: "png", width: 320, height: 400, loop: false, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "search-help", action: "search", src: PsycholkaAssets.booking.search, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["dashboard"] },
+  { id: "waiting-sad", action: "sad", src: PsycholkaAssets.waiting, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["today", "welcome"] },
+  { id: "success-happy", action: "happy", src: PsycholkaAssets.emotions.success, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["today", "welcome"] },
+  { id: "work-meet", action: "meet_aleksandra", src: PsycholkaAssets.work, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "search-help-path", action: "help_path", src: PsycholkaAssets.booking.search, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "booking-locations", action: "locations", src: PsycholkaAssets.booking.calendar, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "success-reviews", action: "reviews", src: PsycholkaAssets.emotions.success, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "work-account", action: "account_whisper", src: PsycholkaAssets.work, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "booking-choice", action: "booking_choice", src: PsycholkaAssets.booking.calendar, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
+  { id: "goodnight", action: "goodbye", src: PsycholkaAssets.emotions.goodnight, format: "png", width: 320, height: 400, loop: true, durationMs: null, contextAllowlist: ["welcome"] },
 ];
 
 export const publicJourneyAssets = [
-  { place: "Hero", action: "greeting", path: "/psycholka/greeting/greeting-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Booking", action: "point_booking", path: "/psycholka/point-booking/point-booking-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Aleksandra", action: "meet_aleksandra", path: "/psycholka/meet-aleksandra/meet-aleksandra-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Zakres pomocy", action: "help_path", path: "/psycholka/help-path/help-path-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Gabinety", action: "locations", path: "/psycholka/locations/locations-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Opinie", action: "reviews", path: "/psycholka/reviews/reviews-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Konto", action: "account_whisper", path: "/psycholka/account-whisper/account-whisper-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Wybór wizyty", action: "booking_choice", path: "/psycholka/booking-choice/booking-choice-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
-  { place: "Pożegnanie", action: "goodbye", path: "/psycholka/goodbye/goodbye-default-v1.webp", fallback: "greeting → idle → neutralny widok" },
+  { place: "Hero", action: "greeting", path: PsycholkaAssets.greeting, fallback: "greeting → neutralny widok" },
+  { place: "Booking", action: "point_booking", path: PsycholkaAssets.booking.calendar, fallback: "greeting → neutralny widok" },
+  { place: "Aleksandra", action: "meet_aleksandra", path: PsycholkaAssets.work, fallback: "greeting → neutralny widok" },
+  { place: "Zakres pomocy", action: "help_path", path: PsycholkaAssets.booking.search, fallback: "greeting → neutralny widok" },
+  { place: "Gabinety", action: "locations", path: PsycholkaAssets.booking.calendar, fallback: "greeting → neutralny widok" },
+  { place: "Opinie", action: "reviews", path: PsycholkaAssets.emotions.success, fallback: "greeting → neutralny widok" },
+  { place: "Konto", action: "account_whisper", path: PsycholkaAssets.work, fallback: "greeting → neutralny widok" },
+  { place: "Wybór wizyty", action: "booking_choice", path: PsycholkaAssets.booking.calendar, fallback: "greeting → neutralny widok" },
+  { place: "Pożegnanie", action: "goodbye", path: PsycholkaAssets.emotions.goodnight, fallback: "greeting → neutralny widok" },
 ] as const;
 
 export function getPsycholkaAsset(action: PsycholkaAction, context: PsycholkaContext) {

@@ -56,7 +56,7 @@ const isFormValid =
       setEmail("");
       setCategory("Dorosły");
       setMessage("");
-    } catch (err) {
+    } catch {
       setError(
         "Nie udało się wysłać wiadomości. Spróbuj ponownie za chwilę."
       );
@@ -66,7 +66,7 @@ const isFormValid =
   }
 
   return (
-    <section id="kontakt" className="bg-[#F8F5F0] py-24">
+    <section id="kontakt" data-scroll-anchor="kontakt" className="scroll-mt-24 bg-[#F8F5F0] py-24">
       <div className="max-w-4xl mx-auto bg-white rounded-[40px] shadow-2xl p-12">
         <PublicPsycholkaGuide message="Jeżeli masz pytania, jesteśmy tutaj." />
 
@@ -118,33 +118,41 @@ const isFormValid =
           <input
             type="text"
             placeholder="Imię i nazwisko *"
+            aria-label="Imię i nazwisko"
+            autoComplete="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
            
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           />
 
           <input
             type="tel"
             placeholder="Telefon *"
+            aria-label="Telefon"
+            autoComplete="tel"
+            inputMode="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           />
 
           <input
             type="email"
             placeholder="Adres e-mail (opcjonalnie)"
+            aria-label="Adres e-mail"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            aria-label="Obszar konsultacji"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           >
             <option>Dziecko</option>
             <option>Nastolatek</option>
@@ -156,10 +164,11 @@ const isFormValid =
           <textarea
             rows={6}
             placeholder="Krótko opisz, z czym chciałbyś/chciałabyś się zgłosić."
+            aria-label="Krótki opis zgłoszenia"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           
-            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#6D7A62]"
+            className="w-full rounded-2xl border border-gray-300 px-6 py-4 text-lg text-[#4B4338] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           />
 
           <button

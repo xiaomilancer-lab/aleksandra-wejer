@@ -1,20 +1,16 @@
 "use client";
 
-import { useState } from "react";
-
 type BookingChoiceProps = {
-  onCalendarClick: () => void;
+  onCalendarClick?: () => void;
 };
 
 export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
-  const [showAlternatives, setShowAlternatives] = useState(false);
-
   return (
     <div className="w-full max-w-md">
       <button
         type="button"
-        onClick={onCalendarClick}
-        className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-[#E63946] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#E63946]/20 transition duration-200 hover:-translate-y-0.5 hover:bg-[#cc2f3c] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2"
+        onClick={() => (onCalendarClick ?? (() => document.getElementById("booking-wizard")?.scrollIntoView({ behavior: "smooth", block: "start" })))()}
+        className="group hidden w-full items-center justify-center gap-3 rounded-2xl bg-[#E63946] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#E63946]/20 transition duration-200 hover:-translate-y-0.5 hover:bg-[#cc2f3c] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2 md:flex"
       >
         <span aria-hidden="true">📅</span>
         Umów wizytę
@@ -23,41 +19,31 @@ export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
         </span>
       </button>
 
-      <p className="mt-3 text-center text-sm text-stone-600">
+      <p className="mt-3 hidden text-center text-sm text-stone-600 md:block">
         Wybierz dogodny termin w kalendarzu.
       </p>
 
-      <div className="mt-4 text-center">
-        <button
-          type="button"
-          aria-expanded={showAlternatives}
-          onClick={() => setShowAlternatives((current) => !current)}
-          className="text-sm font-medium text-[#2F6B5F] underline-offset-4 transition hover:text-[#245448] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F] focus-visible:ring-offset-2"
-        >
-          {showAlternatives ? "Ukryj inne sposoby kontaktu" : "Masz pytanie? Zobacz inne sposoby kontaktu"}
-        </button>
-      </div>
-
-      {showAlternatives && (
-        <div className="mt-3 grid gap-2 rounded-2xl border border-stone-200 bg-white/80 p-3 text-left shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+      <div className="rounded-2xl border border-stone-200 bg-white/75 p-4 text-left md:mt-5">
+        <p className="text-center text-sm font-medium text-stone-600">Wolisz inną formę kontaktu?</p>
+        <div className="mt-2 grid gap-1">
           <a
-            href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/warszawa"
+            href="https://www.znanylekarz.pl/aleksandra-wejer/psycholog/starogard-gdanski"
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl px-4 py-3 text-sm font-medium text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F]"
+            className="rounded-xl px-3 py-2.5 text-sm font-medium text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F]"
           >
-            Umów wizytę przez ZnanyLekarz →
+            Umów przez ZnanyLekarz →
           </a>
           <a
-            href="https://wa.me/48512729997"
+            href="https://wa.me/48510777469"
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl px-4 py-3 text-sm font-medium text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F]"
+            className="rounded-xl px-3 py-2.5 text-sm font-medium text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F]"
           >
-            Napisz wiadomość na WhatsApp →
+            Napisz wiadomość →
           </a>
         </div>
-      )}
+      </div>
     </div>
   );
 }

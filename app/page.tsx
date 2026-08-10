@@ -12,6 +12,7 @@ import PublicBookingAccess from "./components/PublicBookingAccess";
 import PublicWelcomeReplay from "./components/PublicWelcomeReplay";
 import PatientAccountTeaser from "./components/PatientAccountTeaser";
 import PublicGuidedJourneyEnd from "./components/PublicGuidedJourneyEnd";
+import MobilePsycholkaJourney from "./components/MobilePsycholkaJourney";
 
 export default function Home() {
   return (
@@ -21,27 +22,28 @@ export default function Home() {
 
       <PublicBookingAccess />
       <PublicPsycholkaWelcome />
+      <MobilePsycholkaJourney />
 
-     <Quote />
+     <div className="hidden md:block"><Quote /></div>
 
-      <Hero />
+      <div className="hidden md:block"><Hero /></div>
 
-      <About />
+      <div className="hidden md:block"><About /></div>
 
-      <PatientAccountTeaser />
+      <div className="hidden md:block"><Services /></div>
 
-      <Services />
+      <div className="hidden md:block"><PatientAccountTeaser /></div>
 
       <Calendar />
       
       <FAQ />
 
 
-      <Contact />
+      <div className="hidden md:block"><Contact /></div>
 
-      <PublicGuidedJourneyEnd />
+      <div className="hidden md:block"><PublicGuidedJourneyEnd /></div>
 
-      <div className="bg-[#F8F5F0] pb-6 text-center"><PublicWelcomeReplay /></div>
+      <div className="hidden bg-[#F8F5F0] pb-6 text-center md:block"><PublicWelcomeReplay /></div>
 
       <Footer />
 

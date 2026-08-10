@@ -32,25 +32,27 @@ export default async function PatientPage({ params, searchParams }: PatientPageP
   const initialTab = tab === "notes" || tab === "tasks" || tab === "documents" || tab === "summary" || tab === "reflection" || tab === "patient-journey" || tab === "followups" ? tab : "visits";
 
   await connection();
-  const [patient, visits, notes, tasks, timeline, templates, reflections, reflectionCards, latestPlan, memory, visitPlans, followupReminders] = await Promise.all([
-    getPatientById(id),
-    getPatientVisits(id),
-    getPatientNotes(id),
-    getPatientTasks(id),
-    getPatientTimeline(id),
-    getTemplates(),
-    getPatientReflections(id),
-    getReflectionCards(id),
-    getLatestPatientVisitPlan(id),
-    getPatientMemory(id),
-    getPatientVisitPlans(id),
-    getPatientFollowupReminders(id),
-  ]);
-  const knowledgeMaterials = await getKnowledgeMaterialsForVisits(visits.map((visit) => visit.id));
+  const patient = await getPatientById(id);
 
   if (!patient) {
     notFound();
   }
+
+  const optional = <T,>(promise: Promise<T>, fallback: T) => promise.catch(() => fallback);
+  const [visits, notes, tasks, timeline, templates, reflections, reflectionCards, latestPlan, memory, visitPlans, followupReminders] = await Promise.all([
+    optional(getPatientVisits(id), []),
+    optional(getPatientNotes(id), []),
+    optional(getPatientTasks(id), []),
+    optional(getPatientTimeline(id), []),
+    optional(getTemplates(), []),
+    optional(getPatientReflections(id), []),
+    optional(getReflectionCards(id), []),
+    optional(getLatestPatientVisitPlan(id), null),
+    optional(getPatientMemory(id), []),
+    optional(getPatientVisitPlans(id), []),
+    optional(getPatientFollowupReminders(id), []),
+  ]);
+  const knowledgeMaterials = await optional(getKnowledgeMaterialsForVisits(visits.map((visit) => visit.id)), []);
 
   const createdAt = new Intl.DateTimeFormat("pl-PL", {
     day: "numeric",

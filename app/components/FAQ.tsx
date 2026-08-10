@@ -47,7 +47,8 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="bg-[#F8F5F0] py-24"
+      data-scroll-anchor="faq"
+      className="scroll-mt-24 bg-[#F8F5F0] py-24"
     >
       <div className="mx-auto max-w-4xl px-6">
 
@@ -216,7 +217,7 @@ export default function FAQ() {
               </p>
 
               <a
-                href="#kontakt"
+                href="#kalendarz"
                 className="
                   mt-8
                   inline-flex

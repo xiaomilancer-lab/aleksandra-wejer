@@ -17,6 +17,13 @@ export default function BookingWizard() {
     });
     return () => window.cancelAnimationFrame(frame);
   }, [selectedDate]);
+  useEffect(() => {
+    if (!selectedTime) return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("step-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedTime]);
   const location = locations.find((item) => item.id === selectedLocation);
-  return <section className="space-y-10"><StepLocation selectedLocation={selectedLocation} setSelectedLocation={(value) => { setSelectedLocation(value); setSelectedDate(null); setSelectedTime(null); }} />{selectedLocation && location && <><StepSummary locationName={location.name} /><StepDate selectedDate={selectedDate} setSelectedDate={(value) => { setSelectedDate(value); setSelectedTime(null); }} />{selectedDate && <StepTime key={selectedDate} selectedLocation={selectedLocation} selectedDate={selectedDate} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}{selectedTime && <StepForm selectedLocation={location.name} locationId={selectedLocation} selectedDate={selectedDate!} selectedTime={selectedTime} />}</>}</section>;
+  return <section id="booking-wizard" className="space-y-10"><StepLocation selectedLocation={selectedLocation} setSelectedLocation={(value) => { setSelectedLocation(value); setSelectedDate(null); setSelectedTime(null); }} />{selectedLocation && location && <><StepSummary locationName={location.name} /><StepDate locationId={selectedLocation} selectedDate={selectedDate} setSelectedDate={(value) => { setSelectedDate(value); setSelectedTime(null); }} />{selectedDate && <StepTime key={selectedDate} selectedLocation={selectedLocation} selectedDate={selectedDate} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}{selectedTime && <StepForm selectedLocation={location.name} locationId={selectedLocation} selectedDate={selectedDate!} selectedTime={selectedTime} />}</>}</section>;
 }

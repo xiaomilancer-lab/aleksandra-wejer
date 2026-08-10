@@ -210,7 +210,6 @@ export async function getDayClosingSummary(now: Date = new Date()): Promise<DayC
   const bookingsResult = await supabaseAdmin.from("bookings").select("id, patient_id, name, visit_date, visit_time, status").eq("visit_date", date).order("visit_time", { ascending: true });
   if (bookingsResult.error) throw bookingsResult.error;
   const visits = (bookingsResult.data ?? []) as Array<Pick<Visit, "id" | "patient_id" | "name" | "visit_date" | "visit_time" | "status">>;
-  const visitIds = visits.map((visit) => visit.id);
   const patientIds = [...new Set(visits.flatMap((visit) => visit.patient_id ? [visit.patient_id] : []))];
   const [notesResult, tasksResult, followupsResult, patientsResult, tomorrowResult] = await Promise.all([
     supabaseAdmin.from("patient_notes").select("id, visit_id, created_at"),

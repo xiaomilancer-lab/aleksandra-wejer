@@ -33,7 +33,7 @@ export default function CalendarHeader({
       <button
         onClick={onPrevious}
         disabled={!canGoPrevious}
-        className="rounded-xl border border-gray-200 px-4 py-2 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+        className="rounded-xl border border-gray-200 px-4 py-2 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
       >
         ←
       </button>
@@ -44,7 +44,7 @@ export default function CalendarHeader({
 
       <button
         onClick={onNext}
-        className="rounded-xl border border-gray-200 px-4 py-2 transition hover:bg-gray-100"
+        className="rounded-xl border border-gray-200 px-4 py-2 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 active:scale-[0.97]"
       >
         →
       </button>

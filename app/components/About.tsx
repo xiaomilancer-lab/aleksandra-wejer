@@ -4,7 +4,7 @@ import PublicPsycholkaGuide from "./PublicPsycholkaGuide";
 
 export default function About() {
   return (
-    <section id="omnie" className="bg-white py-28">
+    <section id="omnie" data-scroll-anchor="omnie" className="scroll-mt-24 bg-white py-28">
       <div className="max-w-7xl mx-auto px-8">
         <PublicPsycholkaGuide action="meet_aleksandra" message="Chcesz poznać Aleksandrę? ❤️" />
 
@@ -45,22 +45,22 @@ export default function About() {
             </h3>
 
             <p className="mt-8 text-lg leading-8 text-gray-600">
-              Jestem psychologiem, absolwentką pięcioletnich
-              studiów magisterskich na Uniwersytecie Gdańskim
-              oraz mamą dwójki chłopców.
+              Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.
+              W swojej pracy wspieram dzieci, młodzież, osoby dorosłe, pary i rodziny.
+              Ważne jest dla mnie stworzenie spokojnej, bezpiecznej przestrzeni,
+              w której można bez oceniania porozmawiać o trudnościach.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              W swojej pracy spotykam się z dziećmi, młodzieżą, osobami dorosłymi,
-parami i rodzinami. Wierzę, że każda historia jest wyjątkowa i wymaga
-indywidualnego podejścia, uważności oraz wzajemnego zaufania.
+              Każdą osobę i każdą relację staram się zobaczyć indywidualnie —
+              z jej historią, zasobami, trudnościami i tym, co jest ważne właśnie teraz.
+              Wspólnie szukamy najlepszego rozwiązania, w tempie odpowiednim dla Ciebie.
             </p>
 
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Tworzę przestrzeń, w której można spokojnie opowiedzieć o swoich
-trudnościach, emocjach i doświadczeniach, bez oceniania i pośpiechu.
-Wspólnie szukamy sposobów, które pomogą odzyskać równowagę i poczucie
-wpływu na własne życie.
+              Prywatnie jestem mamą dwóch chłopców, dlatego bliskie są mi również
+              codzienne wyzwania rodzicielstwa i życia rodzinnego. W pracy łączę
+              wiedzę psychologiczną z uważnością, spokojem i indywidualnym podejściem.
             </p>
 
           </div>
@@ -140,7 +140,7 @@ wpływu na własne życie.
                   </p>
 
                   <a
-                    href="tel:+48735110077"
+                    href="tel:+48510777469"
                     className="mt-1 block text-base font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
                   >
                     ☎ +48 510 777 469
@@ -201,7 +201,7 @@ wpływu na własne życie.
                   </p>
 
                   <a
-                    href="tel:+48735110077"
+                    href="tel:+48510777469"
                     className="mt-2 block text-lg font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
                   >
                     ☎ +48 510 777 469

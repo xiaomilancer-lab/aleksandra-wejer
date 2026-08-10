@@ -52,10 +52,10 @@ export default function PublicQuickContact() {
       {isOpen && (
         <form onSubmit={handleSubmit} className="mt-3 rounded-2xl border border-[#DCE8E2] bg-white p-4 text-left shadow-sm">
           <div className="grid gap-3 sm:grid-cols-2">
-            <input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Imię i nazwisko" className="min-h-11 rounded-xl border border-stone-200 px-3 text-sm text-[#23332F] outline-none placeholder:text-stone-500 focus:ring-2 focus:ring-[#6D7A62]" />
-            <input required type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="Telefon" className="min-h-11 rounded-xl border border-stone-200 px-3 text-sm text-[#23332F] outline-none placeholder:text-stone-500 focus:ring-2 focus:ring-[#6D7A62]" />
+            <input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Imię i nazwisko" aria-label="Imię i nazwisko" autoComplete="name" className="min-h-11 rounded-xl border border-stone-300 px-3 text-sm text-[#23332F] outline-none placeholder:text-slate-500 transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]" />
+            <input required type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="Telefon" aria-label="Telefon" autoComplete="tel" inputMode="tel" className="min-h-11 rounded-xl border border-stone-300 px-3 text-sm text-[#23332F] outline-none placeholder:text-slate-500 transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]" />
           </div>
-          <textarea required rows={3} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Napisz krótko, w czym mogę pomóc." className="mt-3 w-full rounded-xl border border-stone-200 px-3 py-2.5 text-sm text-[#23332F] outline-none placeholder:text-stone-500 focus:ring-2 focus:ring-[#6D7A62]" />
+          <textarea required rows={3} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Napisz krótko, w czym mogę pomóc." aria-label="Wiadomość" className="mt-3 w-full rounded-xl border border-stone-300 px-3 py-2.5 text-sm text-[#23332F] outline-none placeholder:text-slate-500 transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]" />
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <p aria-live="polite" className={`text-xs ${status === "error" ? "text-[#A34D55]" : "text-stone-500"}`}>
               {status === "success" ? "Dziękuję — wiadomość została wysłana." : status === "error" ? "Nie udało się wysłać wiadomości. Spróbuj ponownie." : "Odpowiadamy zazwyczaj w ciągu 24 godzin roboczych."}
