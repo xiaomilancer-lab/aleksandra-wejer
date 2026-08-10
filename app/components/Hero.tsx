@@ -5,7 +5,7 @@ import { MapPin } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section id="start" className="relative overflow-hidden bg-gradient-to-b from-[#F8F5F0] via-white to-[#F8F5F0]">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8F5F0] via-white to-[#F8F5F0]">
       <div className="mx-auto max-w-7xl px-8 py-20">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           <div>

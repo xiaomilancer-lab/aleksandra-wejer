@@ -35,7 +35,7 @@ export default function BookingChoice({ onCalendarClick }: BookingChoiceProps) {
             Umów przez ZnanyLekarz →
           </a>
           <a
-            href="https://wa.me/48512729997"
+            href="https://wa.me/48510777469"
             target="_blank"
             rel="noreferrer"
             className="rounded-xl px-3 py-2.5 text-sm font-medium text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F]"

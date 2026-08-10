@@ -44,7 +44,7 @@ export default function CalendarGrid({ selectedDate, setSelectedDate, currentMon
         setAvailability({ requestKey, state: "ready", dates: new Set((data.slots ?? []).map((slot: { date: string }) => slot.date)) });
       })
       .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (controller.signal.aborted || (error instanceof DOMException && error.name === "AbortError")) return;
         setAvailability({ requestKey, state: "error", dates: new Set() });
       });
 

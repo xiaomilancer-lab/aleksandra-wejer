@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Phone, Smartphone, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import PsycholkaWidget from "../panel/components/PsychOLKAWidget";
 import PsycholkaGreetingSequence from "../panel/components/PsycholkaGreetingSequence";
 import { PSYCHOLKA_DEBUG } from "../panel/psycholka/psycholkaConfig";
@@ -33,20 +33,11 @@ const guidedMessages = [
   "Najpierw poznajmy gabinet.",
 ] as const;
 
-const paths = [
-  { icon: "🧸", label: "Szukam pomocy dla dziecka", href: "#oferta" },
-  { icon: "🎒", label: "Nastolatek", href: "#oferta" },
-  { icon: "❤️", label: "Dorosły", href: "#oferta" },
-  { icon: "🤝", label: "Para", href: "#oferta" },
-  { icon: "👩‍⚕️", label: "Chcę poznać Aleksandrę", href: "#omnie" },
-  { icon: "📅", label: "Chcę od razu umówić wizytę", href: "#kalendarz" },
-];
-
 function pickMessage<T extends readonly string[]>(messages: T): T[number] {
   return messages[Math.floor(Math.random() * messages.length)]!;
 }
 
-export default function PublicPsycholkaWelcome() {
+export default function PublicPsycholkaWelcome({ desktopHelpSection }: { desktopHelpSection: ReactNode }) {
   const [firstVisit, setFirstVisit] = useState(true);
   const [greeting, setGreeting] = useState<(typeof greetings)[number]>(greetings[0]);
   const [interactionMessage, setInteractionMessage] = useState<string | null>(null);
@@ -124,12 +115,7 @@ export default function PublicPsycholkaWelcome() {
           <a href="https://wa.me/48510777469" target="_blank" rel="noreferrer" className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#1FAE57] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2">📱 WhatsApp</a>
         </div>
       </div>
-      <div id="public-paths" className="mx-auto mt-16 hidden w-full max-w-6xl scroll-mt-24 md:block">
-        <div className="mb-6 text-center"><h2 className="font-serif text-3xl font-semibold text-[#23332F]">W czym mogę Ci pomóc?</h2><p className="mt-2 text-stone-600">Wybierz ścieżkę, a pokażę Ci właściwe miejsce.</p></div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {paths.map((path) => <Link key={path.label} href={path.href} className="group flex min-h-24 items-center gap-4 rounded-2xl border border-stone-200 bg-white p-5 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#9CC6B9] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F] focus-visible:ring-offset-2"><span aria-hidden="true" className="text-2xl">{path.icon}</span><span className="font-semibold text-[#23332F] transition group-hover:text-[#2F6B5F]">{path.label}</span></Link>)}
-        </div>
-      </div>
+      <div className="hidden w-full md:block">{desktopHelpSection}</div>
       {isAppInfoOpen && <div className="fixed inset-0 z-50 grid place-items-center bg-[#23332F]/25 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="patient-app-title">
         <div className="relative w-full max-w-md rounded-3xl border border-[#DCE8E2] bg-white p-6 text-left shadow-2xl">
           <button type="button" onClick={() => setIsAppInfoOpen(false)} aria-label="Zamknij" className="absolute right-4 top-4 rounded-xl p-2 text-[#55624D] transition hover:bg-[#F8F5F0] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]"><X size={18} aria-hidden="true" /></button>
