@@ -10,7 +10,7 @@ export default async function PanelLayout({
   await requirePsychologist();
 
   return (
-    <div className="min-h-screen bg-[#F8F5F0]">
+    <div className="min-h-screen w-full min-w-0 max-w-full bg-[#F8F5F0]">
       <PanelSessionBridge />
       {children}
     </div>

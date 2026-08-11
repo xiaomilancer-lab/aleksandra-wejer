@@ -56,11 +56,11 @@ export default async function PanelPage() {
           <PsycholkaGentleCelebration eventKey={`first-new-patient-${celebrationDate}`} enabled={(dashboardData.newPatientsToday ?? 0) > 0} />
         <div className="mx-auto max-w-7xl">
           <WelcomeHeader initialNow={now.toISOString()} celebrate={(dashboardData.newPatientsToday ?? 0) > 0} hasVisits={todayQueue.length > 0} />
-          <DashboardSitePulse initialData={sitePulseData} />
           {loadError && <p className="mt-6 rounded-2xl border border-[#E5E1D8] bg-[#FFF9EE] px-5 py-4 text-sm text-[#7A6540]">Kalendarz chwilowo nie jest dostępny. Spróbuj odświeżyć stronę za moment.</p>}
           <div className="mt-6 grid gap-6 xl:grid-cols-2"><DashboardNextVisit visit={nextVisit} /><DashboardNewRequests requests={newRequests} /></div>
           <div className="mt-6"><TodayQueue visits={todayQueue} initialNow={now.toISOString()} /></div>
           <div className="mt-6"><DashboardAttention items={attentionItems} /></div>
+          <DashboardSitePulse initialData={sitePulseData} />
           <div className="mt-6 grid gap-6 xl:grid-cols-3"><DashboardWeekSchedule schedule={weekData} /><DashboardFollowupReminders assignments={followupReminders} /><DashboardQuickActions /></div>
         </div>
       </Dashboard>
