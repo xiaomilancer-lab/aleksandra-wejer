@@ -8,6 +8,7 @@ import StepTime from "./StepTime";
 import { locations } from "./location";
 import StepForm from "./StepForm";
 import type { BookingSource } from "@/app/booking/bookingContext";
+import { trackSitePulseEvent } from "@/app/site-pulse/client";
 
 interface BookingWizardProps {
   source?: BookingSource;
@@ -25,6 +26,7 @@ export default function BookingWizard({ source = "main-site", fixedLocationId }:
   }, [selectedDate]);
   useEffect(() => {
     if (!selectedTime) return;
+    void trackSitePulseEvent("booking_form_started", "booking");
     const frame = window.requestAnimationFrame(() => {
       document.getElementById("step-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });

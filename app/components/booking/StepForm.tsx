@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { BookingSource } from "@/app/booking/bookingContext";
+import { trackSitePulseEvent } from "@/app/site-pulse/client";
 
 interface StepFormProps {
   selectedLocation: string;
@@ -59,6 +60,7 @@ export default function StepForm({ selectedLocation, locationId, selectedDate, s
       if (response.ok && data.success) {
         setCompleted(true);
         setStatus(nextStatus);
+        void trackSitePulseEvent("booking_completed", "booking");
         return;
       }
 

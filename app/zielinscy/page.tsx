@@ -18,7 +18,7 @@ const trustPoints = [
 export default function ZielinscyPage() {
   return (
     <main className="min-h-screen bg-[#F8F5F0] text-[#2D4739]">
-      <section className="px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 lg:px-8 lg:py-24">
+      <section data-pulse-section="hero" className="px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-10 lg:px-8 lg:py-24">
         <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[2rem] border border-[#E5E1D8] bg-white shadow-[0_24px_70px_rgba(45,71,57,0.10)] lg:grid-cols-[0.92fr_1.08fr]">
           <div className="relative min-h-80 sm:min-h-[30rem] lg:min-h-[38rem]">
             <Image
@@ -49,7 +49,7 @@ export default function ZielinscyPage() {
         </div>
       </section>
 
-      <section aria-labelledby="zielinscy-trust-title" className="border-y border-[#E5E1D8] bg-white px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <section data-pulse-section="about" aria-labelledby="zielinscy-trust-title" className="border-y border-[#E5E1D8] bg-white px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#6D7A62]">O mnie</p>
@@ -67,7 +67,7 @@ export default function ZielinscyPage() {
         </div>
       </section>
 
-      <section id="rezerwacja" aria-labelledby="zielinscy-booking-title" className="scroll-mt-5 px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <section id="rezerwacja" data-pulse-section="booking" aria-labelledby="zielinscy-booking-title" className="scroll-mt-5 px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-14">
             <span className="mx-auto inline-flex items-center gap-2 rounded-full bg-[#EEF1EB] px-4 py-2 text-sm font-semibold text-[#55624D]"><CheckCircle2 size={17} aria-hidden="true" />Rezerwacja online</span>
