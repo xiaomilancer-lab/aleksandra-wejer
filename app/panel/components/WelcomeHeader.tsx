@@ -51,16 +51,16 @@ export default function WelcomeHeader({ initialNow, celebrate = false, hasVisits
   }).format(now);
 
   return (
-    <section className="overflow-hidden rounded-3xl border border-[#E5E1D8] bg-[#2D4739] p-6 text-white shadow-[0_12px_35px_rgba(45,71,57,0.12)] sm:p-8">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2 text-[#DDE6D7]">
+    <section className="min-w-0 max-w-full overflow-hidden rounded-3xl border border-[#E5E1D8] bg-[#2D4739] p-6 text-white shadow-[0_12px_35px_rgba(45,71,57,0.12)] sm:p-8">
+      <div className="flex min-w-0 flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <div className="flex min-w-0 items-center gap-2 text-[#DDE6D7]">
             <Sun size={20} aria-hidden="true" />
-            <span className="text-sm font-semibold uppercase tracking-[0.12em]">
+            <span className="min-w-0 break-words text-sm font-semibold uppercase tracking-[0.12em]">
               {header}
             </span>
           </div>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="mt-3 min-w-0 break-words text-3xl font-bold tracking-tight sm:text-4xl">
             {greeting}
           </h1>
           <p className="mt-3 capitalize text-[#DDE6D7]">{date}</p>

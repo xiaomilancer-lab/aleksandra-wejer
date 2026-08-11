@@ -2,7 +2,8 @@
 
 import { BookOpen, CalendarClock, ClipboardCheck, FolderKanban, Users, X, Zap } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import DashboardCard from "./DashboardCard";
 
 const actions = [
@@ -13,8 +14,11 @@ const actions = [
   { label: "Domknięcie dnia", icon: ClipboardCheck, href: "/panel/day-closing" },
 ];
 
+const subscribeToHydration = () => () => {};
+
 export default function DashboardQuickActions() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const hydrated = useSyncExternalStore(subscribeToHydration, () => true, () => false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -44,37 +48,37 @@ export default function DashboardQuickActions() {
         </DashboardCard>
       </div>
 
-      <button
+      {hydrated && createPortal(<><button
         type="button"
         onClick={() => setMobileOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={mobileOpen}
-        className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-3 z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#2D4739] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(45,71,57,0.28)] transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 sm:hidden"
+        className="fixed right-20 z-40 inline-flex min-h-12 max-w-[calc(100dvw-6rem)] items-center gap-2 rounded-full bg-[#2D4739] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(45,71,57,0.28)] transition [bottom:calc(1rem+env(safe-area-inset-bottom))] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 sm:hidden"
       >
-        <Zap size={18} aria-hidden="true" />
-        Szybkie akcje
+        <Zap size={18} className="shrink-0" aria-hidden="true" />
+        <span className="truncate">Szybkie akcje</span>
       </button>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 sm:hidden">
           <button type="button" onClick={() => setMobileOpen(false)} aria-label="Zamknij szybkie akcje" className="absolute inset-0 bg-[#1F3028]/45" />
-          <section role="dialog" aria-modal="true" aria-labelledby="quick-actions-title" className="absolute inset-x-0 bottom-0 max-h-[min(82dvh,36rem)] overflow-y-auto rounded-t-3xl bg-white px-4 pt-4 shadow-2xl [padding-bottom:calc(1rem+env(safe-area-inset-bottom))]">
+          <section role="dialog" aria-modal="true" aria-labelledby="quick-actions-title" className="absolute inset-x-0 bottom-0 max-h-[min(82dvh,36rem)] w-full min-w-0 max-w-full overflow-y-auto rounded-t-3xl bg-white px-4 pt-4 shadow-2xl [padding-bottom:calc(1rem+env(safe-area-inset-bottom))]">
             <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-[#D5DCCF]" aria-hidden="true" />
-            <div className="flex items-center justify-between gap-3">
-              <div>
+            <div className="flex min-w-0 items-center justify-between gap-3">
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D7A62]">Szybkie akcje</p>
-                <h2 id="quick-actions-title" className="mt-1 text-xl font-bold text-[#2D4739]">Co chcesz zrobić?</h2>
+                <h2 id="quick-actions-title" className="mt-1 break-words text-xl font-bold text-[#2D4739]">Co chcesz zrobić?</h2>
               </div>
               <button ref={closeButtonRef} type="button" onClick={() => setMobileOpen(false)} aria-label="Zamknij szybkie akcje" className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#E5E1D8] text-[#2D4739] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62]">
                 <X size={20} aria-hidden="true" />
               </button>
             </div>
-            <nav className="mt-5 grid gap-2" aria-label="Szybkie akcje">
+            <nav className="mt-5 grid min-w-0 gap-2" aria-label="Szybkie akcje">
               {actions.map(({ label, icon: Icon, href }) => <ActionLink key={label} label={label} icon={Icon} href={href} onClick={() => setMobileOpen(false)} />)}
             </nav>
           </section>
         </div>
-      )}
+      )}</>, document.body)}
     </>
   );
 }
