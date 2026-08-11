@@ -37,7 +37,8 @@ export default function VisitDrawer({
         top-0
         right-0
         h-screen
-        w-[500px]
+        w-full
+        max-w-[500px]
         bg-white
         flex
         flex-col

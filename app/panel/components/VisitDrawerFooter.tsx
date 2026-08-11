@@ -10,7 +10,7 @@ export default function VisitDrawerFooter({
   saving,
 }: Props) {
   return (
-    <div className="w-full border-t bg-white p-6">
+    <div className="w-full border-t bg-white p-4 sm:p-6">
 
       <button
         onClick={onSave}

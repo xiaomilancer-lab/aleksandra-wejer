@@ -31,11 +31,11 @@ export default function VisitDrawerBody({
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex border-b border-[#E5E1D8]">
-        <button type="button" onClick={() => setActiveTab("brief")} className={`border-b-2 px-3 py-2 text-sm font-semibold ${activeTab === "brief" ? "border-[#6D7A62] text-[#2D4739]" : "border-transparent text-gray-500"}`}>Brief</button>
-        <button type="button" onClick={() => setActiveTab("details")} className={`border-b-2 px-3 py-2 text-sm font-semibold ${activeTab === "details" ? "border-[#6D7A62] text-[#2D4739]" : "border-transparent text-gray-500"}`}>Szczegóły</button>
-        <button type="button" onClick={() => setActiveTab("preparation")} className={`border-b-2 px-3 py-2 text-sm font-semibold ${activeTab === "preparation" ? "border-[#6D7A62] text-[#2D4739]" : "border-transparent text-gray-500"}`}>🌿 Przygotowanie</button>
+    <div className="min-w-0 p-4 sm:p-6">
+      <div className="mb-6 flex overflow-x-auto border-b border-[#E5E1D8]">
+        <button type="button" onClick={() => setActiveTab("brief")} className={`shrink-0 border-b-2 px-3 py-2 text-sm font-semibold ${activeTab === "brief" ? "border-[#6D7A62] text-[#2D4739]" : "border-transparent text-gray-500"}`}>Brief</button>
+        <button type="button" onClick={() => setActiveTab("details")} className={`shrink-0 border-b-2 px-3 py-2 text-sm font-semibold ${activeTab === "details" ? "border-[#6D7A62] text-[#2D4739]" : "border-transparent text-gray-500"}`}>Szczegóły</button>
+        <button type="button" onClick={() => setActiveTab("preparation")} className={`shrink-0 border-b-2 px-3 py-2 text-sm font-semibold ${activeTab === "preparation" ? "border-[#6D7A62] text-[#2D4739]" : "border-transparent text-gray-500"}`}>🌿 Przygotowanie</button>
       </div>
       {activeTab === "brief" ? <VisitBrief visit={visit} selectedStatus={selectedStatus} templates={templates} onShowDetails={() => setActiveTab("details")} /> : activeTab === "preparation" ? <VisitAssistantPreparation key={visit.id} visit={visit} templates={templates} /> : <div className="space-y-6">
 

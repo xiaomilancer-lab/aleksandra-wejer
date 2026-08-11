@@ -6,11 +6,11 @@ export default function VisitDrawerHeader({
   onClose,
 }: Props) {
   return (
-    <div className="flex items-center justify-between border-b p-6">
+    <div className="flex items-center justify-between gap-3 border-b p-4 sm:p-6">
 
       <div>
 
-        <h2 className="text-2xl font-bold text-[#2D4739]">
+        <h2 className="text-xl font-bold text-[#2D4739] sm:text-2xl">
           👤 Szczegóły wizyty
         </h2>
 
