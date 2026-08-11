@@ -1,5 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PublicSitePulseTracker from "./site-pulse/PublicSitePulseTracker";
@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     verification: {
     google: "kLEduvFtYgx4dlLGe1VlMiF9U7yNxqWnhg-cQy92ZHg",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

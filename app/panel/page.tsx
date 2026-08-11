@@ -6,6 +6,7 @@ import DashboardFollowupReminders from "./components/DashboardFollowupReminders"
 import DashboardNewRequests from "./components/DashboardNewRequests";
 import DashboardNextVisit from "./components/DashboardNextVisit";
 import DashboardQuickActions from "./components/DashboardQuickActions";
+import DashboardWidthDiagnostics from "./components/DashboardWidthDiagnostics";
 import DashboardSitePulse from "./components/DashboardSitePulse";
 import DashboardWeekSchedule from "./components/DashboardWeekSchedule";
 import PsycholkaGentleCelebration from "./components/PsycholkaGentleCelebration";
@@ -52,6 +53,7 @@ export default async function PanelPage() {
   return (
     <AuthGuard>
       <Dashboard>
+        <DashboardWidthDiagnostics />
         <PsycholkaOnboarding />
           <PsycholkaGentleCelebration eventKey={`first-new-patient-${celebrationDate}`} enabled={(dashboardData.newPatientsToday ?? 0) > 0} />
         <div className="mx-auto max-w-7xl">
