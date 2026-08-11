@@ -53,7 +53,7 @@ export default function DashboardQuickActions() {
         onClick={() => setMobileOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={mobileOpen}
-        className="fixed right-20 z-40 inline-flex min-h-12 max-w-[calc(100dvw-6rem)] items-center gap-2 rounded-full bg-[#2D4739] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(45,71,57,0.28)] transition [bottom:calc(1rem+env(safe-area-inset-bottom))] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 sm:hidden"
+        className="fixed right-4 z-40 inline-flex min-h-12 max-w-[calc(100dvw-6rem)] items-center gap-2 rounded-full bg-[#2D4739] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(45,71,57,0.28)] transition [bottom:calc(1rem+env(safe-area-inset-bottom))] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 sm:hidden"
       >
         <Zap size={18} className="shrink-0" aria-hidden="true" />
         <span className="truncate">Szybkie akcje</span>
