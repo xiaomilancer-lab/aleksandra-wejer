@@ -16,10 +16,20 @@ export default function MobilePsycholkaJourney() {
           </div>
         </div>
         <div className="mt-4 space-y-3 text-sm leading-6 text-gray-600">
-          <p>Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.</p>
-          <p>Wspieram dzieci, młodzież,<br /><span className="whitespace-nowrap">dorosłych, pary oraz rodziny.</span></p>
-          <p>Ważne jest dla mnie stworzenie spokojnej, bezpiecznej przestrzeni do rozmowy bez oceniania — z uważnością i indywidualnym podejściem do każdej osoby.</p>
-          <p>Prywatnie jestem mamą dwóch chłopców, dlatego bliskie są mi również codzienne wyzwania rodzicielstwa i życia rodzinnego.</p>
+          <p>Wierzę, że każda historia zasługuje na uwagę, zrozumienie i bezpieczną przestrzeń do rozmowy.</p>
+          <p>Jestem magistrem psychologii, absolwentką Wydziału Nauk Społecznych Uniwersytetu Gdańskiego. Ukończyłam specjalność z zakresu psychologii rodziny i od ponad 6 lat pracuję z dziećmi i młodzieżą, m.in. w szkołach i przedszkolach.</p>
+          <p>Wspieram również osoby dorosłe oraz rodziców mierzących się z wyzwaniami codziennego życia.</p>
+          <details className="group rounded-2xl bg-[#F8F5F0] px-4 py-3">
+            <summary className="cursor-pointer font-semibold text-[#55624D] marker:text-[#6D7A62]">Czytaj więcej o mnie</summary>
+            <div className="mt-3 space-y-3">
+              <p>Doświadczenie zawodowe rozwijałam także podczas praktyk w Centrum Leczenia Uzależnień oraz w prywatnym gabinecie psychologicznym.</p>
+              <p>Prywatnie jestem mamą dwójki małych dzieci. Macierzyństwo każdego dnia przypomina mi, jak ważne w relacjach są bliskość, cierpliwość, zrozumienie i poczucie bezpieczeństwa.</p>
+              <p>W pracy stawiam na empatię, autentyczność i indywidualne podejście. Chcę tworzyć przestrzeń, w której można spokojnie opowiedzieć o swoich trudnościach — bez oceniania i w swoim tempie.</p>
+              <p>Psychologia jest dla mnie nie tylko zawodem, ale również pasją, dlatego stale poszerzam wiedzę i rozwijam swoje kompetencje.</p>
+              <p>Jeśli czujesz, że potrzebujesz rozmowy, wsparcia lub chcesz lepiej zrozumieć siebie — zapraszam.</p>
+              <p className="font-medium text-[#55624D]">Bo kiedy Ty czujesz się dobrze, łatwiej zadbać o wszystko, co dla Ciebie ważne.</p>
+            </div>
+          </details>
         </div>
       </section>
 
