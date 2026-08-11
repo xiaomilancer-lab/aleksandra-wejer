@@ -22,9 +22,8 @@ export default function About() {
           </h2>
 
           <p className="mt-8 text-xl leading-9 text-gray-600">
-            Wierzę, że rozmowa oparta na zaufaniu,
-            empatii i poczuciu bezpieczeństwa
-            może być początkiem pozytywnej zmiany.
+            Wierzę, że każda historia zasługuje na uwagę, zrozumienie
+            i bezpieczną przestrzeń do rozmowy.
           </p>
         </div>
 
@@ -44,24 +43,46 @@ export default function About() {
               Nazywam się Aleksandra Wejer
             </h3>
 
-            <p className="mt-8 text-lg leading-8 text-gray-600">
-              Jestem magistrem psychologii, absolwentką Uniwersytetu Gdańskiego.
-              W swojej pracy wspieram dzieci, młodzież, osoby dorosłe, pary i rodziny.
-              Ważne jest dla mnie stworzenie spokojnej, bezpiecznej przestrzeni,
-              w której można bez oceniania porozmawiać o trudnościach.
-            </p>
+            <div className="mt-8 space-y-5 text-lg leading-8 text-gray-600">
+              <p>
+                Jestem magistrem psychologii, absolwentką Wydziału Nauk Społecznych
+                Uniwersytetu Gdańskiego. Ukończyłam specjalność z zakresu psychologii
+                rodziny i od ponad 6 lat pracuję z dziećmi i młodzieżą, zdobywając
+                doświadczenie m.in. w szkołach i przedszkolach. Wspieram również osoby
+                dorosłe oraz rodziców mierzących się z wyzwaniami codziennego życia.
+              </p>
 
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Każdą osobę i każdą relację staram się zobaczyć indywidualnie —
-              z jej historią, zasobami, trudnościami i tym, co jest ważne właśnie teraz.
-              Wspólnie szukamy najlepszego rozwiązania, w tempie odpowiednim dla Ciebie.
-            </p>
+              <p>
+                Doświadczenie zawodowe rozwijałam także podczas praktyk w Centrum
+                Leczenia Uzależnień oraz w prywatnym gabinecie psychologicznym.
+              </p>
 
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Prywatnie jestem mamą dwóch chłopców, dlatego bliskie są mi również
-              codzienne wyzwania rodzicielstwa i życia rodzinnego. W pracy łączę
-              wiedzę psychologiczną z uważnością, spokojem i indywidualnym podejściem.
-            </p>
+              <p>
+                Prywatnie jestem mamą dwójki małych dzieci. Macierzyństwo każdego dnia
+                przypomina mi, jak ważne w relacjach są bliskość, cierpliwość,
+                zrozumienie i poczucie bezpieczeństwa.
+              </p>
+
+              <p>
+                W pracy stawiam na empatię, autentyczność i indywidualne podejście.
+                Chcę tworzyć przestrzeń, w której można spokojnie opowiedzieć o swoich
+                trudnościach — bez oceniania i w swoim tempie.
+              </p>
+
+              <p>
+                Psychologia jest dla mnie nie tylko zawodem, ale również pasją, dlatego
+                stale poszerzam wiedzę i rozwijam swoje kompetencje.
+              </p>
+
+              <p>
+                Jeśli czujesz, że potrzebujesz rozmowy, wsparcia lub chcesz lepiej
+                zrozumieć siebie — zapraszam.
+              </p>
+
+              <p className="font-medium text-[#55624D]">
+                Bo kiedy Ty czujesz się dobrze, łatwiej zadbać o wszystko, co dla Ciebie ważne.
+              </p>
+            </div>
 
           </div>
 

@@ -17,7 +17,7 @@ const categories = [
   },
   {
     id: "mlodziez",
-    title: "Nastolatki",
+    title: "Młodzież",
     icon: GraduationCap,
     image: PsycholkaAssets.ideas.idea,
     intro: "Dorastanie bywa intensywne — rozmowa może pomóc uporządkować to, co teraz najważniejsze.",
