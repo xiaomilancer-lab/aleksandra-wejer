@@ -41,7 +41,7 @@ export async function getFollowupSuggestions(now: Date = new Date()): Promise<Fo
   });
 
   return [...visitsByPatient.entries()].flatMap(([patientId, patientVisits]) => {
-    const hasUpcomingVisit = patientVisits.some((visit) => visit.visit_date >= today && visit.status !== "Anulowane");
+    const hasUpcomingVisit = patientVisits.some((visit) => visit.visit_date >= today && visit.status !== "Odwołane");
     if (hasUpcomingVisit) return [];
     const lastCompletedVisit = patientVisits.find((visit) => visit.status === "Zrealizowane" && visit.visit_date < today);
     if (!lastCompletedVisit) return [];

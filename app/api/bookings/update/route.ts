@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { recordTimelineEvent } from "@/app/panel/services/patientService";
 import { scheduleReviewRequestAfterCompletedVisit } from "@/app/panel/services/reviewCareService";
 import { getPsychologistApiAuthorization } from "@/app/panel/server/requirePsychologist";
+import { isVisitStatus } from "@/app/panel/domain/status";
 
 export async function POST(req: Request) {
   const authorization = await getPsychologistApiAuthorization(req);
@@ -10,12 +11,12 @@ export async function POST(req: Request) {
   if (authorization.kind === "forbidden") return NextResponse.json({ success: false, message: "Nie masz dostępu do zarządzania wizytami." }, { status: 403 });
 
   const body = await req.json().catch(() => null) as { id?: unknown; status?: unknown } | null;
-  if (!body || !Number.isInteger(body.id) || typeof body.status !== "string" || !body.status.trim()) {
+  if (!body || !Number.isInteger(body.id) || !isVisitStatus(body.status)) {
     return NextResponse.json({ success: false, message: "Nieprawidłowe dane wizyty." }, { status: 400 });
   }
   const { data: booking, error } = await supabaseAdmin
     .from("bookings")
-    .update({ status: body.status.trim() })
+    .update({ status: body.status })
     .eq("id", body.id)
     .select("id, patient_id, status, visit_date")
     .single();

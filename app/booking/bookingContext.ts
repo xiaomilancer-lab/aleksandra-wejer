@@ -1,3 +1,3 @@
-export type BookingSource = "main-site" | "zielinscy" | "arthro" | "partner-zielinscy" | "partner-zielinscy-embed" | "instagram-zielinscy" | "facebook-zielinscy" | "qr-zielinscy" | "future-mobile-app";
+export type BookingSource = "main-site" | "zielinscy" | "arthro" | "partner-arthro" | "partner-zielinscy" | "partner-zielinscy-embed" | "instagram-zielinscy" | "facebook-zielinscy" | "qr-zielinscy" | "future-mobile-app";
 export type BookingContext = { id: string; source: BookingSource; partnerId: string | null; locationId: string; location: string; allowedWeekdays: number[]; allowedTimeRanges: string[]; showWhatsApp: boolean; showPhone: boolean; showWrittenForm: boolean; showZnanyLekarz: boolean; theme: string; introMessage: string; successMessage: string; cta: string };
 export const bookingAnalyticsEvents = ["booking_opened", "booking_filter_selected", "booking_slot_selected", "booking_form_started", "booking_completed", "booking_no_slots"] as const;

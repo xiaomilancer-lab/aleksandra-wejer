@@ -65,7 +65,7 @@ export async function getVisitBrief(patientId: string, currentVisitId: number): 
     pinnedReflections,
     notes,
     tasks,
-    hasNextVisit: visits.some((visit) => visit.id !== currentVisitId && visit.visit_date >= new Date().toISOString().slice(0, 10) && visit.status !== "Anulowane"),
+    hasNextVisit: visits.some((visit) => visit.id !== currentVisitId && visit.visit_date >= new Date().toISOString().slice(0, 10) && visit.status !== "Odwołane"),
     pinnedMemory,
     timelineEvents: timelineEvents.slice(0, 3),
     currentPlan,

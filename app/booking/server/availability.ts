@@ -32,7 +32,7 @@ export async function getAvailableSlots({ locationId, from, to, now = new Date()
   const rules = (rulesResult.data ?? []) as AvailabilityRule[];
   const exceptions = (exceptionsResult.data ?? []) as AvailabilityException[];
   if (rules.length === 0) return { state: "NO_SCHEDULE", slots: [] };
-  const occupied = new Set((bookingsResult.data ?? []).filter((booking) => !["Anulowane", "Odwołane"].includes(booking.status ?? "")).map((booking) => `${booking.visit_date}T${booking.visit_time.slice(0, 5)}`));
+  const occupied = new Set((bookingsResult.data ?? []).filter((booking) => booking.status !== "Odwołane").map((booking) => `${booking.visit_date}T${booking.visit_time.slice(0, 5)}`));
   const slots: AvailableSlot[] = [];
 
   for (const date of eachDate(from, to)) {

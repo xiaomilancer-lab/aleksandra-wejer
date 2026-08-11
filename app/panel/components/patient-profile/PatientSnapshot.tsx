@@ -11,7 +11,7 @@ interface PatientSnapshotProps { patient: Patient; visits: Visit[]; notes: Patie
 export default function PatientSnapshot({ patient, visits, notes, tasks, latestPlan, onTabChange }: PatientSnapshotProps) {
   const router = useRouter();
   const today = new Date().toISOString().slice(0, 10);
-  const nextVisit = visits.filter((visit) => visit.visit_date >= today && visit.status !== "Anulowane").at(-1) ?? null;
+  const nextVisit = visits.filter((visit) => visit.visit_date >= today && visit.status !== "Odwołane").at(-1) ?? null;
   const lastVisit = visits.find((visit) => visit.visit_date < today || visit.status === "Zrealizowane") ?? null;
   const latestNote = notes[0] ?? null;
   const latestTask = tasks[0] ?? null;

@@ -1,5 +1,7 @@
 "use client";
 
+import { VISIT_STATUSES } from "../domain/status";
+
 interface Props {
   value: string;
   onChange: (value: string) => void;
@@ -24,15 +26,7 @@ export default function StatusSelect({
         text-[#2D4739]
       "
     >
-      <option>Nowe</option>
-
-      <option>Potwierdzone</option>
-
-      <option>Zrealizowane</option>
-
-      <option>Odwołane</option>
-
-      <option>Nie pojawił się</option>
+      {VISIT_STATUSES.map((status) => <option key={status}>{status}</option>)}
     </select>
   );
 }

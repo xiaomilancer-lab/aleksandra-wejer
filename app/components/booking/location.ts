@@ -1,23 +1,12 @@
 import { Location } from "./types";
+import { bookingLocationConfig } from "@/app/booking/locations";
 
-export const locations: Location[] = [
-  {
-    id: "arthro-cure-clinic",
-    name: "Arthro Cure Clinic",
-    city: "Starogard Gdański",
-    street: "Al. Jana Pawła II 1/U9",
-    image: "/images/offices/arthro1.jpg",
-    active: true,
-    available: true,
-  },
-
-  {
-    id: "nowa-wies-rzeczna",
-    name: "Centrum Medyczno-Estetyczne Zielińscy Premium",
-    city: "Nowa Wieś Rzeczna",
-    street: "Kasztanowa 1",
-    image: "/images/offices/zielinscy.jpg",
-    active: true,
-    available: true,
-  },
-];
+export const locations: Location[] = Object.entries(bookingLocationConfig).map(([id, location]) => ({
+  id,
+  name: location.name,
+  city: location.city,
+  street: location.street,
+  image: location.image,
+  active: true,
+  available: true,
+}));

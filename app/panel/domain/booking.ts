@@ -5,6 +5,7 @@ export interface Visit {
   email: string;
   phone: string;
   location: string;
+  location_id?: string | null;
   visit_date: string;
   visit_time: string;
   status: string;

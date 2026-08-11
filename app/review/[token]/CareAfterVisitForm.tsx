@@ -5,11 +5,11 @@ import { useState, useTransition } from "react";
 import { submitGoogleReviewAction, submitPrivateFeedbackAction } from "./actions";
 
 type CareAfterVisitFormProps = {
-  patientId: string;
+  token: string;
   googleReviewUrl: string | null;
 };
 
-export default function CareAfterVisitForm({ patientId, googleReviewUrl }: CareAfterVisitFormProps) {
+export default function CareAfterVisitForm({ token, googleReviewUrl }: CareAfterVisitFormProps) {
   const [step, setStep] = useState<"choice" | "thanks" | "feedback" | "sent">("choice");
   const [feedback, setFeedback] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export default function CareAfterVisitForm({ patientId, googleReviewUrl }: CareA
     setError(null);
     startTransition(async () => {
       try {
-        await submitGoogleReviewAction(patientId);
+        await submitGoogleReviewAction(token);
         setStep("thanks");
       } catch {
         setError("Nie udało się zapisać odpowiedzi. Spróbuj ponownie za chwilę.");
@@ -31,7 +31,7 @@ export default function CareAfterVisitForm({ patientId, googleReviewUrl }: CareA
     setError(null);
     startTransition(async () => {
       try {
-        await submitPrivateFeedbackAction(patientId, feedback);
+        await submitPrivateFeedbackAction(token, feedback);
         setStep("sent");
       } catch (submissionError) {
         setError(submissionError instanceof Error ? submissionError.message : "Nie udało się wysłać uwagi.");

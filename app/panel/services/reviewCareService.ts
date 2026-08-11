@@ -81,22 +81,24 @@ export async function getReviewCareOverview(): Promise<PatientReviewCare[]> {
 
 export async function recordGoogleReviewClick(patientId: string) {
   const now = new Date().toISOString();
-  const { error } = await supabaseAdmin.from("patients").update({
+  const { data, error } = await supabaseAdmin.from("patients").update({
     review_request_sent: true,
     review_request_sent_at: now,
     review_response: "google",
     google_review_clicked_at: now,
-  }).eq("id", patientId);
+  }).eq("id", patientId).is("review_response", null).select("id").maybeSingle();
   if (error) throw error;
+  if (!data) throw new Error("Ta prośba o opinię została już wykorzystana.");
 }
 
 export async function savePrivateFeedback(patientId: string, feedback: string) {
   const now = new Date().toISOString();
-  const { error } = await supabaseAdmin.from("patients").update({
+  const { data, error } = await supabaseAdmin.from("patients").update({
     review_request_sent: true,
     review_request_sent_at: now,
     review_response: "private_feedback",
     private_feedback: feedback.trim(),
-  }).eq("id", patientId);
+  }).eq("id", patientId).is("review_response", null).select("id").maybeSingle();
   if (error) throw error;
+  if (!data) throw new Error("Ta prośba o opinię została już wykorzystana.");
 }

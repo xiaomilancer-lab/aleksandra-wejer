@@ -9,8 +9,21 @@ import { getVisitPlan } from "./visitPlanService";
 
 export type DashboardVisit = Pick<
   Visit,
-  "id" | "name" | "location" | "visit_date" | "visit_time" | "status" | "source"
+  "id" | "name" | "location" | "location_id" | "visit_date" | "visit_time" | "status" | "source"
 >;
+
+export interface DashboardRequest extends DashboardVisit {
+  patient_id: string | null;
+  message: string | null;
+}
+
+export interface DashboardAttentionItem {
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+  kind: "unlinked" | "missing_note";
+}
 
 export interface DashboardDayData {
   todayVisits: DashboardVisit[];
@@ -97,7 +110,7 @@ export async function getDashboardDayData(
   now: Date = new Date()
 ): Promise<DashboardDayData> {
   const { date: today, time: currentTime } = getWarsawDateParts(now);
-  const fields = "id, name, location, visit_date, visit_time, status, source";
+  const fields = "id, name, location, location_id, visit_date, visit_time, status, source";
 
   const [todayResult, attentionResult, patientsResult] = await Promise.all([
     supabaseAdmin
@@ -108,7 +121,7 @@ export async function getDashboardDayData(
     supabaseAdmin
       .from("bookings")
       .select(fields)
-      .in("status", ["Nowe", "Oczekujące"])
+      .eq("status", "Nowe")
       .order("visit_date", { ascending: true })
       .order("visit_time", { ascending: true })
       .limit(5),
@@ -137,13 +150,13 @@ export async function getDashboardDayData(
 export async function getDashboardWeekData(now: Date = new Date()): Promise<DashboardWeekData> {
   const { date: today } = getWarsawDateParts(now);
   const endDate = nextCalendarDate(today, 6);
-  const fields = "id, name, location, visit_date, visit_time, status, source";
+  const fields = "id, name, location, location_id, visit_date, visit_time, status, source";
   const result = await supabaseAdmin
     .from("bookings")
     .select(fields)
     .gte("visit_date", today)
     .lte("visit_date", endDate)
-    .neq("status", "Anulowane")
+    .neq("status", "Odwołane")
     .order("visit_date", { ascending: true })
     .order("visit_time", { ascending: true });
 
@@ -159,7 +172,7 @@ export async function getDashboardWeekData(now: Date = new Date()): Promise<Dash
 
 export async function getTodayQueue(now: Date = new Date()): Promise<TodayQueueItem[]> {
   const { date: today } = getWarsawDateParts(now);
-  const fields = "id, patient_id, name, location, visit_date, visit_time, status, message, source";
+  const fields = "id, patient_id, name, location, location_id, visit_date, visit_time, status, message, source";
   const { data, error } = await supabaseAdmin.from("bookings").select(fields).eq("visit_date", today).order("visit_time", { ascending: true });
   if (error) throw error;
   const visits = (data ?? []) as Array<DashboardVisit & Pick<Visit, "patient_id" | "message">>;
@@ -167,6 +180,113 @@ export async function getTodayQueue(now: Date = new Date()): Promise<TodayQueueI
   const [allVisitsResult, followupSuggestions] = await Promise.all([
     patientIds.length ? supabaseAdmin.from("bookings").select("id, patient_id, visit_date, visit_time, status").in("patient_id", patientIds) : Promise.resolve({ data: [], error: null }),
     getFollowupSuggestions(now).catch(() => []),
+  ]);
+  if (allVisitsResult.error) throw allVisitsResult.error;
+  const allVisits = (allVisitsResult.data ?? []) as Array<Pick<Visit, "id" | "patient_id" | "visit_date" | "visit_time" | "status">>;
+  const followupPatientIds = new Set(followupSuggestions.map((suggestion) => suggestion.patientId));
+
+  return Promise.all(visits.map(async (visit) => {
+    const previousVisits = visit.patient_id ? allVisits.filter((item) => item.patient_id === visit.patient_id && item.id !== visit.id && item.visit_date < visit.visit_date) : [];
+    const [notes, tasks, plan, memory, materials] = await Promise.all([
+      visit.patient_id ? getPatientNotes(visit.patient_id).catch(() => []) : Promise.resolve([]),
+      visit.patient_id ? getPatientTasks(visit.patient_id).catch(() => []) : Promise.resolve([]),
+      getVisitPlan(visit.id).catch(() => null),
+      visit.patient_id ? getPinnedPatientMemory(visit.patient_id).catch(() => []) : Promise.resolve([]),
+      getVisitKnowledgeMaterials(visit.id).catch(() => []),
+    ]);
+    const activeTask = tasks.find((task) => task.status !== "completed") ?? null;
+    const requiresFollowup = visit.patient_id ? followupPatientIds.has(visit.patient_id) : false;
+    return { ...visit, previousVisitsCount: previousVisits.length, latestNote: notes[0] ?? null, activeTask, hasVisitPlan: Boolean(plan), pinnedMemoryCount: memory.length, pinnedMaterialsCount: materials.length, requiresFollowup, requiresClosure: visit.status === "Zrealizowane" && Boolean(activeTask || requiresFollowup) };
+  }));
+}
+
+export async function getNextUpcomingVisit(now: Date = new Date()): Promise<TodayQueueItem | null> {
+  const { date: today, time } = getWarsawDateParts(now);
+  const fields = "id, patient_id, name, location, location_id, visit_date, visit_time, status, message, source";
+  const { data, error } = await supabaseAdmin
+    .from("bookings")
+    .select(fields)
+    .gte("visit_date", today)
+    .neq("status", "Odwołane")
+    .order("visit_date", { ascending: true })
+    .order("visit_time", { ascending: true })
+    .limit(20);
+  if (error) throw error;
+  const visits = (data ?? []) as Array<DashboardVisit & Pick<Visit, "patient_id" | "message">>;
+  const next = visits.find((visit) => visit.visit_date > today || visit.visit_time >= time);
+  if (!next) return null;
+  return (await enrichQueueVisits([next]))[0] ?? null;
+}
+
+export async function getNewBookingRequests(now: Date = new Date()): Promise<DashboardRequest[]> {
+  const { date: today } = getWarsawDateParts(now);
+  const fields = "id, patient_id, name, location, location_id, visit_date, visit_time, status, message, source";
+  const { data, error } = await supabaseAdmin
+    .from("bookings")
+    .select(fields)
+    .gte("visit_date", today)
+    .eq("status", "Nowe")
+    .order("visit_date", { ascending: true })
+    .order("visit_time", { ascending: true })
+    .limit(8);
+  if (error) throw error;
+  return (data ?? []) as DashboardRequest[];
+}
+
+export async function getDashboardAttentionItems(now: Date = new Date()): Promise<DashboardAttentionItem[]> {
+  const { date: today } = getWarsawDateParts(now);
+  const [unlinkedResult, completedResult, notesResult] = await Promise.all([
+    supabaseAdmin
+      .from("bookings")
+      .select("id, name, visit_date, visit_time")
+      .gte("visit_date", today)
+      .neq("status", "Odwołane")
+      .is("patient_id", null)
+      .order("visit_date", { ascending: true })
+      .order("visit_time", { ascending: true })
+      .limit(8),
+    supabaseAdmin
+      .from("bookings")
+      .select("id, patient_id, name, visit_date, visit_time")
+      .eq("status", "Zrealizowane")
+      .not("patient_id", "is", null)
+      .order("visit_date", { ascending: false })
+      .limit(20),
+    supabaseAdmin.from("patient_notes").select("visit_id").not("visit_id", "is", null),
+  ]);
+  if (unlinkedResult.error) throw unlinkedResult.error;
+  if (completedResult.error) throw completedResult.error;
+
+  const unlinked: DashboardAttentionItem[] = (unlinkedResult.data ?? []).map((visit) => ({
+    id: `unlinked-${visit.id}`,
+    kind: "unlinked",
+    title: `${visit.name} — brak przypisanej karty pacjenta`,
+    description: `${visit.visit_date} · ${visit.visit_time}`,
+    href: `/panel/visits/${visit.id}/brief`,
+  }));
+
+  if (notesResult.error && !isTableMissing(notesResult.error.code)) throw notesResult.error;
+  const missingNotes: DashboardAttentionItem[] = notesResult.error ? [] : (() => {
+    const visitsWithNotes = new Set((notesResult.data ?? []).map((note) => note.visit_id));
+    return (completedResult.data ?? [])
+      .filter((visit) => !visitsWithNotes.has(visit.id))
+      .map((visit) => ({
+        id: `missing-note-${visit.id}`,
+        kind: "missing_note" as const,
+        title: `${visit.name} — brak notatki po zrealizowanej wizycie`,
+        description: `${visit.visit_date} · ${visit.visit_time}`,
+        href: `/panel/visits/${visit.id}/session`,
+      }));
+  })();
+
+  return [...unlinked, ...missingNotes].slice(0, 10);
+}
+
+async function enrichQueueVisits(visits: Array<DashboardVisit & Pick<Visit, "patient_id" | "message">>): Promise<TodayQueueItem[]> {
+  const patientIds = [...new Set(visits.flatMap((visit) => visit.patient_id ? [visit.patient_id] : []))];
+  const [allVisitsResult, followupSuggestions] = await Promise.all([
+    patientIds.length ? supabaseAdmin.from("bookings").select("id, patient_id, visit_date, visit_time, status").in("patient_id", patientIds) : Promise.resolve({ data: [], error: null }),
+    getFollowupSuggestions().catch(() => []),
   ]);
   if (allVisitsResult.error) throw allVisitsResult.error;
   const allVisits = (allVisitsResult.data ?? []) as Array<Pick<Visit, "id" | "patient_id" | "visit_date" | "visit_time" | "status">>;
@@ -216,7 +336,7 @@ export async function getDayClosingSummary(now: Date = new Date()): Promise<DayC
     supabaseAdmin.from("patient_tasks").select("id, created_at"),
     supabaseAdmin.from("followup_reminders").select("id, patient_id, title, status").eq("status", "open"),
     supabaseAdmin.from("patients").select("id, name, created_at, review_request_sent, review_request_scheduled_at"),
-    supabaseAdmin.from("bookings").select("id, patient_id, visit_time, status").eq("visit_date", tomorrowDate).neq("status", "Anulowane").order("visit_time", { ascending: true }),
+    supabaseAdmin.from("bookings").select("id, patient_id, visit_time, status").eq("visit_date", tomorrowDate).neq("status", "Odwołane").order("visit_time", { ascending: true }),
   ]);
   for (const result of [notesResult, tasksResult, followupsResult, patientsResult]) {
     if (result.error && !isTableMissing(result.error.code)) throw result.error;
@@ -228,9 +348,9 @@ export async function getDayClosingSummary(now: Date = new Date()): Promise<DayC
   const followups = followupsResult.error ? [] : (followupsResult.data ?? []) as Array<{ id: string; patient_id: string; title: string; status: "open" }>;
   const patients = patientsResult.error ? [] : (patientsResult.data ?? []) as Array<{ id: string; name: string; created_at: string; review_request_sent: boolean; review_request_scheduled_at: string | null }>;
   const completed = visits.filter((visit) => visit.status === "Zrealizowane");
-  const cancelled = visits.filter((visit) => visit.status === "Anulowane");
+  const cancelled = visits.filter((visit) => visit.status === "Odwołane");
   const notesByVisit = new Set(notes.map((note) => note.visit_id).filter((id): id is number => id !== null));
-  const incompleteVisits = visits.filter((visit) => visit.status !== "Zrealizowane" && visit.status !== "Anulowane");
+  const incompleteVisits = visits.filter((visit) => visit.status !== "Zrealizowane" && visit.status !== "Odwołane");
   const completedWithoutNote = notesResult.error ? [] : completed.filter((visit) => !notesByVisit.has(visit.id));
   const carePendingPatients = patientsResult.error ? [] : patients.filter((patient) => !patient.review_request_sent && isInWarsawDay(patient.review_request_scheduled_at, date));
   const followupsForToday = followupsResult.error ? [] : followups.filter((reminder) => patientIds.includes(reminder.patient_id));
@@ -263,7 +383,7 @@ export async function getDayClosingSummary(now: Date = new Date()): Promise<DayC
 export async function getDailyFlowState(now: Date = new Date()): Promise<DailyFlowState> {
   const { time } = getWarsawDateParts(now);
   const [dashboard, closing] = await Promise.all([getDashboardDayData(now), getDayClosingSummary(now)]);
-  const actionableVisits = dashboard.todayVisits.filter((visit) => visit.status !== "Anulowane" && visit.status !== "Zrealizowane");
+  const actionableVisits = dashboard.todayVisits.filter((visit) => visit.status !== "Odwołane" && visit.status !== "Zrealizowane");
   const [nowHour, nowMinute] = time.split(":").map(Number); const current = nowHour * 60 + nowMinute;
   const activeVisit = actionableVisits.find((visit) => { const [hour, minute] = visit.visit_time.split(":").map(Number); const start = hour * 60 + minute; return current >= start && current < start + 50; });
   if (activeVisit) return { kind: "visit_active", title: `Trwa wizyta: ${activeVisit.name}`, description: "Wróć do trybu sesji i kontynuuj spotkanie.", href: `/panel/visits/${activeVisit.id}/session`, visitTime: activeVisit.visit_time };
