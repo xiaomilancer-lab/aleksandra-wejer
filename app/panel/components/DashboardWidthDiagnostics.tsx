@@ -3,6 +3,11 @@
 import { useEffect, useState } from "react";
 
 type Dimensions = {
+  visualViewportWidth: number | null;
+  visualViewportHeight: number | null;
+  visualViewportScale: number | null;
+  visualViewportOffsetLeft: number | null;
+  visualViewportOffsetTop: number | null;
   innerWidth: number;
   documentElementClientWidth: number;
   documentElementScrollWidth: number;
@@ -44,19 +49,28 @@ export default function DashboardWidthDiagnostics() {
     let liveFrame = 0;
     let hydrationFrame = 0;
 
-    const capture = (phase: string, replaceLive = false) => {
+    const capture = (phase: string, replaceEvent = false) => {
       const measurement = measurePage(phase);
       setMeasurements((current) => {
-        if (replaceLive && current.at(-1)?.phase === "live") return [...current.slice(0, -1), measurement];
+        if (replaceEvent && current.at(-1)?.phase.startsWith("event:")) {
+          return [...current.slice(0, -1), measurement];
+        }
         return [...current, measurement];
       });
       window.__panelWidthDiagnostics = measurement;
     };
 
-    const scheduleLiveCapture = () => {
+    const scheduleEventCapture = (phase: string) => {
       window.cancelAnimationFrame(liveFrame);
-      liveFrame = window.requestAnimationFrame(() => capture("live", true));
+      liveFrame = window.requestAnimationFrame(() => capture(`event: ${phase}`, true));
     };
+
+    const onRootResize = () => scheduleEventCapture("ResizeObserver");
+    const onWindowResize = () => scheduleEventCapture("window.resize");
+    const onOrientationChange = () => scheduleEventCapture("window.orientationchange");
+    const onWindowScroll = () => scheduleEventCapture("window.scroll");
+    const onVisualViewportResize = () => scheduleEventCapture("visualViewport.resize");
+    const onVisualViewportScroll = () => scheduleEventCapture("visualViewport.scroll");
 
     capture("effect / hydration");
     initialFrame = window.requestAnimationFrame(() => capture("requestAnimationFrame"));
@@ -64,12 +78,14 @@ export default function DashboardWidthDiagnostics() {
       hydrationFrame = window.requestAnimationFrame(() => capture("750ms after hydration"));
     }, 750);
 
-    const observer = new ResizeObserver(scheduleLiveCapture);
+    const observer = new ResizeObserver(onRootResize);
     observer.observe(document.documentElement);
     observer.observe(document.body);
-    window.addEventListener("resize", scheduleLiveCapture);
-    window.addEventListener("orientationchange", scheduleLiveCapture);
-    window.addEventListener("scroll", scheduleLiveCapture, { passive: true });
+    window.addEventListener("resize", onWindowResize);
+    window.addEventListener("orientationchange", onOrientationChange);
+    window.addEventListener("scroll", onWindowScroll, { passive: true });
+    window.visualViewport?.addEventListener("resize", onVisualViewportResize);
+    window.visualViewport?.addEventListener("scroll", onVisualViewportScroll);
 
     return () => {
       window.clearTimeout(afterHydration);
@@ -77,9 +93,11 @@ export default function DashboardWidthDiagnostics() {
       window.cancelAnimationFrame(liveFrame);
       window.cancelAnimationFrame(hydrationFrame);
       observer.disconnect();
-      window.removeEventListener("resize", scheduleLiveCapture);
-      window.removeEventListener("orientationchange", scheduleLiveCapture);
-      window.removeEventListener("scroll", scheduleLiveCapture);
+      window.removeEventListener("resize", onWindowResize);
+      window.removeEventListener("orientationchange", onOrientationChange);
+      window.removeEventListener("scroll", onWindowScroll);
+      window.visualViewport?.removeEventListener("resize", onVisualViewportResize);
+      window.visualViewport?.removeEventListener("scroll", onVisualViewportScroll);
       delete window.__panelWidthDiagnostics;
     };
   }, [enabled]);
@@ -136,6 +154,7 @@ export default function DashboardWidthDiagnostics() {
 function measurePage(phase: string): Measurement {
   const root = document.documentElement;
   const body = document.body;
+  const visualViewport = window.visualViewport;
   const elements = [root, body, ...document.querySelectorAll<HTMLElement>("body *")].filter(
     (element) => !element.closest(`[${OVERLAY_ATTRIBUTE}]`),
   );
@@ -152,6 +171,11 @@ function measurePage(phase: string): Measurement {
     phase,
     measuredAt: new Date().toLocaleTimeString("pl-PL", { fractionalSecondDigits: 3 }),
     dimensions: {
+      visualViewportWidth: nullableRound(visualViewport?.width),
+      visualViewportHeight: nullableRound(visualViewport?.height),
+      visualViewportScale: nullableRound(visualViewport?.scale),
+      visualViewportOffsetLeft: nullableRound(visualViewport?.offsetLeft),
+      visualViewportOffsetTop: nullableRound(visualViewport?.offsetTop),
       innerWidth: window.innerWidth,
       documentElementClientWidth: root.clientWidth,
       documentElementScrollWidth: root.scrollWidth,
@@ -188,6 +212,11 @@ function describeElement(element: HTMLElement) {
 function DimensionsDetails({ dimensions }: { dimensions: Dimensions }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px 10px", marginTop: 4 }}>
+      <span>visualViewport.width: {formatNullable(dimensions.visualViewportWidth)}</span>
+      <span>visualViewport.height: {formatNullable(dimensions.visualViewportHeight)}</span>
+      <span>visualViewport.scale: {formatNullable(dimensions.visualViewportScale)}</span>
+      <span>visualViewport.offsetLeft: {formatNullable(dimensions.visualViewportOffsetLeft)}</span>
+      <span>visualViewport.offsetTop: {formatNullable(dimensions.visualViewportOffsetTop)}</span>
       <span>innerWidth: {dimensions.innerWidth}</span>
       <span>documentElement.clientWidth: {dimensions.documentElementClientWidth}</span>
       <span>documentElement.scrollWidth: {dimensions.documentElementScrollWidth}</span>
@@ -211,6 +240,14 @@ function ElementDetails({ element, numbered }: { element: MeasuredElement | null
 
 function round(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function nullableRound(value: number | undefined) {
+  return value === undefined ? null : round(value);
+}
+
+function formatNullable(value: number | null) {
+  return value === null ? "unsupported" : value;
 }
 
 declare global {
