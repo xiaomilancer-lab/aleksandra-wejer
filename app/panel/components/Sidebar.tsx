@@ -21,7 +21,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex w-full min-w-0 max-w-full items-center justify-between border-b border-[#E5E1D8] bg-white/95 px-4 py-3 shadow-sm backdrop-blur lg:hidden">
+      <header data-panel-mobile-header className="sticky top-0 z-40 flex w-full min-w-0 max-w-full items-center justify-between border-b border-[#E5E1D8] bg-white/95 px-4 py-3 shadow-sm backdrop-blur lg:hidden">
         <div className="min-w-0"><p className="truncate font-bold text-[#2D4739]">Gabinet Aleksandry</p><p className="text-xs text-gray-500">Panel pracy</p></div>
         <button type="button" onClick={() => setMobileOpen(true)} aria-label="Otwórz menu panelu" aria-expanded={mobileOpen} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#E5E1D8] text-[#2D4739]"><Menu size={22} aria-hidden="true" /></button>
       </header>

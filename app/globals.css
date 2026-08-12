@@ -59,6 +59,12 @@ body {
 .psycholka-confetti-delay-1 { animation-delay: 0ms; }.psycholka-confetti-delay-2 { animation-delay: 120ms; color: #B7791F; }.psycholka-confetti-delay-3 { animation-delay: 220ms; }.psycholka-confetti-delay-4 { animation-delay: 80ms; color: #6D7A62; }.psycholka-confetti-delay-5 { animation-delay: 180ms; }
 @keyframes psycholka-confetti-fall { from { opacity: 0; transform: translateY(-10px) rotate(0deg); } 20% { opacity: .85; } to { opacity: 0; transform: translateY(78px) rotate(12deg); } }
 @media (max-width: 640px) { .psycholka-visual { width: 88px; height: 100px; } .psycholka-visual-small { width: 72px; height: 82px; } .psycholka-visual-session { width: 60px; height: 70px; } }
+@keyframes psycholka-mobile-sway { 0%, 100% { transform: translate3d(-2px, 0, 0) rotate(-4deg); } 50% { transform: translate3d(2px, -5px, 0) rotate(4deg); } }
+@keyframes psycholka-mobile-wave { 0%, 100% { transform: translate3d(-2px, 0, 0) rotate(-4deg); } 50% { transform: translate3d(3px, -6px, 0) rotate(4deg); } }
+@media (max-width: 640px) {
+  .psycholka-greeting, .psycholka-breath { animation: psycholka-mobile-sway 2.2s ease-in-out infinite; }
+  .psycholka-wave, .psycholka-greeting-wave { animation: psycholka-mobile-wave 2s ease-in-out infinite; }
+}
 @media (prefers-reduced-motion: reduce) { .psycholka-idle, .psycholka-breath, .psycholka-wave, .psycholka-coffee, .psycholka-greeting, .psycholka-greeting-appear, .psycholka-open-arms, .psycholka-point-booking, .psycholka-confetti, .booking-time-psycholka, .psycholka-desk-look .psycholka-visual, .psycholka-desk-blink .psycholka-visual, .psycholka-desk-smile .psycholka-visual, .psycholka-desk-coffee .psycholka-visual, .psycholka-desk-wave .psycholka-visual, .psycholka-desk-rare .psycholka-visual { animation: none; opacity: 1; transform: none; } }
 .psycholka-onboarding-widget .psycholka-visual { width: 180px; height: 220px; }
 @media (max-width: 640px) { .psycholka-onboarding-widget .psycholka-visual { width: 130px; height: 160px; } }
@@ -111,6 +117,8 @@ body {
 @keyframes psycholka-rare-shoes { 0%,100% { transform: translateY(0); } 45%,65% { transform: translateY(2px); } }
 @keyframes psycholka-rare-smile { 0%,100% { transform: scale(1); } 45%,65% { transform: scale(1.015); } }
 @media (max-width: 640px) { .psycholka-desk { width: 124px; min-height: 116px; } .psycholka-desk .psycholka-visual { width: 108px; height: 120px; } }
+@media (max-width: 640px) { .psycholka-desk-wave .psycholka-visual { animation: psycholka-mobile-wave 2s ease-in-out infinite; } }
+@media (prefers-reduced-motion: reduce) { .psycholka-greeting-wave, .psycholka-desk-wave .psycholka-visual { animation: none; transform: none; } }
 
 
 html,

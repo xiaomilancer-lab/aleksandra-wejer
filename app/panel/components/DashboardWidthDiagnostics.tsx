@@ -8,6 +8,12 @@ type Dimensions = {
   visualViewportScale: number | null;
   visualViewportOffsetLeft: number | null;
   visualViewportOffsetTop: number | null;
+  visualViewportPageLeft: number | null;
+  visualViewportPageTop: number | null;
+  devicePixelRatio: number;
+  screenWidth: number;
+  screenAvailWidth: number;
+  outerWidth: number;
   innerWidth: number;
   documentElementClientWidth: number;
   documentElementScrollWidth: number;
@@ -21,10 +27,18 @@ type MeasuredElement = {
   selector: string;
   left: number;
   right: number;
+  top: number;
   width: number;
   clientWidth: number;
   scrollWidth: number;
   position: string;
+  transform: string;
+  zoom: string;
+};
+
+type NamedElement = {
+  label: string;
+  element: MeasuredElement | null;
 };
 
 type Measurement = {
@@ -33,6 +47,7 @@ type Measurement = {
   dimensions: Dimensions;
   widestElement: MeasuredElement | null;
   overflowingElements: MeasuredElement[];
+  namedElements: NamedElement[];
 };
 
 const OVERLAY_ATTRIBUTE = "data-dashboard-width-diagnostics";
@@ -79,8 +94,15 @@ export default function DashboardWidthDiagnostics() {
     }, 750);
 
     const observer = new ResizeObserver(onRootResize);
+    const mutationObserver = new MutationObserver((records) => {
+      const hasExternalMutation = records.some(
+        (record) => !(record.target instanceof Element) || !record.target.closest(`[${OVERLAY_ATTRIBUTE}]`),
+      );
+      if (hasExternalMutation) scheduleEventCapture("MutationObserver");
+    });
     observer.observe(document.documentElement);
     observer.observe(document.body);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
     window.addEventListener("resize", onWindowResize);
     window.addEventListener("orientationchange", onOrientationChange);
     window.addEventListener("scroll", onWindowScroll, { passive: true });
@@ -93,6 +115,7 @@ export default function DashboardWidthDiagnostics() {
       window.cancelAnimationFrame(liveFrame);
       window.cancelAnimationFrame(hydrationFrame);
       observer.disconnect();
+      mutationObserver.disconnect();
       window.removeEventListener("resize", onWindowResize);
       window.removeEventListener("orientationchange", onOrientationChange);
       window.removeEventListener("scroll", onWindowScroll);
@@ -135,6 +158,10 @@ export default function DashboardWidthDiagnostics() {
             {measurement.phase} · {measurement.measuredAt}
           </strong>
           <DimensionsDetails dimensions={measurement.dimensions} />
+          <div style={{ marginTop: 5, color: "#86efac" }}>NAMED ELEMENT RECTS</div>
+          {measurement.namedElements.map(({ label, element }) => (
+            <NamedElementDetails key={label} label={label} element={element} />
+          ))}
           <div style={{ marginTop: 5, color: "#fde68a" }}>
             SUSPECTS ({measurement.overflowingElements.length}; position: fixed excluded)
           </div>
@@ -166,6 +193,15 @@ function measurePage(phase: string): Measurement {
   const overflowingElements = measured.filter(
     (element) => element.position !== "fixed" && (element.left < 0 || element.right > window.innerWidth),
   );
+  const namedElements: NamedElement[] = [
+    namedElement("html", root),
+    namedElement("body", body),
+    namedElement("panel root", document.querySelector<HTMLElement>("[data-panel-root]")),
+    namedElement("Gabinet Aleksandry header", document.querySelector<HTMLElement>("[data-panel-mobile-header]")),
+    namedElement("green Dashboard card", document.querySelector<HTMLElement>("[data-dashboard-welcome-card]")),
+    namedElement("onboarding wrapper", document.querySelector<HTMLElement>("[data-psycholka-onboarding-wrapper]")),
+    namedElement("onboarding main", document.querySelector<HTMLElement>("[data-psycholka-onboarding-main]")),
+  ];
 
   return {
     phase,
@@ -176,6 +212,12 @@ function measurePage(phase: string): Measurement {
       visualViewportScale: nullableRound(visualViewport?.scale),
       visualViewportOffsetLeft: nullableRound(visualViewport?.offsetLeft),
       visualViewportOffsetTop: nullableRound(visualViewport?.offsetTop),
+      visualViewportPageLeft: nullableRound(visualViewport?.pageLeft),
+      visualViewportPageTop: nullableRound(visualViewport?.pageTop),
+      devicePixelRatio: round(window.devicePixelRatio),
+      screenWidth: window.screen.width,
+      screenAvailWidth: window.screen.availWidth,
+      outerWidth: window.outerWidth,
       innerWidth: window.innerWidth,
       documentElementClientWidth: root.clientWidth,
       documentElementScrollWidth: root.scrollWidth,
@@ -185,21 +227,30 @@ function measurePage(phase: string): Measurement {
     },
     widestElement,
     overflowingElements,
+    namedElements,
   };
 }
 
 function measureElement(element: HTMLElement): MeasuredElement {
   const rect = element.getBoundingClientRect();
+  const styles = window.getComputedStyle(element);
   return {
     tag: element.tagName.toLowerCase(),
     selector: describeElement(element),
     left: round(rect.left),
     right: round(rect.right),
+    top: round(rect.top),
     width: round(rect.width),
     clientWidth: element.clientWidth,
     scrollWidth: element.scrollWidth,
-    position: window.getComputedStyle(element).position,
+    position: styles.position,
+    transform: styles.transform,
+    zoom: styles.getPropertyValue("zoom") || "normal",
   };
+}
+
+function namedElement(label: string, element: HTMLElement | null): NamedElement {
+  return { label, element: element ? measureElement(element) : null };
 }
 
 function describeElement(element: HTMLElement) {
@@ -217,6 +268,12 @@ function DimensionsDetails({ dimensions }: { dimensions: Dimensions }) {
       <span>visualViewport.scale: {formatNullable(dimensions.visualViewportScale)}</span>
       <span>visualViewport.offsetLeft: {formatNullable(dimensions.visualViewportOffsetLeft)}</span>
       <span>visualViewport.offsetTop: {formatNullable(dimensions.visualViewportOffsetTop)}</span>
+      <span>visualViewport.pageLeft: {formatNullable(dimensions.visualViewportPageLeft)}</span>
+      <span>visualViewport.pageTop: {formatNullable(dimensions.visualViewportPageTop)}</span>
+      <span>devicePixelRatio: {dimensions.devicePixelRatio}</span>
+      <span>screen.width: {dimensions.screenWidth}</span>
+      <span>screen.availWidth: {dimensions.screenAvailWidth}</span>
+      <span>window.outerWidth: {dimensions.outerWidth}</span>
       <span>innerWidth: {dimensions.innerWidth}</span>
       <span>documentElement.clientWidth: {dimensions.documentElementClientWidth}</span>
       <span>documentElement.scrollWidth: {dimensions.documentElementScrollWidth}</span>
@@ -233,7 +290,20 @@ function ElementDetails({ element, numbered }: { element: MeasuredElement | null
     <div style={{ borderTop: "1px solid rgba(148, 163, 184, 0.25)", paddingTop: 3, marginTop: 3, overflowWrap: "anywhere" }}>
       {numbered ? `${numbered}. ` : ""}
       <span style={{ color: "#c4b5fd" }}>{element.selector}</span>
-      {` | left ${element.left} | right ${element.right} | width ${element.width} | clientWidth ${element.clientWidth} | scrollWidth ${element.scrollWidth} | position ${element.position}`}
+      {` | left ${element.left} | right ${element.right} | top ${element.top} | width ${element.width} | clientWidth ${element.clientWidth} | scrollWidth ${element.scrollWidth} | transform ${element.transform} | zoom ${element.zoom} | position ${element.position}`}
+    </div>
+  );
+}
+
+function NamedElementDetails({ label, element }: { label: string; element: MeasuredElement | null }) {
+  return (
+    <div style={{ borderTop: "1px solid rgba(134, 239, 172, 0.25)", paddingTop: 3, marginTop: 3, overflowWrap: "anywhere" }}>
+      <strong>{label}: </strong>
+      {element ? (
+        `${element.selector} | left ${element.left} | right ${element.right} | top ${element.top} | width ${element.width} | clientWidth ${element.clientWidth} | scrollWidth ${element.scrollWidth} | transform ${element.transform} | zoom ${element.zoom} | position ${element.position}`
+      ) : (
+        "not mounted"
+      )}
     </div>
   );
 }

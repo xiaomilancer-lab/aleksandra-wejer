@@ -8,7 +8,7 @@ export default function Dashboard({
   children,
 }: DashboardProps) {
   return (
-    <div className="flex min-h-screen min-w-0 flex-col lg:flex-row">
+    <div data-panel-root className="flex min-h-screen min-w-0 flex-col lg:flex-row">
 
       <Sidebar />
 

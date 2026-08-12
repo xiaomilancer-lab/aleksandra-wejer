@@ -31,8 +31,8 @@ export default function PsycholkaOnboarding() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 min-h-[100dvh] w-full min-w-0 max-w-full overflow-hidden bg-[#F8F5F0]/95 backdrop-blur-sm">
-      <main className="psycholka-onboarding mx-auto flex h-[100dvh] min-h-[100dvh] w-full min-w-0 max-w-2xl flex-col text-center">
+    <div data-psycholka-onboarding-wrapper className="fixed inset-0 z-50 min-h-[100dvh] w-full min-w-0 max-w-full overflow-hidden bg-[#F8F5F0]/95 backdrop-blur-sm">
+      <main data-psycholka-onboarding-main className="psycholka-onboarding mx-auto flex h-[100dvh] min-h-[100dvh] w-full min-w-0 max-w-2xl flex-col text-center">
         <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col items-center overflow-y-auto px-4 pb-6 pt-[calc(2rem+env(safe-area-inset-top))]">
           <div className="my-auto flex w-full min-w-0 flex-col items-center">
           {step === "welcome" ? (
