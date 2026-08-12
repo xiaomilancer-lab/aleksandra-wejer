@@ -14,6 +14,10 @@ export default function AuthGuard({ children }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let layoutFrame = 0;
+    let revealFrame = 0;
+    let cancelled = false;
+
     async function checkUser() {
       const {
         data: { session },
@@ -24,10 +28,22 @@ export default function AuthGuard({ children }: Props) {
         return;
       }
 
-      setLoading(false);
+      layoutFrame = window.requestAnimationFrame(() => {
+        // Let iOS Safari settle the visual viewport after the auth route transition.
+        document.documentElement.getBoundingClientRect();
+        revealFrame = window.requestAnimationFrame(() => {
+          if (!cancelled) setLoading(false);
+        });
+      });
     }
 
     checkUser();
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(layoutFrame);
+      window.cancelAnimationFrame(revealFrame);
+    };
   }, [router]);
 
   if (loading) {
