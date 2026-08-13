@@ -53,7 +53,7 @@ export default async function PanelPage() {
   return (
     <AuthGuard>
       <Dashboard>
-        <DashboardWidthDiagnostics />
+        <DashboardWidthDiagnostics previewTriggerEnabled={process.env.VERCEL_ENV === "preview"} />
         <PsycholkaOnboarding />
           <PsycholkaGentleCelebration eventKey={`first-new-patient-${celebrationDate}`} enabled={(dashboardData.newPatientsToday ?? 0) > 0} />
         <div className="mx-auto max-w-7xl">

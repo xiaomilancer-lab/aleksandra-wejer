@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Dimensions = {
   visualViewportWidth: number | null;
@@ -52,10 +53,25 @@ type Measurement = {
 
 const OVERLAY_ATTRIBUTE = "data-dashboard-width-diagnostics";
 
-export default function DashboardWidthDiagnostics() {
+export default function DashboardWidthDiagnostics({ previewTriggerEnabled }: { previewTriggerEnabled: boolean }) {
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
-  const enabled =
+  const [manualEnabled, setManualEnabled] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
+  const queryEnabled =
     typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug-width") === "1";
+  const enabled = queryEnabled || manualEnabled;
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setPortalReady(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  const activateDiagnostics = () => {
+    const preOverlayMeasurement = measurePage("DBG: immediately before overlay");
+    window.__panelWidthDiagnostics = preOverlayMeasurement;
+    setMeasurements([preOverlayMeasurement]);
+    setManualEnabled(true);
+  };
 
   useEffect(() => {
     if (!enabled) return;
@@ -87,7 +103,7 @@ export default function DashboardWidthDiagnostics() {
     const onVisualViewportResize = () => scheduleEventCapture("visualViewport.resize");
     const onVisualViewportScroll = () => scheduleEventCapture("visualViewport.scroll");
 
-    capture("effect / hydration");
+    capture(queryEnabled ? "effect / hydration" : "effect / after DBG activation");
     initialFrame = window.requestAnimationFrame(() => capture("requestAnimationFrame"));
     const afterHydration = window.setTimeout(() => {
       hydrationFrame = window.requestAnimationFrame(() => capture("750ms after hydration"));
@@ -123,14 +139,40 @@ export default function DashboardWidthDiagnostics() {
       window.visualViewport?.removeEventListener("scroll", onVisualViewportScroll);
       delete window.__panelWidthDiagnostics;
     };
-  }, [enabled]);
-
-  if (!enabled) return null;
+  }, [enabled, queryEnabled]);
 
   const latest = measurements.at(-1);
 
   return (
-    <aside
+    <>
+      {previewTriggerEnabled && portalReady && !enabled &&
+        createPortal(
+          <button
+            {...{ [OVERLAY_ATTRIBUTE]: "trigger" }}
+            type="button"
+            aria-label="Uruchom diagnostykę szerokości"
+            onClick={activateDiagnostics}
+            style={{
+              position: "fixed",
+              right: 8,
+              bottom: 8,
+              zIndex: 2147483647,
+              width: 40,
+              height: 40,
+              border: "1px solid rgba(148, 163, 184, 0.65)",
+              borderRadius: 8,
+              background: "rgba(15, 23, 42, 0.82)",
+              color: "#f8fafc",
+              font: "700 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+              touchAction: "manipulation",
+            }}
+          >
+            DBG
+          </button>,
+          document.body,
+        )}
+
+      {enabled && <aside
       {...{ [OVERLAY_ATTRIBUTE]: "true" }}
       aria-label="Dashboard width diagnostics"
       style={{
@@ -174,7 +216,8 @@ export default function DashboardWidthDiagnostics() {
           )}
         </section>
       ))}
-    </aside>
+      </aside>}
+    </>
   );
 }
 
