@@ -58,6 +58,10 @@ export default function LoginPage() {
         return;
       }
 
+      const activeElement = document.activeElement;
+      if (activeElement instanceof HTMLElement && activeElement !== document.body) {
+        activeElement.blur();
+      }
       router.push("/panel");
     } catch {
       setErrorMessage("Nie udało się połączyć z panelem. Spróbuj ponownie za chwilę.");
@@ -94,7 +98,7 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             required
-            className="mt-2 min-h-12 w-full rounded-2xl border border-[#D5DCCF] bg-white p-4 text-[#23332F] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
+            className="mt-2 min-h-12 w-full rounded-2xl border border-[#D5DCCF] bg-white p-4 text-base text-[#23332F] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           />
         </label>
 
@@ -107,7 +111,7 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
             required
-            className="mt-2 min-h-12 w-full rounded-2xl border border-[#D5DCCF] bg-white p-4 text-[#23332F] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
+            className="mt-2 min-h-12 w-full rounded-2xl border border-[#D5DCCF] bg-white p-4 text-base text-[#23332F] placeholder:text-slate-500 outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
           />
         </label>
 
