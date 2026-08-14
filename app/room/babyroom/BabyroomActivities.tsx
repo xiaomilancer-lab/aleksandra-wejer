@@ -1,10 +1,24 @@
 "use client";
 
-import { Eraser, Palette, Pause, Play, RefreshCw, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Eraser, Palette, Pause, Play, Puzzle as PuzzleIcon, RefreshCw, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const colors = ["#2D4739", "#E85D75", "#F2B134", "#4C8BF5", "#7B61A8", "#42A66C"];
-const memorySymbols = ["🌸", "🐻", "🌈", "⭐", "🦋", "🍓"];
+const memorySymbols = [
+  { key: "macha", label: "PsychOLKA macha", src: "/psycholka/greeting/1_greeting_macha.png" },
+  { key: "mis", label: "PsychOLKA z misiem", src: "/psycholka/children/10_children_mis.png" },
+  { key: "kawa", label: "PsychOLKA z kubkiem", src: "/psycholka/lifestyle/4_coffee_kubek.png" },
+  { key: "kalendarz", label: "PsychOLKA z kalendarzem", src: "/psycholka/booking/3_booking_kalendarz.png" },
+  { key: "konfetti", label: "PsychOLKA świętuje", src: "/psycholka/emotions/5_success_konfetti.png" },
+  { key: "pomysl", label: "PsychOLKA ma pomysł", src: "/psycholka/ideas/15_idea_pomysl.png" },
+] as const;
+
+const puzzleScenes = [
+  { label: "Machająca", src: "/psycholka/greeting/1_greeting_macha.png" },
+  { label: "Z misiem", src: "/psycholka/children/10_children_mis.png" },
+  { label: "Konfetti", src: "/psycholka/emotions/5_success_konfetti.png" },
+] as const;
 
 export default function BabyroomActivities() {
   return (
@@ -14,6 +28,7 @@ export default function BabyroomActivities() {
         <BreathingBubble />
         <MemoryGame />
       </div>
+      <PsycholkaPuzzle />
     </div>
   );
 }
@@ -123,18 +138,24 @@ function BreathingBubble() {
   );
 }
 
-function shuffledCards() {
-  return [...memorySymbols, ...memorySymbols]
-    .map((symbol, index) => ({ id: `${symbol}-${index}`, symbol }))
-    .sort(() => Math.random() - 0.5);
+function createMemoryDeck() {
+  return [...memorySymbols, ...memorySymbols].map((symbol, index) => ({
+    id: `${symbol.key}-${index}`,
+    symbol,
+  }));
 }
 
-function initialCards() {
-  return [...memorySymbols, ...memorySymbols].map((symbol, index) => ({ id: `${symbol}-${index}`, symbol }));
+function shuffledCards() {
+  const deck = createMemoryDeck();
+  for (let index = deck.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [deck[index], deck[randomIndex]] = [deck[randomIndex], deck[index]];
+  }
+  return deck;
 }
 
 function MemoryGame() {
-  const [cards, setCards] = useState(() => initialCards());
+  const [cards, setCards] = useState(() => createMemoryDeck());
   const [open, setOpen] = useState<number[]>([]);
   const [matched, setMatched] = useState<string[]>([]);
   const locked = open.length === 2;
@@ -142,8 +163,11 @@ function MemoryGame() {
   useEffect(() => {
     if (open.length !== 2) return;
     const [first, second] = open;
-    if (cards[first].symbol === cards[second].symbol) {
-      const timer = window.setTimeout(() => { setMatched((items) => [...items, cards[first].symbol]); setOpen([]); }, 450);
+    if (cards[first].symbol.key === cards[second].symbol.key) {
+      const timer = window.setTimeout(() => {
+        setMatched((items) => [...items, cards[first].symbol.key]);
+        setOpen([]);
+      }, 450);
       return () => window.clearTimeout(timer);
     }
     const timer = window.setTimeout(() => setOpen([]), 800);
@@ -151,7 +175,7 @@ function MemoryGame() {
   }, [cards, open]);
 
   function choose(index: number) {
-    if (locked || open.includes(index) || matched.includes(cards[index].symbol)) return;
+    if (locked || open.includes(index) || matched.includes(cards[index].symbol.key)) return;
     setOpen((items) => [...items, index]);
   }
 
@@ -163,15 +187,188 @@ function MemoryGame() {
 
   return (
     <section className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-sm">
-      <div className="flex items-start justify-between gap-3"><div><p className="text-sm text-gray-500">Znajdź pary</p><h2 className="text-2xl font-bold">Memory</h2></div><button type="button" onClick={reset} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-3 py-2 font-semibold"><RefreshCw size={17} aria-hidden="true" />Od nowa</button></div>
+      <div className="flex items-start justify-between gap-3"><div><p className="text-sm text-gray-500">Znajdź dwie takie same PsychOLKI</p><h2 className="text-2xl font-bold">Memory PsychOLKI</h2></div><button type="button" onClick={reset} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-3 py-2 font-semibold"><RefreshCw size={17} aria-hidden="true" />Pomieszaj</button></div>
       <div className="mt-5 grid grid-cols-4 gap-2 sm:gap-3">
         {cards.map((card, index) => {
-          const visible = open.includes(index) || matched.includes(card.symbol);
-          return <button key={card.id} type="button" onClick={() => choose(index)} aria-label={visible ? `Odkryta karta ${card.symbol}` : "Zakryta karta"} className={`aspect-square rounded-2xl border text-2xl transition sm:text-3xl ${visible ? "border-[#CBD3C6] bg-[#EEF1EB]" : "border-[#E5E1D8] bg-[#F8F5F0] hover:bg-[#EFEAE2]"}`}>{visible ? card.symbol : "?"}</button>;
+          const visible = open.includes(index) || matched.includes(card.symbol.key);
+          return (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => choose(index)}
+              aria-label={visible ? card.symbol.label : "Zakryta karta"}
+              className={`relative aspect-square overflow-hidden rounded-2xl border transition ${visible ? "border-[#CBD3C6] bg-[#EEF1EB]" : "border-[#E5E1D8] bg-[#F8F5F0] hover:bg-[#EFEAE2]"}`}
+            >
+              {visible ? (
+                <Image
+                  src={card.symbol.src}
+                  alt=""
+                  width={160}
+                  height={160}
+                  className="h-full w-full object-contain p-1 sm:p-2"
+                />
+              ) : (
+                <span className="text-2xl font-bold text-[#6D7A62] sm:text-3xl">?</span>
+              )}
+            </button>
+          );
         })}
       </div>
       <p className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#6D7A62]"><Sparkles size={17} aria-hidden="true" />Znalezione pary: {matched.length} / {memorySymbols.length}</p>
-      {matched.length === memorySymbols.length && <p className="mt-3 rounded-xl bg-[#FFF9EE] p-3 text-center font-bold">Brawo! Wszystkie pary odnalezione 🎉</p>}
+      {matched.length === memorySymbols.length && <p className="mt-3 rounded-xl bg-[#FFF9EE] p-3 text-center font-bold">Brawo! Wszystkie PsychOLKI odnalezione 🎉</p>}
+    </section>
+  );
+}
+
+type PuzzleTile = number | null;
+
+const solvedPuzzle: PuzzleTile[] = [0, 1, 2, 3, 4, 5, 6, 7, null];
+
+function adjacentIndexes(index: number) {
+  const row = Math.floor(index / 3);
+  const column = index % 3;
+  const neighbors: number[] = [];
+  if (row > 0) neighbors.push(index - 3);
+  if (row < 2) neighbors.push(index + 3);
+  if (column > 0) neighbors.push(index - 1);
+  if (column < 2) neighbors.push(index + 1);
+  return neighbors;
+}
+
+function shuffledPuzzle() {
+  const tiles = [...solvedPuzzle];
+  let blankIndex = 8;
+  let previousBlank = -1;
+
+  for (let step = 0; step < 120; step += 1) {
+    const choices = adjacentIndexes(blankIndex).filter((index) => index !== previousBlank);
+    const chosen = choices[Math.floor(Math.random() * choices.length)];
+    tiles[blankIndex] = tiles[chosen];
+    tiles[chosen] = null;
+    previousBlank = blankIndex;
+    blankIndex = chosen;
+  }
+
+  if (isPuzzleSolved(tiles)) {
+    const chosen = adjacentIndexes(blankIndex)[0];
+    tiles[blankIndex] = tiles[chosen];
+    tiles[chosen] = null;
+  }
+
+  return tiles;
+}
+
+function isPuzzleSolved(tiles: PuzzleTile[]) {
+  return tiles.every((tile, index) => tile === solvedPuzzle[index]);
+}
+
+function PsycholkaPuzzle() {
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const [tiles, setTiles] = useState<PuzzleTile[]>(solvedPuzzle);
+  const [moves, setMoves] = useState(0);
+  const [started, setStarted] = useState(false);
+  const scene = puzzleScenes[sceneIndex];
+  const complete = started && isPuzzleSolved(tiles);
+
+  function shuffle() {
+    setTiles(shuffledPuzzle());
+    setMoves(0);
+    setStarted(true);
+  }
+
+  function chooseTile(index: number) {
+    const blankIndex = tiles.indexOf(null);
+    if (!adjacentIndexes(blankIndex).includes(index) || tiles[index] === null) return;
+
+    setTiles((current) => {
+      const next = [...current];
+      next[blankIndex] = next[index];
+      next[index] = null;
+      return next;
+    });
+    setMoves((value) => value + 1);
+    setStarted(true);
+  }
+
+  function chooseScene(index: number) {
+    setSceneIndex(index);
+    setTiles(solvedPuzzle);
+    setMoves(0);
+    setStarted(false);
+  }
+
+  return (
+    <section className="rounded-3xl border border-[#E5E1D8] bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm text-gray-500">Przesuwaj kafelki obok pustego pola</p>
+          <h2 className="mt-1 flex items-center gap-2 text-2xl font-bold">
+            <PuzzleIcon className="text-[#6D7A62]" size={24} aria-hidden="true" />
+            Puzzle PsychOLKI 3 × 3
+          </h2>
+        </div>
+        <button type="button" onClick={shuffle} className="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-2.5 font-semibold text-white hover:bg-[#58644F]">
+          <RefreshCw size={17} aria-hidden="true" />
+          Pomieszaj
+        </button>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2" aria-label="Wybierz obrazek układanki">
+        {puzzleScenes.map((option, index) => (
+          <button
+            key={option.src}
+            type="button"
+            onClick={() => chooseScene(index)}
+            aria-pressed={sceneIndex === index}
+            className={`min-h-11 rounded-xl border px-4 py-2 text-sm font-semibold ${
+              sceneIndex === index
+                ? "border-[#6D7A62] bg-[#EEF1EB] text-[#2D4739]"
+                : "border-[#D8DDD4] bg-white text-gray-600"
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mx-auto mt-6 grid max-w-xl grid-cols-3 gap-1.5 rounded-2xl bg-[#E7E2D9] p-1.5 sm:gap-2 sm:p-2">
+        {tiles.map((tile, index) => {
+          if (tile === null) {
+            return <div key="blank" className="aspect-square rounded-xl bg-[#F8F5F0]" aria-label="Puste pole" />;
+          }
+
+          const sourceRow = Math.floor(tile / 3);
+          const sourceColumn = tile % 3;
+          return (
+            <button
+              key={tile}
+              type="button"
+              onClick={() => chooseTile(index)}
+              aria-label={`Przesuń fragment ${tile + 1}`}
+              className="aspect-square rounded-xl border border-white/80 bg-[#FFFDF9] bg-no-repeat shadow-sm transition hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-[#AFC0AA]"
+              style={{
+                backgroundImage: `url(${scene.src})`,
+                backgroundPosition: `${sourceColumn * 50}% ${sourceRow * 50}%`,
+                backgroundSize: "300% 300%",
+              }}
+            >
+              <span className="float-right m-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-white/85 text-xs font-bold text-[#49604F] shadow-sm sm:m-2">
+                {tile + 1}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mx-auto mt-4 flex max-w-xl items-center justify-between gap-3 text-sm font-semibold text-[#6D7A62]">
+        <span>Ruchy: {moves}</span>
+        {!started && <span>Naciśnij „Pomieszaj”, żeby zacząć.</span>}
+      </div>
+      {complete && (
+        <p className="mx-auto mt-4 max-w-xl rounded-xl bg-[#FFF9EE] p-3 text-center font-bold">
+          Ułożone! PsychOLKA wróciła na swoje miejsce 🌸
+        </p>
+      )}
     </section>
   );
 }

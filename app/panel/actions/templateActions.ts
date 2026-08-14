@@ -9,6 +9,19 @@ function validateTemplate(input: VisitTemplateInput) {
   if (!input.title.trim() || !input.category.trim()) {
     throw new Error("Uzupełnij nazwę i kategorię szablonu.");
   }
+
+  const limits: Array<[string, string, number]> = [
+    ["Nazwa", input.title, 180],
+    ["Kategoria", input.category, 140],
+    ["Opis", input.description, 4_000],
+    ["Szablon notatki", input.noteTemplate, 15_000],
+    ["Szablon zadania", input.homeworkTemplate, 8_000],
+  ];
+
+  const exceeded = limits.find(([, value, limit]) => value.length > limit);
+  if (exceeded) {
+    throw new Error(`${exceeded[0]} jest zbyt długi. Maksymalnie ${exceeded[2]} znaków.`);
+  }
 }
 
 export async function createTemplateAction(input: VisitTemplateInput) {
