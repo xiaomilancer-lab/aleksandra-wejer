@@ -17,7 +17,7 @@ export default function PublicBookingAccess() {
   const scrollToCalendar = () => document.getElementById("kalendarz")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return <>
-    <div className="fixed right-6 top-6 z-40 hidden items-center gap-3 md:flex">
+    <div className="fixed right-6 top-24 z-40 hidden items-center gap-3 md:flex">
       <a href="tel:+48510777469" className="inline-flex items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 text-sm font-semibold text-[#4B4338] shadow-lg ring-1 ring-[#E5E2DB] backdrop-blur transition hover:bg-[#EEF1EB]">
         <Phone size={17} aria-hidden="true" />Zadzwoń
       </a>
