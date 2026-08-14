@@ -8,6 +8,7 @@ export * from "./assistantTemplate";
 export * from "./visitReflection";
 export * from "./followup";
 export * from "./followupReminder";
+export * from "./importantDate";
 export * from "./reflectionCard";
 export * from "./visitPlan";
 export * from "./patientMemory";

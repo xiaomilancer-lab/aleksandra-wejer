@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, CalendarClock, CalendarDays, FolderKanban, Menu, Settings, Users, X } from "lucide-react";
+import { BookOpen, CalendarClock, CalendarDays, CalendarHeart, FolderKanban, Menu, Settings, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const navItems = [
   { href: "/panel/availability", label: "Grafik i dostępność", icon: CalendarClock },
   { href: "/panel/templates", label: "Szablony", icon: FolderKanban },
   { href: "/panel/library", label: "Biblioteka", icon: BookOpen },
+  { href: "/panel/important-dates", label: "Ważne daty", icon: CalendarHeart },
   { href: "/panel/settings", label: "Ustawienia", icon: Settings },
 ];
 

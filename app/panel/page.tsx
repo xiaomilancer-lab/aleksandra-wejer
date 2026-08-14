@@ -3,6 +3,7 @@ import AuthGuard from "./components/AuthGuard";
 import Dashboard from "./components/Dashboard";
 import DashboardAttention from "./components/DashboardAttention";
 import DashboardFollowupReminders from "./components/DashboardFollowupReminders";
+import DashboardImportantDates from "./components/DashboardImportantDates";
 import DashboardNewRequests from "./components/DashboardNewRequests";
 import DashboardNextVisit from "./components/DashboardNextVisit";
 import DashboardQuickActions from "./components/DashboardQuickActions";
@@ -12,9 +13,10 @@ import PsycholkaGentleCelebration from "./components/PsycholkaGentleCelebration"
 import PsycholkaOnboarding from "./components/PsycholkaOnboarding";
 import TodayQueue from "./components/TodayQueue";
 import WelcomeHeader from "./components/WelcomeHeader";
-import type { FollowupReminderAssignment } from "./domain";
+import type { FollowupReminderAssignment, ImportantDateOccurrence } from "./domain";
 import { getDashboardAttentionItems, getDashboardDayData, getDashboardWeekData, getNewBookingRequests, getNextUpcomingVisit, getTodayQueue, getWarsawDateParts, type DashboardAttentionItem, type DashboardDayData, type DashboardRequest, type DashboardWeekData, type TodayQueueItem } from "./services/dashboardService";
 import { getOpenFollowupRemindersForNearestVisits } from "./services/followupReminderService";
+import { getImportantDateOccurrences, getImportantDates } from "./services/importantDateService";
 import { getSitePulseDashboardData } from "./services/sitePulseService";
 import { emptySitePulseDashboardData, type SitePulseDashboardData } from "@/app/site-pulse/domain";
 
@@ -28,12 +30,14 @@ export default async function PanelPage() {
   let newRequests: DashboardRequest[] = [];
   let attentionItems: DashboardAttentionItem[] = [];
   let followupReminders: FollowupReminderAssignment[] = [];
+  let importantDateOccurrences: ImportantDateOccurrence[] = [];
   let sitePulseData: SitePulseDashboardData = emptySitePulseDashboardData;
   let loadError = false;
   const sitePulsePromise = getSitePulseDashboardData(now).catch(() => emptySitePulseDashboardData);
 
   try {
-    [dashboardData, weekData, todayQueue, nextVisit, newRequests, attentionItems, followupReminders] = await Promise.all([
+    const [importantDates, dashboard, week, queue, upcoming, requests, attention, followups] = await Promise.all([
+      getImportantDates(),
       getDashboardDayData(now),
       getDashboardWeekData(now),
       getTodayQueue(now),
@@ -42,6 +46,14 @@ export default async function PanelPage() {
       getDashboardAttentionItems(now),
       getOpenFollowupRemindersForNearestVisits(getWarsawDateParts(now).date),
     ]);
+    importantDateOccurrences = getImportantDateOccurrences(importantDates, getWarsawDateParts(now).date);
+    dashboardData = dashboard;
+    weekData = week;
+    todayQueue = queue;
+    nextVisit = upcoming;
+    newRequests = requests;
+    attentionItems = attention;
+    followupReminders = followups;
   } catch {
     loadError = true;
   }
@@ -61,7 +73,8 @@ export default async function PanelPage() {
           <div className="mt-6"><TodayQueue visits={todayQueue} initialNow={now.toISOString()} /></div>
           <div className="mt-6"><DashboardAttention items={attentionItems} /></div>
           <DashboardSitePulse initialData={sitePulseData} />
-          <div className="mt-6 grid gap-6 xl:grid-cols-3"><DashboardWeekSchedule schedule={weekData} /><DashboardFollowupReminders assignments={followupReminders} /><DashboardQuickActions /></div>
+          <div className="mt-6 grid gap-6 xl:grid-cols-3"><DashboardWeekSchedule schedule={weekData} /><DashboardImportantDates occurrences={importantDateOccurrences} /><DashboardFollowupReminders assignments={followupReminders} /></div>
+          <div className="mt-6"><DashboardQuickActions /></div>
         </div>
       </Dashboard>
     </AuthGuard>
