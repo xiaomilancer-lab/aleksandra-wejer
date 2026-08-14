@@ -103,7 +103,7 @@ export default function PublicPsycholkaWelcome() {
         </div>
         <div className="grid w-full max-w-xl grid-cols-2 justify-center gap-3 md:grid-cols-2 md:items-start">
           <div className="relative inline-flex items-center justify-center">
-            <PsycholkaWidget context="welcome" action="point_booking" fallbackAction="greeting" className="public-psycholka-point-booking" />
+            <div className="hidden md:block"><PsycholkaWidget context="welcome" action="point_booking" fallbackAction="greeting" className="public-psycholka-point-booking" /></div>
             <a href="#kalendarz" onClick={() => showInteractionMessage("❤️ Trzymam kciuki.")} className="relative z-10 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#E63946] px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#cc2f3c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E63946] focus-visible:ring-offset-2">📅 Umów wizytę</a>
           </div>
           <button type="button" onClick={startGuidedJourney} className="hidden min-h-12 items-center justify-center rounded-xl border border-[#2F6B5F] bg-white px-6 py-3 font-semibold text-[#2F6B5F] transition hover:bg-[#F3F8F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F] focus-visible:ring-offset-2 md:inline-flex">🌿 Rozejrzyj się ze mną</button>
