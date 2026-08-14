@@ -32,6 +32,12 @@ export async function updateVisitRecordKind(id: number, recordKind: VisitRecordK
   if (error) throw error;
 }
 
+export async function getOrganizerVisitById(id: number): Promise<Visit | null> {
+  const { data, error } = await supabaseAdmin.from("bookings").select(fields).eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data as Visit | null;
+}
+
 export async function createHistoricalVisit(input: HistoricalVisitInput) {
   if (!isBookingLocationId(input.locationId)) throw new Error("Nieprawidłowa lokalizacja.");
   const patient = input.patientId ? await getPatientById(input.patientId) : null;
