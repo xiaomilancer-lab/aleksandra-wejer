@@ -1,16 +1,12 @@
 import Link from "next/link";
-import { CalendarDays, Car, Download, Gift, MessageCircleHeart, Palette, Sparkles } from "lucide-react";
+import { CalendarDays, Car, Download, Gift, MessageCircleHeart, Palette, Sparkles, Star } from "lucide-react";
 import { requireMember } from "@/app/room/server/requireMember";
 import RoomLogoutButton from "@/app/room/RoomLogoutButton";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getMemberPatientAccess } from "@/app/room/server/memberContext";
 
 export default async function MemberRoomPage() {
   const member = await requireMember();
-  const { data: accessRows } = await supabaseAdmin
-    .from("member_patient_access")
-    .select("access_role")
-    .eq("user_id", member.userId)
-    .eq("status", "active");
+  const accessRows = await getMemberPatientAccess(member.userId);
 
   const activeRoles = new Set((accessRows ?? []).map((access) => access.access_role));
   const isLinked = activeRoles.size > 0;
@@ -42,12 +38,13 @@ export default async function MemberRoomPage() {
         )}
 
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <RoomCard icon={CalendarDays} title="Wizyty" description="Terminy, rezerwacja i prośba o przełożenie." />
-          <RoomCard icon={MessageCircleHeart} title="Od Aleksandry" description="Prywatne wiadomości i udostępnione materiały." />
+          <RoomCard icon={CalendarDays} title="Wizyty" description="Terminy, historia i bezpieczna prośba o przełożenie." href="/room/visits" />
+          <RoomCard icon={MessageCircleHeart} title="Od Aleksandry" description="Prywatne wiadomości i udostępnione materiały." href="/room/messages" />
           <RoomCard icon={Gift} title="Prezenty i konkursy" description="Nagrody, rabaty i spokojne niespodzianki." />
-          <RoomCard icon={Palette} title="Babyroom" description="Kolorowanki, rysowanie i bezpieczne mini-gry." />
+          <RoomCard icon={Palette} title="Babyroom" description="Rysowanie i bezpieczne mini-gry bez reklam." href="/room/babyroom" />
           <RoomCard icon={Car} title="Dojazd" description="Samochód, komunikacja miejska i Bolt do obu gabinetów." href="/room/travel" />
           <RoomCard icon={Sparkles} title="Co warto zrobić?" description="Rodzinne atrakcje pobierane ze wspólnego cache." />
+          <RoomCard icon={Star} title="Twoja opinia" description="Prywatna wiadomość lub dobrowolna opinia Google dla właściwego gabinetu." href="/room/feedback" />
         </section>
       </div>
     </main>

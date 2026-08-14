@@ -16,6 +16,7 @@ export async function submitGoogleReviewAction(token: string) {
 
 export async function submitPrivateFeedbackAction(token: string, feedback: string) {
   if (!feedback.trim()) throw new Error("Napisz proszę swoją uwagę przed wysłaniem.");
+  if (feedback.trim().length > 1200) throw new Error("Wiadomość może mieć maksymalnie 1200 znaków.");
   const { patientId } = requireReviewToken(token);
   await savePrivateFeedback(patientId, feedback);
 }
