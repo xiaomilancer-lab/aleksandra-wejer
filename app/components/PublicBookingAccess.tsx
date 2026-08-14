@@ -25,6 +25,9 @@ export default function PublicBookingAccess() {
         <CalendarDays size={17} aria-hidden="true" />Umów wizytę
       </button>
     </div>
-    {!hideMobile && <button type="button" onClick={scrollToCalendar} className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 text-sm font-semibold text-white shadow-xl transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2 md:hidden"><CalendarDays size={18} aria-hidden="true" />Umów wizytę</button>}
+    {!hideMobile && <div className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid grid-cols-2 gap-2 md:hidden">
+      <a href="tel:+48510777469" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#6D7A62] bg-white/95 px-3 py-3 text-sm font-semibold text-[#2D4739] shadow-xl backdrop-blur transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2"><Phone size={18} aria-hidden="true" />Zadzwoń</a>
+      <button type="button" onClick={scrollToCalendar} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-3 py-3 text-sm font-semibold text-white shadow-xl transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6D7A62] focus-visible:ring-offset-2"><CalendarDays size={18} aria-hidden="true" />Umów wizytę</button>
+    </div>}
   </>;
 }
