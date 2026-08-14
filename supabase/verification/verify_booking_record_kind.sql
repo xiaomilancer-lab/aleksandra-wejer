@@ -33,7 +33,6 @@ from pg_indexes
 where schemaname = 'public'
   and tablename = 'bookings'
   and indexname in (
-    'bookings_location_date_time_unique_idx',
     'bookings_location_id_date_time_unique_idx'
   )
 order by indexname;
