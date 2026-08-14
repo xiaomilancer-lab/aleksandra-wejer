@@ -117,11 +117,13 @@ export async function getDashboardDayData(
       .from("bookings")
       .select(fields)
       .eq("visit_date", today)
+      .neq("record_kind", "test")
       .order("visit_time", { ascending: true }),
     supabaseAdmin
       .from("bookings")
       .select(fields)
       .eq("status", "Nowe")
+      .neq("record_kind", "test")
       .order("visit_date", { ascending: true })
       .order("visit_time", { ascending: true })
       .limit(5),
@@ -156,6 +158,7 @@ export async function getDashboardWeekData(now: Date = new Date()): Promise<Dash
     .select(fields)
     .gte("visit_date", today)
     .lte("visit_date", endDate)
+    .neq("record_kind", "test")
     .neq("status", "Odwołane")
     .order("visit_date", { ascending: true })
     .order("visit_time", { ascending: true });
@@ -173,12 +176,12 @@ export async function getDashboardWeekData(now: Date = new Date()): Promise<Dash
 export async function getTodayQueue(now: Date = new Date()): Promise<TodayQueueItem[]> {
   const { date: today } = getWarsawDateParts(now);
   const fields = "id, patient_id, name, location, location_id, visit_date, visit_time, status, message, source";
-  const { data, error } = await supabaseAdmin.from("bookings").select(fields).eq("visit_date", today).order("visit_time", { ascending: true });
+  const { data, error } = await supabaseAdmin.from("bookings").select(fields).eq("visit_date", today).neq("record_kind", "test").order("visit_time", { ascending: true });
   if (error) throw error;
   const visits = (data ?? []) as Array<DashboardVisit & Pick<Visit, "patient_id" | "message">>;
   const patientIds = [...new Set(visits.flatMap((visit) => visit.patient_id ? [visit.patient_id] : []))];
   const [allVisitsResult, followupSuggestions] = await Promise.all([
-    patientIds.length ? supabaseAdmin.from("bookings").select("id, patient_id, visit_date, visit_time, status").in("patient_id", patientIds) : Promise.resolve({ data: [], error: null }),
+    patientIds.length ? supabaseAdmin.from("bookings").select("id, patient_id, visit_date, visit_time, status").in("patient_id", patientIds).neq("record_kind", "test") : Promise.resolve({ data: [], error: null }),
     getFollowupSuggestions(now).catch(() => []),
   ]);
   if (allVisitsResult.error) throw allVisitsResult.error;
@@ -207,6 +210,7 @@ export async function getNextUpcomingVisit(now: Date = new Date()): Promise<Toda
     .from("bookings")
     .select(fields)
     .gte("visit_date", today)
+    .neq("record_kind", "test")
     .neq("status", "Odwołane")
     .order("visit_date", { ascending: true })
     .order("visit_time", { ascending: true })
@@ -225,6 +229,7 @@ export async function getNewBookingRequests(now: Date = new Date()): Promise<Das
     .from("bookings")
     .select(fields)
     .gte("visit_date", today)
+    .neq("record_kind", "test")
     .eq("status", "Nowe")
     .order("visit_date", { ascending: true })
     .order("visit_time", { ascending: true })
@@ -240,6 +245,7 @@ export async function getDashboardAttentionItems(now: Date = new Date()): Promis
       .from("bookings")
       .select("id, name, visit_date, visit_time")
       .gte("visit_date", today)
+      .neq("record_kind", "test")
       .neq("status", "Odwołane")
       .is("patient_id", null)
       .order("visit_date", { ascending: true })
@@ -249,6 +255,7 @@ export async function getDashboardAttentionItems(now: Date = new Date()): Promis
       .from("bookings")
       .select("id, patient_id, name, visit_date, visit_time")
       .eq("status", "Zrealizowane")
+      .neq("record_kind", "test")
       .not("patient_id", "is", null)
       .order("visit_date", { ascending: false })
       .limit(20),
@@ -285,7 +292,7 @@ export async function getDashboardAttentionItems(now: Date = new Date()): Promis
 async function enrichQueueVisits(visits: Array<DashboardVisit & Pick<Visit, "patient_id" | "message">>): Promise<TodayQueueItem[]> {
   const patientIds = [...new Set(visits.flatMap((visit) => visit.patient_id ? [visit.patient_id] : []))];
   const [allVisitsResult, followupSuggestions] = await Promise.all([
-    patientIds.length ? supabaseAdmin.from("bookings").select("id, patient_id, visit_date, visit_time, status").in("patient_id", patientIds) : Promise.resolve({ data: [], error: null }),
+    patientIds.length ? supabaseAdmin.from("bookings").select("id, patient_id, visit_date, visit_time, status").in("patient_id", patientIds).neq("record_kind", "test") : Promise.resolve({ data: [], error: null }),
     getFollowupSuggestions().catch(() => []),
   ]);
   if (allVisitsResult.error) throw allVisitsResult.error;
@@ -327,7 +334,7 @@ function nextCalendarDate(date: string, daysToAdd = 1) {
 export async function getDayClosingSummary(now: Date = new Date()): Promise<DayClosingSummary> {
   const { date } = getWarsawDateParts(now);
   const tomorrowDate = nextCalendarDate(date);
-  const bookingsResult = await supabaseAdmin.from("bookings").select("id, patient_id, name, visit_date, visit_time, status").eq("visit_date", date).order("visit_time", { ascending: true });
+  const bookingsResult = await supabaseAdmin.from("bookings").select("id, patient_id, name, visit_date, visit_time, status").eq("visit_date", date).neq("record_kind", "test").order("visit_time", { ascending: true });
   if (bookingsResult.error) throw bookingsResult.error;
   const visits = (bookingsResult.data ?? []) as Array<Pick<Visit, "id" | "patient_id" | "name" | "visit_date" | "visit_time" | "status">>;
   const patientIds = [...new Set(visits.flatMap((visit) => visit.patient_id ? [visit.patient_id] : []))];
@@ -336,7 +343,7 @@ export async function getDayClosingSummary(now: Date = new Date()): Promise<DayC
     supabaseAdmin.from("patient_tasks").select("id, created_at"),
     supabaseAdmin.from("followup_reminders").select("id, patient_id, title, status").eq("status", "open"),
     supabaseAdmin.from("patients").select("id, name, created_at, review_request_sent, review_request_scheduled_at"),
-    supabaseAdmin.from("bookings").select("id, patient_id, visit_time, status").eq("visit_date", tomorrowDate).neq("status", "Odwołane").order("visit_time", { ascending: true }),
+    supabaseAdmin.from("bookings").select("id, patient_id, visit_time, status").eq("visit_date", tomorrowDate).neq("record_kind", "test").neq("status", "Odwołane").order("visit_time", { ascending: true }),
   ]);
   for (const result of [notesResult, tasksResult, followupsResult, patientsResult]) {
     if (result.error && !isTableMissing(result.error.code)) throw result.error;

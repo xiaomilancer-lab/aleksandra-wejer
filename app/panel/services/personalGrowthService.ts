@@ -27,7 +27,7 @@ export async function getPersonalGrowthData(): Promise<PersonalGrowthData> {
     getPatients(),
     getKnowledgeMaterials(),
     getFavoriteTemplates(),
-    supabaseAdmin.from("bookings").select("id, patient_id, status"),
+    supabaseAdmin.from("bookings").select("id, patient_id, status").neq("record_kind", "test"),
   ]);
   if (visitsResult.error) throw visitsResult.error;
 

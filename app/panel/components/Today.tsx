@@ -7,6 +7,7 @@ export default async function Today() {
     .from("bookings")
     .select("*")
     .eq("visit_date", today)
+    .neq("record_kind", "test")
     .order("visit_time");
 
   return (

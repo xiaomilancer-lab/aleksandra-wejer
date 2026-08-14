@@ -6,6 +6,7 @@ export default async function VisitTable() {
   const [{ data: visits, error }, templates] = await Promise.all([supabaseAdmin
     .from("bookings")
     .select("*")
+    .neq("record_kind", "test")
     .order("visit_date", { ascending: true })
     .order("visit_time", { ascending: true }), getTemplates()]);
 

@@ -86,6 +86,7 @@ export async function getOpenFollowupRemindersForNearestVisits(
       .from("bookings")
       .select("id, patient_id, name, visit_date, visit_time, status")
       .gte("visit_date", today)
+      .neq("record_kind", "test")
       .neq("status", "Odwołane")
       .order("visit_date", { ascending: true })
       .order("visit_time", { ascending: true }),

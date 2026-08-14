@@ -79,6 +79,7 @@ export async function getPatientVisits(patientId: string): Promise<Visit[]> {
     .from("bookings")
     .select("id, patient_id, name, email, phone, location, visit_date, visit_time, status, message")
     .eq("patient_id", patientId)
+    .neq("record_kind", "test")
     .order("visit_date", { ascending: false })
     .order("visit_time", { ascending: false });
 

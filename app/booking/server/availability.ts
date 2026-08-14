@@ -22,7 +22,7 @@ export async function getAvailableSlots({ locationId, from, to, now = new Date()
   const [rulesResult, exceptionsResult, bookingsResult] = await Promise.all([
     supabaseAdmin.from("availability_rules").select("weekday, start_time, end_time, slot_duration_minutes, valid_from, valid_to").eq("location_id", locationId).eq("is_active", true),
     supabaseAdmin.from("availability_exceptions").select("date, kind, start_time, end_time, slot_duration_minutes").eq("location_id", locationId).gte("date", from).lte("date", to),
-    supabaseAdmin.from("bookings").select("visit_date, visit_time, status").eq("location_id", locationId).gte("visit_date", from).lte("visit_date", to),
+    supabaseAdmin.from("bookings").select("visit_date, visit_time, status").eq("location_id", locationId).gte("visit_date", from).lte("visit_date", to).neq("record_kind", "test"),
   ]);
 
   if (rulesResult.error) throw new AvailabilityError(`Błąd availability_rules (${rulesResult.error.code ?? "unknown"}).`, "availability_rules", { cause: rulesResult.error });

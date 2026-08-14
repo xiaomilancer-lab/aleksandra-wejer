@@ -27,7 +27,7 @@ export async function getFollowupRules(): Promise<FollowupRule[]> {
 export async function getFollowupSuggestions(now: Date = new Date()): Promise<FollowupSuggestion[]> {
   const [rules, bookingsResult] = await Promise.all([
     getFollowupRules(),
-    supabaseAdmin.from("bookings").select("id, patient_id, name, visit_date, visit_time, status").not("patient_id", "is", null).order("visit_date", { ascending: false }).order("visit_time", { ascending: false }),
+    supabaseAdmin.from("bookings").select("id, patient_id, name, visit_date, visit_time, status").not("patient_id", "is", null).neq("record_kind", "test").order("visit_date", { ascending: false }).order("visit_time", { ascending: false }),
   ]);
   if (bookingsResult.error) throw bookingsResult.error;
 

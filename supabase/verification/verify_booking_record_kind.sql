@@ -23,3 +23,17 @@ select record_kind, count(*) as booking_count
 from public.bookings
 group by record_kind
 order by record_kind;
+
+select
+  indexname,
+  indexdef,
+  (indexdef ilike '%record_kind%real%'
+    and indexdef ilike '%status%Odwołane%') as ignores_test_and_cancelled
+from pg_indexes
+where schemaname = 'public'
+  and tablename = 'bookings'
+  and indexname in (
+    'bookings_location_date_time_unique_idx',
+    'bookings_location_id_date_time_unique_idx'
+  )
+order by indexname;

@@ -11,16 +11,19 @@ export default async function Stats() {
   const { count: todayCount } = await supabaseAdmin
     .from("bookings")
     .select("*", { count: "exact", head: true })
-    .eq("visit_date", today);
+    .eq("visit_date", today)
+    .neq("record_kind", "test");
 
   const { count: tomorrowCount } = await supabaseAdmin
     .from("bookings")
     .select("*", { count: "exact", head: true })
-    .eq("visit_date", tomorrowString);
+    .eq("visit_date", tomorrowString)
+    .neq("record_kind", "test");
 
   const { count: totalCount } = await supabaseAdmin
     .from("bookings")
-    .select("*", { count: "exact", head: true });
+    .select("*", { count: "exact", head: true })
+    .neq("record_kind", "test");
 
   return (
     <div className="mt-10 grid gap-6 md:grid-cols-3">

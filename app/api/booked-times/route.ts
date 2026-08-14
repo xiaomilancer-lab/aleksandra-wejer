@@ -12,7 +12,8 @@ export async function GET(req: Request) {
   const { data, error } = await supabaseAdmin
     .from("bookings")
     .select("visit_time")
-    .eq("visit_date", date);
+    .eq("visit_date", date)
+    .neq("record_kind", "test");
 
   if (error) {
     console.error(error);
