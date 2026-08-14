@@ -8,14 +8,15 @@ const storageKey = "psycholka-self-care-favorites";
 const favoritesChangedEvent = "psycholka-self-care-favorites-changed";
 const filters: { id: SelfCareCategory; label: string }[] = [
   { id: "all", label: "Wszystko" },
-  { id: "screen", label: "Filmy i seriale" },
+  { id: "netflix", label: "Netflix" },
+  { id: "cinema", label: "Kino" },
   { id: "places", label: "Miejsca" },
   { id: "events", label: "Wydarzenia" },
   { id: "gifts", label: "Prezenty" },
   { id: "deals", label: "Promocje" },
 ];
 
-const icons = { screen: Clapperboard, places: MapPin, events: CalendarHeart, gifts: Gift, deals: Tags };
+const icons = { netflix: Clapperboard, cinema: Clapperboard, places: MapPin, events: CalendarHeart, gifts: Gift, deals: Tags };
 
 export default function SelfCareHub() {
   const [category, setCategory] = useState<SelfCareCategory>("all");
