@@ -14,6 +14,7 @@ const navigationItems: ReadonlyArray<{ label: string; href: string; visibility?:
   { label: "FAQ", href: "#faq" },
   { label: "Kontakt", href: "#kontakt", visibility: "hidden md:flex" },
   { label: "Kontakt", href: "#kontakt-mobile", visibility: "flex md:hidden" },
+  { label: "Panel psychologa", href: "/login" },
 ];
 
 export default function Footer() {
