@@ -1,4 +1,5 @@
 import Sidebar from "./Sidebar";
+import PanelScrollToTop from "./PanelScrollToTop";
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -9,6 +10,8 @@ export default function Dashboard({
 }: DashboardProps) {
   return (
     <div data-panel-root className="flex min-h-screen min-w-0 flex-col lg:flex-row">
+
+      <PanelScrollToTop />
 
       <Sidebar />
 
