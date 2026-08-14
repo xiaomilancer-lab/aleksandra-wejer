@@ -10,7 +10,7 @@ import { psycholkaConfig } from "../../psycholka/psycholkaConfig";
 import type { PsycholkaContext } from "../../psycholka/psycholkaTypes";
 
 export default function PsycholkaPreviewPage() {
-  if (process.env.NODE_ENV === "production") notFound();
+  if (process.env.VERCEL_ENV === "production") notFound();
 
   const contexts = Object.keys(psycholkaConfig) as PsycholkaContext[];
   const journey = publicJourneyAssets.map((asset) => ({ ...asset, exists: existsSync(join(process.cwd(), "public", asset.path.slice(1))) }));
