@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function LoginPage() {
@@ -13,23 +14,27 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function establishPanelSession(accessToken: string) {
-    const response = await fetch("/api/auth/panel-session", {
+  async function establishAppSession(accessToken: string) {
+    const response = await fetch("/api/auth/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "same-origin",
       body: JSON.stringify({ accessToken }),
     });
-    const body = await response.json().catch(() => null) as { message?: string } | null;
-    return { ok: response.ok, message: body?.message ?? "Nie udało się bezpiecznie rozpocząć sesji panelu." };
+    const body = await response.json().catch(() => null) as { destination?: string; message?: string } | null;
+    return {
+      ok: response.ok,
+      destination: body?.destination ?? null,
+      message: body?.message ?? "Nie udało się bezpiecznie rozpocząć sesji.",
+    };
   }
 
   useEffect(() => {
     async function restorePanelSession() {
       const { data } = await supabase.auth.getSession();
-      const panelSession = data.session ? await establishPanelSession(data.session.access_token) : null;
-      if (panelSession?.ok) {
-        router.replace("/panel");
+      const appSession = data.session ? await establishAppSession(data.session.access_token) : null;
+      if (appSession?.ok && appSession.destination) {
+        router.replace(appSession.destination);
       }
     }
     void restorePanelSession();
@@ -52,9 +57,9 @@ export default function LoginPage() {
         return;
       }
 
-      const panelSession = data.session ? await establishPanelSession(data.session.access_token) : null;
-      if (!panelSession?.ok) {
-        setErrorMessage(panelSession?.message ?? "Nie udało się bezpiecznie rozpocząć sesji panelu.");
+      const appSession = data.session ? await establishAppSession(data.session.access_token) : null;
+      if (!appSession?.ok || !appSession.destination) {
+        setErrorMessage(appSession?.message ?? "Nie udało się bezpiecznie rozpocząć sesji.");
         return;
       }
 
@@ -62,7 +67,7 @@ export default function LoginPage() {
       if (activeElement instanceof HTMLElement && activeElement !== document.body) {
         activeElement.blur();
       }
-      router.push("/panel");
+      router.push(appSession.destination);
     } catch {
       setErrorMessage("Nie udało się połączyć z panelem. Spróbuj ponownie za chwilę.");
     } finally {
@@ -82,11 +87,11 @@ export default function LoginPage() {
         </h1>
 
         <h2 className="mt-4 text-center text-3xl font-bold text-[#2D4739]">
-          Centrum Gabinetu
+          Centrum PsychOLKI
         </h2>
 
         <p className="mt-2 text-center text-gray-500">
-          Zaloguj się do panelu.
+          Zaloguj się do swojego miejsca.
         </p>
 
         <label className="mt-8 block text-sm font-semibold text-[#2D4739]">
@@ -124,6 +129,16 @@ export default function LoginPage() {
         >
           {isSubmitting ? "Logowanie…" : "🌿 Zaloguj się"}
         </button>
+
+        <div className="mt-6 border-t border-[#E5E1D8] pt-6 text-center">
+          <p className="text-sm text-gray-600">Nie masz jeszcze konta?</p>
+          <Link
+            href="/register"
+            className="mt-3 inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#6D7A62] px-5 py-2.5 text-sm font-semibold text-[#2D4739] transition hover:bg-[#EEF1EB]"
+          >
+            ✨ Zarejestruj się
+          </Link>
+        </div>
       </form>
     </div>
   );
