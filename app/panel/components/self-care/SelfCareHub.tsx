@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarHeart, Clapperboard, Gift, Heart, MapPin, Sparkles, Tags } from "lucide-react";
+import { Baby, CalendarHeart, Clapperboard, Gift, Heart, MapPin, Sparkles, Tags } from "lucide-react";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import { SelfCareCategory, SelfCareInspiration, selfCareInspirations } from "../../domain/selfCare";
 
@@ -10,13 +10,14 @@ const filters: { id: SelfCareCategory; label: string }[] = [
   { id: "all", label: "Wszystko" },
   { id: "netflix", label: "Netflix" },
   { id: "cinema", label: "Kino" },
+  { id: "family", label: "Z dziećmi" },
   { id: "places", label: "Miejsca" },
   { id: "events", label: "Wydarzenia" },
   { id: "gifts", label: "Prezenty" },
   { id: "deals", label: "Promocje" },
 ];
 
-const icons = { netflix: Clapperboard, cinema: Clapperboard, places: MapPin, events: CalendarHeart, gifts: Gift, deals: Tags };
+const icons = { netflix: Clapperboard, cinema: Clapperboard, family: Baby, places: MapPin, events: CalendarHeart, gifts: Gift, deals: Tags };
 
 export default function SelfCareHub() {
   const [category, setCategory] = useState<SelfCareCategory>("all");
@@ -32,14 +33,14 @@ export default function SelfCareHub() {
 
   return <div className="space-y-6">
     <section className="overflow-hidden rounded-[28px] border border-[#DDE4D8] bg-[#2D4739] p-6 text-white shadow-[0_18px_50px_rgba(45,71,57,0.14)] sm:p-8">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"><div className="max-w-3xl"><div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]"><Sparkles size={15} />PsychOLKA dla Aleksandry</div><h1 className="text-3xl font-bold sm:text-4xl">Chwila dla siebie 🌸</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 sm:text-base">Filmy, seriale, miejsca, wydarzenia, prezenty i dobre okazje — krótko, spokojnie i bez szukania po całym internecie.</p></div><div className="rounded-2xl bg-white/10 px-5 py-4 text-sm text-white/85"><p className="font-semibold text-white">Tryb spokojny działa</p><p className="mt-1">Brak AI nie wyłącza tej zakładki.</p></div></div>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"><div className="max-w-3xl"><div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]"><Sparkles size={15} />PsychOLKA dla Aleksandry</div><h1 className="text-3xl font-bold sm:text-4xl">Chwila dla siebie 🌸</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 sm:text-base">Filmy, seriale, rodzinne atrakcje, miejsca, wydarzenia, prezenty i dobre okazje — krótko, spokojnie i bez szukania po całym internecie.</p></div><div className="rounded-2xl bg-white/10 px-5 py-4 text-sm text-white/85"><p className="font-semibold text-white">Tryb spokojny działa</p><p className="mt-1">Brak AI nie wyłącza tej zakładki.</p></div></div>
     </section>
 
     <section className="rounded-[24px] border border-[#E5E1D8] bg-white p-5 shadow-sm sm:p-6"><div className="flex flex-wrap gap-2" role="group" aria-label="Kategorie inspiracji">{filters.map((filter) => <button key={filter.id} type="button" onClick={() => setCategory(filter.id)} className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${category === filter.id ? "bg-[#6D7A62] text-white" : "bg-[#F8F5F0] text-[#2D4739] hover:bg-[#EEF1EB]"}`}>{filter.label}</button>)}</div></section>
 
     <section><div className="mb-4 flex items-end justify-between gap-4"><div><p className="text-sm text-gray-500">Pierwsza spokojna kolekcja</p><h2 className="text-2xl font-bold text-[#2D4739]">Co może sprawić przyjemność?</h2></div>{favorites.length > 0 && <p className="text-sm font-semibold text-[#B05D6D]">Ulubione: {favorites.length}</p>}</div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{visible.map((item) => <InspirationCard key={item.id} item={item} favorite={favorites.includes(item.id)} onFavorite={() => toggleFavorite(item.id)} />)}</div></section>
 
-    <section className="rounded-[24px] border border-[#E8D39D] bg-[#FFF9E9] p-5 sm:p-6"><div className="flex gap-4"><span className="mt-0.5 rounded-2xl bg-white p-3 text-[#B7791F]"><Sparkles size={20} /></span><div><h2 className="font-bold text-[#2D4739]">Co dołoży mózg PsychOLKI?</h2><p className="mt-2 text-sm leading-6 text-gray-600">Świeże premiery Netflixa, koreańskie komedie romantyczne, repertuar kin, wydarzenia, restauracje i promocje z prawdziwą datą ważności. Jeśli źródło lub AI będzie chwilowo niedostępne, ta kolekcja nadal zostanie widoczna.</p></div></div></section>
+    <section className="rounded-[24px] border border-[#E8D39D] bg-[#FFF9E9] p-5 sm:p-6"><div className="flex gap-4"><span className="mt-0.5 rounded-2xl bg-white p-3 text-[#B7791F]"><Sparkles size={20} /></span><div><h2 className="font-bold text-[#2D4739]">Co dołoży mózg PsychOLKI?</h2><p className="mt-2 text-sm leading-6 text-gray-600">Świeże premiery Netflixa, koreańskie komedie romantyczne, repertuar kin, wydarzenia, restauracje, rodzinne atrakcje i promocje z prawdziwą datą ważności. Jeśli źródło lub AI będzie chwilowo niedostępne, ta kolekcja nadal zostanie widoczna.</p></div></div></section>
   </div>;
 }
 
