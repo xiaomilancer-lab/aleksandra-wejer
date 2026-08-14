@@ -7,8 +7,8 @@ import { useState } from "react";
 import LogoutButton from "./LogoutButton";
 
 const navItems = [
-  { href: "/panel", label: "Wizyty", icon: CalendarDays },
-  { href: "/panel/visits", label: "Wszystkie wizyty", icon: ClipboardList },
+  { href: "/panel", label: "Pulpit", icon: CalendarDays },
+  { href: "/panel/visits", label: "Wizyty", icon: ClipboardList },
   { href: "/panel/patients", label: "Pacjenci", icon: Users },
   { href: "/panel/availability", label: "Grafik i dostępność", icon: CalendarClock },
   { href: "/panel/templates", label: "Szablony", icon: FolderKanban },
