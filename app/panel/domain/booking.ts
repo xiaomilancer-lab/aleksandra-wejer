@@ -11,4 +11,8 @@ export interface Visit {
   status: string;
   message: string | null;
   source?: string | null;
+  record_kind?: VisitRecordKind;
 }
+
+export const VISIT_RECORD_KINDS = ["real", "test"] as const;
+export type VisitRecordKind = (typeof VISIT_RECORD_KINDS)[number];
