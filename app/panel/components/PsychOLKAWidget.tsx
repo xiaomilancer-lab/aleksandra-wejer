@@ -19,6 +19,34 @@ export interface PsycholkaWidgetProps extends PsycholkaEventHooks {
 
 const directActions: PsycholkaAction[] = ["idle", "greeting", "open_arms", "point_booking", "search", "sad", "happy", "meet_aleksandra", "help_path", "locations", "reviews", "account_whisper", "booking_choice", "goodbye"];
 
+const motionClassByAction: Record<PsycholkaAction, string> = {
+  idle: "psycholka-idle",
+  wave: "psycholka-wave",
+  coffee: "psycholka-coffee",
+  read: "psycholka-read",
+  walk: "psycholka-walk",
+  run: "psycholka-run",
+  sit: "psycholka-sit",
+  point: "psycholka-point-booking",
+  celebrate: "psycholka-celebrate",
+  lost_shoe: "psycholka-lost-shoe",
+  sleep: "psycholka-sleep",
+  look_around: "psycholka-look-around",
+  greeting: "psycholka-greeting",
+  open_arms: "psycholka-open-arms",
+  point_booking: "psycholka-point-booking",
+  search: "psycholka-look-around",
+  sad: "psycholka-sad",
+  happy: "psycholka-celebrate",
+  meet_aleksandra: "psycholka-greeting",
+  help_path: "psycholka-walk",
+  locations: "psycholka-point-booking",
+  reviews: "psycholka-celebrate",
+  account_whisper: "psycholka-look-around",
+  booking_choice: "psycholka-point-booking",
+  goodbye: "psycholka-sleep",
+};
+
 export default function PsycholkaWidget({
   context,
   mood,
@@ -56,8 +84,7 @@ export default function PsycholkaWidget({
   const fallbackAssets = [configuredFallback, greetingFallback, idleFallback].filter((asset, index, all): asset is NonNullable<typeof asset> => Boolean(asset) && all.findIndex((candidate) => candidate?.id === asset?.id) === index);
   const usesFallback = primaryFailed || !requestedAsset;
   const displayedAsset = usesFallback ? fallbackAssets[fallbackIndex] ?? null : requestedAsset;
-  const displayedAction = displayedAsset?.action ?? requestedAction;
-  const visualAction = requestedAction === "idle" ? "idle" : displayedAction;
+  const visualAction = requestedAction;
   const isSequenceAction = ["greeting", "open_arms", "celebrate", "point_booking"].includes(requestedAction);
   const breathEnabled = breath ?? (requestedAction === "idle" && !isSequenceAction);
 
@@ -67,24 +94,18 @@ export default function PsycholkaWidget({
   void onReviewReceived;
   void onDayClosed;
 
-  const animationClass =
-    visualAction === "wave"
-      ? "psycholka-wave"
-      : visualAction === "coffee"
-        ? "psycholka-coffee"
-        : visualAction === "open_arms"
-          ? "psycholka-open-arms"
-          : visualAction === "point_booking"
-            ? "psycholka-point-booking"
-            : visualAction === "greeting"
-              ? "psycholka-greeting"
-              : "psycholka-idle";
+  const animationClass = motionClassByAction[visualAction];
   const visualClass = context === "session" ? "psycholka-visual-session" : behavior.size === "small" ? "psycholka-visual-small" : "psycholka-visual-medium";
   const showAsset = displayedAsset && !fallbackFailed;
 
   return (
-    <div className={`max-w-full ${breathEnabled ? "psycholka-breath" : ""} ${behavior.interactive ? "" : "pointer-events-none"} ${className ?? ""}`} aria-label="PsychOLKA" data-psycholka-mood={resolvedMood}>
+    <div className={`psycholka-widget max-w-full ${breathEnabled ? "psycholka-breath-shell" : ""} ${behavior.interactive ? "" : "pointer-events-none"} ${className ?? ""}`} aria-label="PsychOLKA" data-psycholka-mood={resolvedMood} data-psycholka-action={visualAction}>
       <div className={`psycholka-visual ${visualClass} ${animationClass}`}>
+        <span className="psycholka-aura" aria-hidden="true" />
+        <span className="psycholka-ground-shadow" aria-hidden="true" />
+        <span className="psycholka-sparkle psycholka-sparkle-one" aria-hidden="true" />
+        <span className="psycholka-sparkle psycholka-sparkle-two" aria-hidden="true" />
+        <div className="psycholka-character">
         {showAsset ? (
           <Image
             src={displayedAsset.src}
@@ -115,6 +136,7 @@ export default function PsycholkaWidget({
             className="h-full w-full object-contain"
           />
         )}
+        </div>
       </div>
       {message && <p className="mt-2 text-sm text-[#55624D]">{message}</p>}
       {PSYCHOLKA_DEBUG && displayedAsset && (

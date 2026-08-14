@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Phone, Smartphone, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import PsycholkaWidget from "../panel/components/PsychOLKAWidget";
@@ -9,7 +8,6 @@ import { PSYCHOLKA_DEBUG } from "../panel/psycholka/psycholkaConfig";
 import { PUBLIC_GUIDE_START_EVENT } from "./PublicPsycholkaGuide";
 import PublicQuickContact from "./PublicQuickContact";
 import { CHARACTER_NAME } from "../lib/branding";
-import { PsycholkaAssets } from "@/public/psycholka";
 
 const PUBLIC_WELCOME_KEY = "psycholka-public-welcome-seen";
 
@@ -92,7 +90,7 @@ export default function PublicPsycholkaWelcome() {
     <section id="start" data-scroll-anchor="start" aria-labelledby="public-psycholka-welcome-title" className="relative min-h-screen scroll-mt-6 overflow-hidden bg-[#F9F6F1] px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-8 sm:px-6 md:scroll-mt-24 md:py-14">
       <button type="button" onClick={() => setIsAppInfoOpen(true)} className="absolute right-3 top-3 z-20 inline-flex max-w-28 items-center gap-1.5 rounded-xl border border-[#DCE8E2] bg-white/90 px-2 py-1.5 text-left text-[10px] font-semibold leading-3 text-[#31584F] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8] sm:right-6 sm:top-6 sm:max-w-48 sm:gap-2 sm:rounded-2xl sm:px-3 sm:py-2 sm:text-xs sm:leading-4"><Smartphone size={13} className="shrink-0 sm:h-[17px] sm:w-[17px]" aria-hidden="true" />Aplikacja dla pacjentów<br />już powstaje ❤️</button>
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 text-center md:gap-8">
-        <div className="psycholka-greeting md:hidden"><Image src={PsycholkaAssets.greeting} alt="PsychOLKA wita Cię na stronie" width={220} height={220} priority className="h-40 w-40 object-contain" /></div>
+        <div className="md:hidden">{firstVisit ? <PsycholkaGreetingSequence className="public-psycholka-welcome" /> : <PsycholkaWidget context="welcome" action="wave" fallbackAction="greeting" className="public-psycholka-welcome" />}</div>
         <div className="hidden md:block">{firstVisit ? <PsycholkaGreetingSequence className="public-psycholka-welcome" /> : <PsycholkaWidget context="welcome" action="wave" fallbackAction="greeting" className="public-psycholka-welcome" />}</div>
         <div className="max-w-2xl space-y-4 md:space-y-5">
           <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#2F6B5F]">Aleksandra Wejer · psycholog</p>

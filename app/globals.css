@@ -32,16 +32,45 @@ body {
 
 .psycholka-fade-in { animation: psycholka-fade-in 220ms ease-out both; }
 
-.psycholka-visual { width: 120px; height: 140px; max-width: 100%; transform-origin: center bottom; }
+.psycholka-widget { position: relative; display: inline-block; }
+.psycholka-visual { position: relative; isolation: isolate; width: 120px; height: 140px; max-width: 100%; transform-origin: center bottom; will-change: transform; }
+.psycholka-character { position: absolute; inset: 0; z-index: 3; transform-origin: 50% 88%; filter: drop-shadow(0 10px 10px rgba(32, 54, 44, .12)); animation: psycholka-character-depth 5.8s ease-in-out infinite; will-change: transform, filter; }
+.psycholka-character img { position: relative; z-index: 1; }
+.psycholka-ground-shadow { position: absolute; z-index: 1; right: 19%; bottom: 3%; left: 19%; height: 8%; border-radius: 50%; background: rgba(31, 53, 43, .18); filter: blur(5px); transform-origin: center; animation: psycholka-shadow-breathe 5.8s ease-in-out infinite; }
+.psycholka-aura { position: absolute; z-index: 0; inset: 18% 10% 6%; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.35), rgba(221,230,215,.08) 54%, transparent 72%); opacity: .7; animation: psycholka-aura-pulse 5.8s ease-in-out infinite; }
+.psycholka-sparkle { position: absolute; z-index: 4; width: 7px; height: 7px; border-radius: 50%; background: #F2D488; box-shadow: 0 0 10px rgba(242,212,136,.9); opacity: 0; pointer-events: none; }
+.psycholka-sparkle-one { top: 22%; right: 12%; }
+.psycholka-sparkle-two { top: 42%; left: 9%; width: 5px; height: 5px; }
 .psycholka-visual-small { width: 84px; height: 96px; }
 .psycholka-visual-session { width: 68px; height: 76px; opacity: .72; }
-@keyframes psycholka-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-@keyframes psycholka-wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(2deg); } }
-@keyframes psycholka-coffee { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-.psycholka-idle { animation: none; }
+@keyframes psycholka-character-depth { 0%, 100% { transform: translate3d(0,0,0) scale(1); filter: drop-shadow(0 10px 10px rgba(32,54,44,.12)); } 50% { transform: translate3d(0,-2px,0) scale(1.012); filter: drop-shadow(0 14px 13px rgba(32,54,44,.16)); } }
+@keyframes psycholka-shadow-breathe { 0%, 100% { opacity: .75; transform: scaleX(1); } 50% { opacity: .48; transform: scaleX(.86); } }
+@keyframes psycholka-aura-pulse { 0%, 100% { opacity: .42; transform: scale(.96); } 50% { opacity: .78; transform: scale(1.04); } }
+@keyframes psycholka-idle { 0%, 100% { transform: translate3d(0,0,0) rotate(0); } 48% { transform: translate3d(0,-2px,0) rotate(.35deg); } }
+@keyframes psycholka-wave { 0%, 100% { transform: translate3d(0,0,0) rotate(-.6deg); } 30% { transform: translate3d(-1px,-3px,0) rotate(2.4deg); } 62% { transform: translate3d(1px,-1px,0) rotate(-1.1deg); } }
+@keyframes psycholka-coffee { 0%, 100% { transform: translate3d(0,0,0) rotate(0); } 36% { transform: translate3d(0,-2px,0) rotate(-.8deg); } 58% { transform: translate3d(1px,-3px,0) rotate(.5deg); } }
+@keyframes psycholka-walk { 0%, 100% { transform: translate3d(-2px,0,0) rotate(-1deg); } 25% { transform: translate3d(0,-4px,0) rotate(1deg); } 50% { transform: translate3d(2px,0,0) rotate(-.5deg); } 75% { transform: translate3d(0,-3px,0) rotate(.8deg); } }
+@keyframes psycholka-run { 0%,100% { transform: translate3d(-4px,0,0) rotate(-2deg); } 50% { transform: translate3d(5px,-6px,0) rotate(3deg); } }
+@keyframes psycholka-celebrate { 0%,100% { transform: translate3d(0,0,0) scale(1) rotate(0); } 28% { transform: translate3d(0,-8px,0) scale(1.025) rotate(-1.5deg); } 55% { transform: translate3d(0,-2px,0) scale(1.01) rotate(1.5deg); } }
+@keyframes psycholka-look-around { 0%,25%,100% { transform: translateX(0) rotate(0); } 40%,52% { transform: translateX(3px) rotate(1deg); } 70%,82% { transform: translateX(-3px) rotate(-1deg); } }
+@keyframes psycholka-sleep { 0%,100% { transform: translateY(0) rotate(-.5deg); opacity: 1; } 50% { transform: translateY(2px) rotate(.5deg); opacity: .94; } }
+@keyframes psycholka-sad { 0%,100% { transform: translateY(1px) rotate(0); } 50% { transform: translateY(3px) rotate(-.7deg); } }
+@keyframes psycholka-sparkle-pop { 0%,100% { opacity: 0; transform: scale(.2) rotate(0); } 28% { opacity: 1; transform: scale(1) rotate(70deg); } 62% { opacity: .35; transform: scale(.65) rotate(140deg); } }
+.psycholka-idle { animation: psycholka-idle 4.8s ease-in-out infinite; }
+.psycholka-breath-shell .psycholka-character { animation-duration: 5.2s; }
+.psycholka-wave { animation: psycholka-wave 1.75s cubic-bezier(.4,0,.2,1) infinite; }
+.psycholka-coffee { animation: psycholka-coffee 2.8s ease-in-out infinite; }
+.psycholka-read, .psycholka-sit { animation: psycholka-idle 5.4s ease-in-out infinite; }
+.psycholka-walk { animation: psycholka-walk 1.4s ease-in-out infinite; }
+.psycholka-run { animation: psycholka-run .7s ease-in-out infinite; }
+.psycholka-celebrate { animation: psycholka-celebrate 1.5s cubic-bezier(.34,1.56,.64,1) infinite; }
+.psycholka-look-around { animation: psycholka-look-around 4.2s ease-in-out infinite; }
+.psycholka-sleep { animation: psycholka-sleep 4.8s ease-in-out infinite; }
+.psycholka-sad { animation: psycholka-sad 4s ease-in-out infinite; }
+.psycholka-lost-shoe { animation: psycholka-look-around 2.2s ease-in-out 2; }
+.psycholka-celebrate .psycholka-sparkle, .psycholka-wave .psycholka-sparkle { animation: psycholka-sparkle-pop 1.8s ease-out infinite; }
+.psycholka-celebrate .psycholka-sparkle-two, .psycholka-wave .psycholka-sparkle-two { animation-delay: .55s; }
 .psycholka-breath { transform-origin: center bottom; animation: psycholka-breath 5.6s ease-in-out infinite; }
-.psycholka-wave { animation: psycholka-wave 1.8s ease-in-out infinite; }
-.psycholka-coffee { animation: psycholka-coffee 2.4s ease-in-out infinite; }
 .psycholka-greeting-appear { opacity: 0; animation: psycholka-greeting-in 500ms ease-out forwards; }
 .psycholka-greeting-wave { animation: psycholka-wave 1s ease-in-out 1; }
 .psycholka-greeting { animation: psycholka-greeting-sway 2.8s ease-in-out infinite; }
@@ -49,9 +78,9 @@ body {
 .psycholka-point-booking { animation: psycholka-point-booking 2.4s ease-in-out infinite; }
 @keyframes psycholka-greeting-in { to { opacity: 1; } }
 @keyframes psycholka-breath { 0%, 100% { transform: translateY(0) scale(1) rotate(0deg); } 50% { transform: translateY(-2px) scale(1.015) rotate(.6deg); } }
-@keyframes psycholka-greeting-sway { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-2px) rotate(.5deg); } }
-@keyframes psycholka-open-arms { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-@keyframes psycholka-point-booking { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+@keyframes psycholka-greeting-sway { 0%, 100% { transform: translate3d(-2px,0,0) rotate(-1.2deg); } 50% { transform: translate3d(2px,-4px,0) rotate(1.4deg); } }
+@keyframes psycholka-open-arms { 0%, 100% { transform: translateY(0) scale(1); } 45% { transform: translateY(-5px) scale(1.035); } }
+@keyframes psycholka-point-booking { 0%, 100% { transform: translateX(0) rotate(0); } 50% { transform: translateX(5px) rotate(1deg); } }
 @keyframes booking-time-psycholka-jump { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-7px); } 70% { transform: translateY(-2px); } }
 .booking-time-psycholka { animation: booking-time-psycholka-jump 620ms ease-out 1; }
 .booking-time-psycholka .psycholka-point-booking { animation-iteration-count: 1; }
@@ -65,7 +94,7 @@ body {
   .psycholka-greeting, .psycholka-breath { animation: psycholka-mobile-sway 2.2s ease-in-out infinite; }
   .psycholka-wave, .psycholka-greeting-wave { animation: psycholka-mobile-wave 2s ease-in-out infinite; }
 }
-@media (prefers-reduced-motion: reduce) { .psycholka-idle, .psycholka-breath, .psycholka-wave, .psycholka-coffee, .psycholka-greeting, .psycholka-greeting-appear, .psycholka-open-arms, .psycholka-point-booking, .psycholka-confetti, .booking-time-psycholka, .psycholka-desk-look .psycholka-visual, .psycholka-desk-blink .psycholka-visual, .psycholka-desk-smile .psycholka-visual, .psycholka-desk-coffee .psycholka-visual, .psycholka-desk-wave .psycholka-visual, .psycholka-desk-rare .psycholka-visual { animation: none; opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .psycholka-idle, .psycholka-breath, .psycholka-wave, .psycholka-coffee, .psycholka-read, .psycholka-sit, .psycholka-walk, .psycholka-run, .psycholka-celebrate, .psycholka-look-around, .psycholka-sleep, .psycholka-sad, .psycholka-lost-shoe, .psycholka-greeting, .psycholka-greeting-appear, .psycholka-open-arms, .psycholka-point-booking, .psycholka-character, .psycholka-ground-shadow, .psycholka-aura, .psycholka-sparkle, .psycholka-confetti, .booking-time-psycholka, .psycholka-desk-look .psycholka-visual, .psycholka-desk-blink .psycholka-visual, .psycholka-desk-smile .psycholka-visual, .psycholka-desk-coffee .psycholka-visual, .psycholka-desk-wave .psycholka-visual, .psycholka-desk-rare .psycholka-visual { animation: none; opacity: 1; transform: none; } }
 .psycholka-onboarding-widget .psycholka-visual { width: 180px; height: 220px; }
 @media (max-width: 640px) { .psycholka-onboarding-widget .psycholka-visual { width: 130px; height: 160px; } }
 .public-psycholka-widget .psycholka-visual { width: 150px; height: 170px; }
@@ -119,6 +148,29 @@ body {
 @media (max-width: 640px) { .psycholka-desk { width: 124px; min-height: 116px; } .psycholka-desk .psycholka-visual { width: 108px; height: 120px; } }
 @media (max-width: 640px) { .psycholka-desk-wave .psycholka-visual { animation: psycholka-mobile-wave 2s ease-in-out infinite; } }
 @media (prefers-reduced-motion: reduce) { .psycholka-greeting-wave, .psycholka-desk-wave .psycholka-visual { animation: none; transform: none; } }
+
+.after-visit-psycholka .psycholka-visual { width: 118px; height: 132px; }
+
+@media (max-width: 640px) {
+  .after-visit-psycholka .psycholka-visual { width: 84px; height: 96px; }
+}
+
+@media print {
+  @page { size: A4 portrait; margin: 8mm; }
+  html, body { background: #fff !important; color: #2D4739 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .after-visit-root { min-height: auto !important; padding: 0 !important; background: #fff !important; }
+  .after-visit-screen-only { display: none !important; }
+  .after-visit-print-page { width: 100% !important; max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+  .after-visit-print-page header { padding: 8mm 10mm !important; }
+  .after-visit-print-page > div { gap: 6mm !important; padding: 7mm 10mm !important; grid-template-columns: 1.12fr .88fr !important; }
+  .after-visit-print-page section, .after-visit-print-page aside { break-inside: avoid; }
+  .after-visit-print-page footer { padding: 4mm 10mm !important; }
+  .after-visit-print-page .psycholka-character,
+  .after-visit-print-page .psycholka-ground-shadow,
+  .after-visit-print-page .psycholka-aura,
+  .after-visit-print-page .psycholka-sparkle,
+  .after-visit-print-page .psycholka-visual { animation: none !important; transform: none !important; }
+}
 
 
 html,

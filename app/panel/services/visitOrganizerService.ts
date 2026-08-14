@@ -38,6 +38,24 @@ export async function getOrganizerVisitById(id: number): Promise<Visit | null> {
   return data as Visit | null;
 }
 
+export async function getNextOrganizerVisit(visit: Visit): Promise<Visit | null> {
+  if (!visit.patient_id) return null;
+  const { data, error } = await supabaseAdmin
+    .from("bookings")
+    .select(fields)
+    .eq("patient_id", visit.patient_id)
+    .eq("record_kind", "real")
+    .neq("status", "Odwołane")
+    .order("visit_date", { ascending: true })
+    .order("visit_time", { ascending: true });
+  if (error) throw error;
+
+  return ((data ?? []) as Visit[]).find((candidate) =>
+    candidate.visit_date > visit.visit_date
+    || (candidate.visit_date === visit.visit_date && candidate.visit_time > visit.visit_time),
+  ) ?? null;
+}
+
 export async function createHistoricalVisit(input: HistoricalVisitInput) {
   if (!isBookingLocationId(input.locationId)) throw new Error("Nieprawidłowa lokalizacja.");
   const patient = input.patientId ? await getPatientById(input.patientId) : null;

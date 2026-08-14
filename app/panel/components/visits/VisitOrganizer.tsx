@@ -1,6 +1,7 @@
 "use client";
 
-import { Plus, Search, SlidersHorizontal, X } from "lucide-react";
+import Link from "next/link";
+import { Plus, Printer, Search, SlidersHorizontal, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Visit, VisitRecordKind } from "../../domain/booking";
@@ -80,7 +81,7 @@ function VisitOrganizerCard({ visit, pending, classificationAvailable, onSave }:
   return <article className={`rounded-3xl border p-5 shadow-[0_10px_30px_rgba(45,71,57,0.05)] ${kind === "test" ? "border-[#E8D39D] bg-[#FFF9E9]" : "border-[#E5E1D8] bg-white"}`}>
     <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D7A62]">#{visit.id} · {kind === "test" ? "Wizyta testowa" : "Wizyta prawdziwa"}</p><h2 className="mt-1 text-xl font-bold text-[#2D4739]">{visit.name}</h2><p className="mt-1 text-sm text-gray-600">{formatDate(visit.visit_date)} · {visit.visit_time}</p><p className="mt-1 text-sm text-gray-600">{visit.location}</p></div><StatusBadge status={visit.status} /></div>
     <div className="mt-4 grid gap-3 sm:grid-cols-2"><label className="text-sm font-semibold text-[#2D4739]">Rodzaj<select value={kind} onChange={(event) => setKind(event.target.value as VisitRecordKind)} disabled={pending || !classificationAvailable} className="mt-2 w-full rounded-xl border border-[#D5DCCF] bg-white px-3 py-2.5 disabled:bg-gray-100"><option value="real">Prawdziwa</option><option value="test">Testowa</option></select></label><label className="text-sm font-semibold text-[#2D4739]">Status<select value={status} onChange={(event) => setStatus(event.target.value)} disabled={pending} className="mt-2 w-full rounded-xl border border-[#D5DCCF] bg-white px-3 py-2.5">{VISIT_STATUSES.map((item) => <option key={item}>{item}</option>)}</select></label></div>
-    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-gray-500"><span>{visit.phone || "Brak telefonu"}{visit.email ? ` · ${visit.email}` : ""}</span><button type="button" disabled={pending || !changed} onClick={() => onSave(visit, kind, status)} className="rounded-xl bg-[#6D7A62] px-4 py-2.5 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300">Zapisz zmiany</button></div>
+    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-gray-500"><span>{visit.phone || "Brak telefonu"}{visit.email ? ` · ${visit.email}` : ""}</span><div className="flex flex-wrap gap-2">{visit.record_kind !== "test" && visit.status === "Zrealizowane" && <Link href={`/panel/visits/${visit.id}/after-visit`} className="inline-flex items-center gap-2 rounded-xl border border-[#D5DCCF] bg-white px-4 py-2.5 font-semibold text-[#2D4739]"><Printer size={16} />Karta po spotkaniu</Link>}<button type="button" disabled={pending || !changed} onClick={() => onSave(visit, kind, status)} className="rounded-xl bg-[#6D7A62] px-4 py-2.5 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300">Zapisz zmiany</button></div></div>
   </article>;
 }
 

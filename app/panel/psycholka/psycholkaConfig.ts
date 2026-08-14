@@ -8,7 +8,7 @@ export const psycholkaConfig: Record<PsycholkaContext, PsycholkaBehavior> = {
   today: { context: "today", mood: "calm", action: "idle", allowedActions: ["idle", "read", "sad", "happy"], position: "inline", size: "small", priority: 3, interactive: false },
   before_visit: { context: "before_visit", mood: "focused", action: "idle", allowedActions: ["idle", "read"], position: "inline", size: "small", priority: 3, interactive: false },
   session: { context: "session", mood: "focused", action: "idle", allowedActions: ["idle", "sit"], position: "bottom-right", size: "small", priority: 5, interactive: false },
-  after_visit: { context: "after_visit", mood: "celebrate", action: "wave", allowedActions: ["idle", "wave"], position: "inline", size: "small", priority: 3, interactive: false },
+  after_visit: { context: "after_visit", mood: "celebrate", action: "wave", allowedActions: ["idle", "wave", "celebrate"], position: "inline", size: "small", priority: 3, interactive: false },
   day_closing: { context: "day_closing", mood: "sleepy", action: "coffee", allowedActions: ["idle", "coffee"], position: "inline", size: "small", priority: 3, interactive: false },
   success: { context: "success", mood: "celebrate", action: "celebrate", allowedActions: ["celebrate", "wave"], position: "inline", size: "medium", priority: 2, interactive: true },
   empty_state: { context: "empty_state", mood: "calm", action: "look_around", allowedActions: ["look_around", "walk"], position: "inline", size: "small", priority: 1, interactive: false },

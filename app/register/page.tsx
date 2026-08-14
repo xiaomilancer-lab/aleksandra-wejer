@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { MemberRole } from "@/app/room/types";
 
@@ -14,6 +14,14 @@ export default function RegisterPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    const initialiseRole = window.setTimeout(() => {
+      const requestedRole = new URLSearchParams(window.location.search).get("role");
+      if (requestedRole === "patient" || requestedRole === "parent") setRole(requestedRole);
+    }, 0);
+    return () => window.clearTimeout(initialiseRole);
+  }, []);
 
   async function handleRegister(event: React.FormEvent) {
     event.preventDefault();
