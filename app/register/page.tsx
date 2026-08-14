@@ -46,7 +46,7 @@ export default function RegisterPage() {
             requested_role: role,
             display_name: displayName.trim(),
           },
-          emailRedirectTo: `${window.location.origin}/login`,
+          emailRedirectTo: "https://aleksandrawejer.pl/login?confirmed=1",
         },
       });
 
@@ -111,8 +111,9 @@ export default function RegisterPage() {
 
         <Field label="Imię i nazwisko" value={displayName} onChange={setDisplayName} autoComplete="name" required />
         <Field label="Adres e-mail" type="email" value={email} onChange={setEmail} autoComplete="email" required />
-        <Field label="Hasło" type="password" value={password} onChange={setPassword} autoComplete="new-password" required />
-        <Field label="Powtórz hasło" type="password" value={passwordConfirmation} onChange={setPasswordConfirmation} autoComplete="new-password" required />
+        <Field label="Hasło" type="password" value={password} onChange={setPassword} autoComplete="new-password" minLength={8} required />
+        <p className="mt-2 text-xs text-gray-500">Minimum 8 znaków.</p>
+        <Field label="Powtórz hasło" type="password" value={passwordConfirmation} onChange={setPasswordConfirmation} autoComplete="new-password" minLength={8} required />
 
         <p className="mt-4 rounded-2xl bg-[#F8F5F0] p-4 text-xs leading-relaxed text-gray-600">
           Rola psychologa nie jest dostępna podczas rejestracji i może zostać nadana wyłącznie ręcznie przez administratora gabinetu.
@@ -143,7 +144,7 @@ function RoleCard({ checked, title, description, onChange }: { checked: boolean;
   );
 }
 
-function Field({ label, type = "text", value, onChange, autoComplete, required }: { label: string; type?: string; value: string; onChange: (value: string) => void; autoComplete: string; required?: boolean }) {
+function Field({ label, type = "text", value, onChange, autoComplete, minLength, required }: { label: string; type?: string; value: string; onChange: (value: string) => void; autoComplete: string; minLength?: number; required?: boolean }) {
   return (
     <label className="mt-4 block text-sm font-semibold text-[#2D4739]">
       {label}
@@ -152,6 +153,7 @@ function Field({ label, type = "text", value, onChange, autoComplete, required }
         value={value}
         onChange={(event) => onChange(event.target.value)}
         autoComplete={autoComplete}
+        minLength={minLength}
         required={required}
         className="mt-2 min-h-12 w-full rounded-2xl border border-[#D5DCCF] bg-white p-4 text-base text-[#23332F] outline-none transition focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]"
       />

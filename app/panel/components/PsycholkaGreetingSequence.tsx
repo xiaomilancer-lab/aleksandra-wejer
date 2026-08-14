@@ -35,7 +35,7 @@ export default function PsycholkaGreetingSequence({ onComplete, className }: Psy
     };
   }, [onComplete]);
 
-  const action = stage === "arms" ? "open_arms" : stage === "wave" ? "wave" : "greeting";
+  const action = stage === "wave" || stage === "arms" ? "wave" : "greeting";
 
   return (
     <div className={`psycholka-greeting-sequence psycholka-greeting-${stage} ${className ?? ""}`}>

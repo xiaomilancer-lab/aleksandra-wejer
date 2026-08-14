@@ -89,7 +89,7 @@ body {
 @keyframes psycholka-confetti-fall { from { opacity: 0; transform: translateY(-10px) rotate(0deg); } 20% { opacity: .85; } to { opacity: 0; transform: translateY(78px) rotate(12deg); } }
 @media (max-width: 640px) { .psycholka-visual { width: 88px; height: 100px; } .psycholka-visual-small { width: 72px; height: 82px; } .psycholka-visual-session { width: 60px; height: 70px; } }
 @keyframes psycholka-mobile-sway { 0%, 100% { transform: translate3d(-2px, 0, 0) rotate(-4deg); } 50% { transform: translate3d(2px, -5px, 0) rotate(4deg); } }
-@keyframes psycholka-mobile-wave { 0%, 100% { transform: translate3d(-2px, 0, 0) rotate(-4deg); } 50% { transform: translate3d(3px, -6px, 0) rotate(4deg); } }
+@keyframes psycholka-mobile-wave { 0%, 100% { transform: translate3d(-1px, 0, 0) rotate(-2.2deg); } 50% { transform: translate3d(2px, -4px, 0) rotate(2.2deg); } }
 @media (max-width: 640px) {
   .psycholka-greeting, .psycholka-breath { animation: psycholka-mobile-sway 2.2s ease-in-out infinite; }
   .psycholka-wave, .psycholka-greeting-wave { animation: psycholka-mobile-wave 2s ease-in-out infinite; }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, Check, ExternalLink, MapPin, Printer, ShieldCheck, Smartphone, Sparkles, UserRound, UsersRound } from "lucide-react";
+import { CalendarDays, Check, Download, ExternalLink, MapPin, Printer, ShieldCheck, Smartphone, Sparkles, UserRound, UsersRound } from "lucide-react";
 import QRCode from "qrcode";
 import { useEffect, useMemo, useState } from "react";
 import PsycholkaWidget from "../PsychOLKAWidget";
@@ -51,6 +51,7 @@ export default function AfterVisitCard({ visit, nextVisit }: { visit: VisitCardD
       <div className="after-visit-screen-only mx-auto mb-5 flex max-w-[210mm] flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D5DCCF] bg-white px-4 py-3 shadow-sm">
         <Link href="/panel/visits" className="inline-flex min-h-11 items-center rounded-xl border border-[#D5DCCF] px-4 py-2 text-sm font-semibold">← Wróć do wizyt</Link>
         <div className="flex flex-wrap gap-2">
+          <a href="/karta-po-spotkaniu-przyklad.pdf" download className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D5DCCF] px-4 py-2 text-sm font-semibold"><Download size={17} />Pobierz przykładowy PDF</a>
           <button type="button" onClick={() => setAudience("patient")} className={`inline-flex min-h-11 items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold ${audience === "patient" ? "bg-[#2D4739] text-white" : "bg-[#EEF1EB]"}`}><UserRound size={17} />Dla pacjenta</button>
           <button type="button" onClick={() => setAudience("parent")} className={`inline-flex min-h-11 items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold ${audience === "parent" ? "bg-[#2D4739] text-white" : "bg-[#EEF1EB]"}`}><UsersRound size={17} />Dla rodzica</button>
           <button type="button" onClick={() => window.print()} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-2 text-sm font-semibold text-white"><Printer size={17} />Drukuj kartę</button>

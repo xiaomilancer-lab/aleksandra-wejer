@@ -1,4 +1,5 @@
-import { CalendarDays, Car, Gift, MessageCircleHeart, Palette, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { CalendarDays, Car, Download, Gift, MessageCircleHeart, Palette, Sparkles } from "lucide-react";
 import { requireMember } from "@/app/room/server/requireMember";
 import RoomLogoutButton from "@/app/room/RoomLogoutButton";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -34,6 +35,9 @@ export default async function MemberRoomPage() {
             <p className="mt-2 text-sm leading-relaxed text-[#6F5732]">
               Gabinet musi jeszcze bezpiecznie połączyć je z właściwą kartą pacjenta. Do tego czasu żadne dane wizyt nie są wyświetlane.
             </p>
+            <a href="/karta-po-spotkaniu-przyklad.pdf" download className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D9C69F] bg-white px-4 py-2 text-sm font-semibold text-[#2D4739]">
+              <Download size={17} aria-hidden="true" /> Pobierz przykładową kartę po spotkaniu
+            </a>
           </section>
         )}
 
@@ -42,7 +46,7 @@ export default async function MemberRoomPage() {
           <RoomCard icon={MessageCircleHeart} title="Od Aleksandry" description="Prywatne wiadomości i udostępnione materiały." />
           <RoomCard icon={Gift} title="Prezenty i konkursy" description="Nagrody, rabaty i spokojne niespodzianki." />
           <RoomCard icon={Palette} title="Babyroom" description="Kolorowanki, rysowanie i bezpieczne mini-gry." />
-          <RoomCard icon={Car} title="Dojazd" description="Nawigacja do właściwego gabinetu." />
+          <RoomCard icon={Car} title="Dojazd" description="Samochód, komunikacja miejska i Bolt do obu gabinetów." href="/room/travel" />
           <RoomCard icon={Sparkles} title="Co warto zrobić?" description="Rodzinne atrakcje pobierane ze wspólnego cache." />
         </section>
       </div>
@@ -50,13 +54,14 @@ export default async function MemberRoomPage() {
   );
 }
 
-function RoomCard({ icon: Icon, title, description }: { icon: typeof CalendarDays; title: string; description: string }) {
-  return (
-    <article className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-sm">
+function RoomCard({ icon: Icon, title, description, href }: { icon: typeof CalendarDays; title: string; description: string; href?: string }) {
+  const card = (
+    <article className={`h-full rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-sm ${href ? "transition hover:-translate-y-0.5 hover:border-[#AAB5A4]" : ""}`}>
       <span className="inline-flex rounded-2xl bg-[#EEF1EB] p-3 text-[#6D7A62]"><Icon size={22} aria-hidden="true" /></span>
       <h2 className="mt-4 text-xl font-bold">{title}</h2>
       <p className="mt-2 text-sm leading-relaxed text-gray-600">{description}</p>
-      <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-[#87917F]">W przygotowaniu</p>
+      <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-[#87917F]">{href ? "Otwórz" : "W przygotowaniu"}</p>
     </article>
   );
+  return href ? <Link href={href} className="block h-full rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]">{card}</Link> : card;
 }
