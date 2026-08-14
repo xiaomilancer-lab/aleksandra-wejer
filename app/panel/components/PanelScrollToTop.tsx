@@ -1,10 +1,19 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 export default function PanelScrollToTop() {
   const pathname = usePathname();
+
+  useEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const resetScroll = () => {
@@ -15,11 +24,11 @@ export default function PanelScrollToTop() {
 
     resetScroll();
     const animationFrame = window.requestAnimationFrame(resetScroll);
-    const timeout = window.setTimeout(resetScroll, 50);
+    const timeouts = [50, 150, 300].map((delay) => window.setTimeout(resetScroll, delay));
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
-      window.clearTimeout(timeout);
+      timeouts.forEach((timeout) => window.clearTimeout(timeout));
     };
   }, [pathname]);
 
