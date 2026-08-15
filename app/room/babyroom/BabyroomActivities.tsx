@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { Eraser, Palette, Pause, Play, Puzzle as PuzzleIcon, RefreshCw, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import PsycholkaColoring from "./PsycholkaColoring";
+import SoothingSounds from "./SoothingSounds";
 
 const colors = ["#2D4739", "#E85D75", "#F2B134", "#4C8BF5", "#7B61A8", "#42A66C"];
 const memorySymbols = [
@@ -23,6 +25,8 @@ const puzzleScenes = [
 export default function BabyroomActivities() {
   return (
     <div className="space-y-5">
+      <SoothingSounds />
+      <PsycholkaColoring />
       <DrawingBoard />
       <div className="grid gap-5 lg:grid-cols-2">
         <BreathingBubble />
