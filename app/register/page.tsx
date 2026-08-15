@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { MemberRole } from "@/app/room/types";
+import { PRIVACY_NOTICE_VERSION, TERMS_VERSION } from "@/app/lib/legal";
 
 export default function RegisterPage() {
   const [displayName, setDisplayName] = useState("");
@@ -14,6 +15,9 @@ export default function RegisterPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acknowledgedPrivacy, setAcknowledgedPrivacy] = useState(false);
+  const [adultOrGuardian, setAdultOrGuardian] = useState(false);
 
   useEffect(() => {
     const initialiseRole = window.setTimeout(() => {
@@ -35,6 +39,10 @@ export default function RegisterPage() {
       setErrorMessage("Wpisane hasła nie są takie same.");
       return;
     }
+    if (!acceptedTerms || !acknowledgedPrivacy || !adultOrGuardian) {
+      setErrorMessage("Przed utworzeniem konta zaznacz wszystkie wymagane oświadczenia.");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -45,6 +53,10 @@ export default function RegisterPage() {
           data: {
             requested_role: role,
             display_name: displayName.trim(),
+            accepted_terms_version: TERMS_VERSION,
+            privacy_notice_version: PRIVACY_NOTICE_VERSION,
+            legal_acceptance_recorded_at: new Date().toISOString(),
+            adult_or_guardian_confirmed: true,
           },
           emailRedirectTo: "https://aleksandrawejer.pl/login?confirmed=1",
         },
@@ -120,6 +132,19 @@ export default function RegisterPage() {
           Jeśli jesteś jednocześnie pacjentem i rodzicem, wystarczy jedno konto — dodatkowy dostęp połączy bezpiecznie gabinet.
         </p>
 
+        <fieldset className="mt-5 space-y-3 rounded-2xl border border-[#E5E1D8] bg-[#FCFBF8] p-4">
+          <legend className="px-1 text-sm font-bold text-[#2D4739]">Wymagane przed utworzeniem konta</legend>
+          <ConsentCheck checked={acceptedTerms} onChange={setAcceptedTerms}>
+            Akceptuję <Link href="/regulamin-konta" target="_blank" className="font-semibold underline underline-offset-4">Regulamin konta</Link> (wersja {TERMS_VERSION}).
+          </ConsentCheck>
+          <ConsentCheck checked={acknowledgedPrivacy} onChange={setAcknowledgedPrivacy}>
+            Zapoznałem/am się z <Link href="/polityka-prywatnosci" target="_blank" className="font-semibold underline underline-offset-4">Polityką prywatności</Link> (wersja {PRIVACY_NOTICE_VERSION}).
+          </ConsentCheck>
+          <ConsentCheck checked={adultOrGuardian} onChange={setAdultOrGuardian}>
+            Mam ukończone 18 lat albo tworzę konto jako rodzic/opiekun prawny.
+          </ConsentCheck>
+        </fieldset>
+
         {errorMessage && <p role="alert" className="mt-4 rounded-2xl border border-[#E8D6B8] bg-[#FFF9EE] px-4 py-3 text-sm text-[#6F5732]">{errorMessage}</p>}
 
         <button type="submit" disabled={isSubmitting} className="mt-6 min-h-12 w-full rounded-2xl bg-[#6D7A62] px-5 py-3 font-semibold text-white transition hover:bg-[#5A6752] disabled:cursor-not-allowed disabled:bg-[#AAB5A4]">
@@ -131,6 +156,15 @@ export default function RegisterPage() {
         </p>
       </form>
     </main>
+  );
+}
+
+function ConsentCheck({ checked, onChange, children }: { checked: boolean; onChange: (checked: boolean) => void; children: React.ReactNode }) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-xl p-2 text-sm leading-6 text-gray-700 transition hover:bg-[#F3F5F1]">
+      <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} required className="mt-1 h-5 w-5 shrink-0 accent-[#6D7A62]" />
+      <span>{children}</span>
+    </label>
   );
 }
 

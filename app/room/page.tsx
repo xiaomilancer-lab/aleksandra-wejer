@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarDays, Car, Download, Gift, House, MessageCircleHeart, Palette, Sparkles, Star } from "lucide-react";
+import { ArrowRight, CalendarDays, Car, Download, Gift, House, MessageCircleHeart, Palette, Sparkles, Star } from "lucide-react";
 import { requireMember } from "@/app/room/server/requireMember";
 import RoomLogoutButton from "@/app/room/RoomLogoutButton";
 import { getMemberPatientAccess } from "@/app/room/server/memberContext";
@@ -62,7 +62,7 @@ function RoomCard({ icon: Icon, title, description, href }: { icon: typeof Calen
       <span className="inline-flex rounded-2xl bg-[#EEF1EB] p-3 text-[#6D7A62]"><Icon size={22} aria-hidden="true" /></span>
       <h2 className="mt-4 text-xl font-bold">{title}</h2>
       <p className="mt-2 text-sm leading-relaxed text-gray-600">{description}</p>
-      <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-[#87917F]">{href ? "Otwórz" : "W przygotowaniu"}</p>
+      {href ? <span className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#EEF1EB] px-4 py-2.5 text-sm font-bold text-[#2D4739]">Otwórz <ArrowRight size={17} aria-hidden="true" /></span> : <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-[#87917F]">W przygotowaniu</p>}
     </article>
   );
   return href ? <Link href={href} className="block h-full rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]">{card}</Link> : card;

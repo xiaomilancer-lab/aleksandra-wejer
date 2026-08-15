@@ -5,7 +5,7 @@ import StatusBadge from "../StatusBadge";
 
 export default function UnlinkedVisitDetails({ visit, clinicalDataUnavailable = false }: { visit: Visit; clinicalDataUnavailable?: boolean }) {
   return <div className="space-y-6">
-    <Link href="/panel/visits" className="inline-flex items-center gap-2 text-sm font-semibold text-[#6D7A62]"><ArrowLeft size={17} />Wróć do wizyt</Link>
+    <Link href="/panel/visits" className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><ArrowLeft size={19} />Wróć do wizyt</Link>
     {clinicalDataUnavailable && <p className="rounded-2xl border border-[#E8D39D] bg-[#FFF9E9] px-5 py-4 text-sm text-[#725C28]">Rozbudowany brief jest chwilowo niedostępny. Podstawowe dane wizyty pozostają bezpieczne i widoczne poniżej.</p>}
     <header className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-8"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-sm text-gray-500">Szczegóły zgłoszenia</p><h1 className="mt-1 text-3xl font-bold text-[#2D4739]">{visit.name}</h1><p className="mt-2 text-sm font-semibold text-[#7A6540]">{visit.patient_id ? "Podstawowy podgląd wizyty" : "Brak przypisanej karty pacjenta"}</p></div><StatusBadge status={visit.status} /></div></header>
     <section className="grid gap-4 md:grid-cols-2"><Detail icon={CalendarClock} label="Termin" value={`${formatDate(visit.visit_date)} · ${visit.visit_time}`} /><Detail icon={MapPin} label="Miejsce" value={visit.location || "Nie podano"} /><Detail icon={Phone} label="Telefon" value={visit.phone || "Nie podano"} /><Detail icon={Mail} label="E-mail" value={visit.email || "Nie podano"} /></section>

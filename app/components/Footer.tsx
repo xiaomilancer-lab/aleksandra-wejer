@@ -4,6 +4,7 @@ import {
   MapPin,
   ArrowUpRight,
 } from "lucide-react";
+import Link from "next/link";
 
 const navigationItems: ReadonlyArray<{ label: string; href: string; visibility?: string }> = [
   { label: "Start", href: "#start" },
@@ -167,8 +168,10 @@ export default function Footer() {
               © 2026 Aleksandra Wejer. Wszelkie prawa zastrzeżone.
             </p>
 
-            <p className="text-xs text-gray-400">
-              Projekt i realizacja{" "}
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-500">
+              <Link href="/regulamin-konta" className="font-medium underline-offset-4 hover:text-[#6D7A62] hover:underline">Regulamin konta</Link>
+              <Link href="/polityka-prywatnosci" className="font-medium underline-offset-4 hover:text-[#6D7A62] hover:underline">Polityka prywatności</Link>
+              <span className="text-gray-400">Projekt i realizacja{" "}
               <a
                 href="https://3d-projekt.com"
                 target="_blank"
@@ -177,7 +180,8 @@ export default function Footer() {
               >
                 3D-Projekt.com
               </a>
-            </p>
+              </span>
+            </div>
 
           </div>
 

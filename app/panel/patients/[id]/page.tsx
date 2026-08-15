@@ -20,6 +20,10 @@ import { getPatientMemory } from "../../services/patientMemoryService";
 import { getKnowledgeMaterialsForVisits } from "../../services/knowledgeLibraryService";
 import { getPatientFollowupReminders } from "../../services/followupReminderService";
 import { formatDate } from "../../utils/formatDate";
+import { requirePsychologist } from "../../server/requirePsychologist";
+import { getPatientVaultState } from "../../server/patientVault";
+import PatientVaultGate from "../PatientVaultGate";
+import PatientVaultLockButton from "../PatientVaultLockButton";
 
 interface PatientPageProps {
   params: Promise<{ id: string }>;
@@ -32,6 +36,11 @@ export default async function PatientPage({ params, searchParams }: PatientPageP
   const initialTab = tab === "notes" || tab === "tasks" || tab === "documents" || tab === "summary" || tab === "reflection" || tab === "patient-journey" || tab === "followups" ? tab : "visits";
 
   await connection();
+  const identity = await requirePsychologist();
+  const vault = await getPatientVaultState(identity.userId);
+  if (!vault.unlocked) {
+    return <AuthGuard><Dashboard><PatientVaultGate configured={vault.configured} lockedUntil={vault.lockedUntil} /></Dashboard></AuthGuard>;
+  }
   const patient = await getPatientById(id);
 
   if (!patient) {
@@ -67,13 +76,7 @@ export default async function PatientPage({ params, searchParams }: PatientPageP
     <AuthGuard>
       <Dashboard>
         <div className="mx-auto max-w-7xl">
-          <Link
-            href="/panel/patients"
-            className="inline-flex items-center gap-2 rounded-xl px-1 py-2 text-sm font-semibold text-[#2D4739] transition hover:text-[#6D7A62]"
-          >
-            <ArrowLeft size={18} aria-hidden="true" />
-            Powrót do listy
-          </Link>
+          <div className="flex flex-wrap items-center justify-between gap-3"><Link href="/panel/patients" className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]"><ArrowLeft size={19} aria-hidden="true" />Powrót do listy</Link><PatientVaultLockButton /></div>
 
           <div className="mt-5">
             <PatientProfile

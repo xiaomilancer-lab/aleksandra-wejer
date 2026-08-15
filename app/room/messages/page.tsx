@@ -44,7 +44,7 @@ export default async function RoomMessagesPage() {
   return (
     <main className="min-h-screen bg-[#F8F5F0] p-4 text-[#2D4739] sm:p-6">
       <div className="mx-auto max-w-5xl space-y-5">
-        <header className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-sm"><Link href="/room" className="inline-flex items-center gap-2 text-sm font-semibold text-[#6D7A62]"><ArrowLeft size={17} aria-hidden="true" />Wróć do pokoju</Link><p className="mt-5 text-sm text-gray-500">Bezpiecznie w Twoim pokoju</p><h1 className="mt-1 text-3xl font-bold">Od Aleksandry</h1><p className="mt-2 text-sm text-gray-600">Prywatne wiadomości, materiały i wspólne ogłoszenia przeznaczone dla Twojego typu konta.</p></header>
+        <header className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-sm"><Link href="/room" className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><ArrowLeft size={19} aria-hidden="true" />Wróć do pokoju</Link><p className="mt-5 text-sm text-gray-500">Bezpiecznie w Twoim pokoju</p><h1 className="mt-1 text-3xl font-bold">Od Aleksandry</h1><p className="mt-2 text-sm text-gray-600">Prywatne wiadomości, materiały i wspólne ogłoszenia przeznaczone dla Twojego typu konta.</p></header>
         <MessageSection title="Prywatnie dla Ciebie" icon={MessageCircleHeart} messages={privateItems} empty={patientIds.length === 0 ? "Prywatne wiadomości pojawią się po połączeniu konta z kartą pacjenta." : "Nie ma teraz nowych prywatnych wiadomości."} />
         <MessageSection title="Ogłoszenia PsychOLKI" icon={Bell} messages={bulletins} empty="Nie ma teraz nowych ogłoszeń." />
       </div>

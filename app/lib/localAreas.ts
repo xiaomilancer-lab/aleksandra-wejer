@@ -8,6 +8,13 @@ export type LocalArea = {
 
 export const localAreas: ReadonlyArray<LocalArea> = [
   {
+    slug: "starogard",
+    name: "Starogard Gdański",
+    intro: "Jeśli szukasz psychologa w Starogardzie Gdańskim, Aleksandra Wejer przyjmuje w Arthro Cure Clinic przy al. Jana Pawła II oraz w drugiej lokalizacji w Nowej Wsi Rzecznej. Terminy obu gabinetów możesz porównać w jednym kalendarzu.",
+    travelTip: "Gabinet w Arthro Cure Clinic znajduje się w Starogardzie Gdańskim przy al. Jana Pawła II 1/U9. Jeżeli dogodniejszy termin jest w Nowej Wsi Rzecznej, kalendarz pokaże nazwę drugiego miejsca jeszcze przed potwierdzeniem rezerwacji.",
+    decisionTip: "Aleksandra prowadzi konsultacje dla dzieci, młodzieży, dorosłych, par i rodzin. Możesz od razu wybrać wolny termin albo wcześniej zadzwonić, jeśli chcesz spokojnie ustalić, od czego zacząć.",
+  },
+  {
     slug: "skarszewy",
     name: "Skarszewy",
     intro: "Jeśli mieszkasz w Skarszewach i szukasz spokojnej konsultacji psychologicznej, możesz porównać terminy w dwóch gabinetach Aleksandry: w Starogardzie Gdańskim i w Nowej Wsi Rzecznej.",
