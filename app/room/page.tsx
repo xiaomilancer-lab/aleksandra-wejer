@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarDays, Car, Download, Gift, MessageCircleHeart, Palette, Sparkles, Star } from "lucide-react";
+import { CalendarDays, Car, Download, Gift, House, MessageCircleHeart, Palette, Sparkles, Star } from "lucide-react";
 import { requireMember } from "@/app/room/server/requireMember";
 import RoomLogoutButton from "@/app/room/RoomLogoutButton";
 import { getMemberPatientAccess } from "@/app/room/server/memberContext";
@@ -22,7 +22,12 @@ export default async function MemberRoomPage() {
             <p className="mt-2 text-sm text-gray-600">{member.role === "parent" ? "Pokój rodzica" : "Pokój pacjenta"}</p>
             {hasBothContexts && <p className="mt-2 text-sm font-semibold text-[#6D7A62]">Jedno konto · dostęp pacjenta i rodzica</p>}
           </div>
-          <RoomLogoutButton />
+          <div className="flex flex-wrap gap-2">
+            <Link href="/" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D5DCCF] px-4 py-2.5 text-sm font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]">
+              <House size={17} aria-hidden="true" />Strona główna
+            </Link>
+            <RoomLogoutButton />
+          </div>
         </header>
 
         {!isLinked && (
