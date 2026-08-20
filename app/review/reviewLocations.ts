@@ -1,11 +1,11 @@
 export const REVIEW_LOCATIONS = {
-  "arthro-cure-clinic": {
-    label: "Arthro Cure Clinic · Starogard Gdański",
-    reviewUrl: "https://g.page/r/CWx8GJ9jp6bTEAE/review",
-  },
   "nowa-wies-rzeczna": {
     label: "Centrum Zielińscy · Nowa Wieś Rzeczna",
     reviewUrl: "https://g.page/r/CXQrUVozvjjYEAE/review",
+  },
+  "arthro-cure-clinic": {
+    label: "Arthro Cure Clinic · Starogard Gdański",
+    reviewUrl: "https://g.page/r/CWx8GJ9jp6bTEAE/review",
   },
 } as const;
 

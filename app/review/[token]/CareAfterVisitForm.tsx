@@ -12,7 +12,7 @@ type CareAfterVisitFormProps = {
 };
 
 export default function CareAfterVisitForm({ token, suggestedLocationId, suggestedLocationLabel }: CareAfterVisitFormProps) {
-  const initialLocation = isReviewLocationId(suggestedLocationId) ? suggestedLocationId : "arthro-cure-clinic";
+  const initialLocation = isReviewLocationId(suggestedLocationId) ? suggestedLocationId : "nowa-wies-rzeczna";
   const [locationId, setLocationId] = useState<ReviewLocationId>(initialLocation);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState("");

@@ -132,32 +132,13 @@ export default function About() {
 
                 <div>
                   <p className="text-xs md:text-sm font-semibold text-[#4B4338]">
-                    Arthro Cure Clinic
-                  </p>
-
-                  <p className="text-xs md:text-sm text-gray-600">
-                    Starogard Gdański
-                  </p>
-
-                  <a
-                    href="tel:+48508439666"
-                    className="mt-1 block text-base font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
-                  >
-                    ☎ +48 508 439 666
-                  </a>
-                </div>
-
-                <div className="my-4 h-px bg-gray-200" />
-
-                <div>
-                  <p className="text-xs md:text-sm font-semibold text-[#4B4338]">
                     Centrum Medyczno-Estetyczne
                     <br />
                     Zielińscy Premium
                   </p>
 
                   <p className="text-xs md:text-sm text-gray-600">
-                    Nowa Wieś Rzeczna
+                    Nowa Wieś Rzeczna · wszystkie dni poza wtorkiem
                   </p>
 
                   <a
@@ -165,6 +146,25 @@ export default function About() {
                     className="mt-1 block text-base font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
                   >
                     ☎ +48 510 777 469
+                  </a>
+                </div>
+
+                <div className="my-4 h-px bg-gray-200" />
+
+                <div>
+                  <p className="text-xs md:text-sm font-semibold text-[#4B4338]">
+                    Arthro Cure Clinic
+                  </p>
+
+                  <p className="text-xs md:text-sm text-gray-600">
+                    Starogard Gdański · tylko wtorki
+                  </p>
+
+                  <a
+                    href="tel:+48508439666"
+                    className="mt-1 block text-base font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
+                  >
+                    ☎ +48 508 439 666
                   </a>
                 </div>
 
@@ -193,32 +193,13 @@ export default function About() {
 
                 <div>
                   <p className="font-semibold text-[#4B4338]">
-                    Arthro Cure Clinic
-                  </p>
-
-                  <p className="text-sm text-gray-600">
-                    Starogard Gdański
-                  </p>
-
-                  <a
-                    href="tel:+48508439666"
-                    className="mt-2 block text-lg font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
-                  >
-                    ☎ +48 508 439 666
-                  </a>
-                </div>
-
-                <div className="my-5 h-px bg-gray-200" />
-
-                <div>
-                  <p className="font-semibold text-[#4B4338]">
                     Centrum Medyczno-Estetyczne
                     <br />
                     Zielińscy Premium
                   </p>
 
                   <p className="text-sm text-gray-600">
-                    Nowa Wieś Rzeczna
+                    Nowa Wieś Rzeczna · wszystkie dni poza wtorkiem
                   </p>
 
                   <a
@@ -226,6 +207,25 @@ export default function About() {
                     className="mt-2 block text-lg font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
                   >
                     ☎ +48 510 777 469
+                  </a>
+                </div>
+
+                <div className="my-5 h-px bg-gray-200" />
+
+                <div>
+                  <p className="font-semibold text-[#4B4338]">
+                    Arthro Cure Clinic
+                  </p>
+
+                  <p className="text-sm text-gray-600">
+                    Starogard Gdański · tylko wtorki
+                  </p>
+
+                  <a
+                    href="tel:+48508439666"
+                    className="mt-2 block text-lg font-bold text-[#6D7A62] hover:text-[#4B4338] transition-colors"
+                  >
+                    ☎ +48 508 439 666
                   </a>
                 </div>
               </div>

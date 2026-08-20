@@ -5,14 +5,16 @@ import { localAreas } from "@/app/lib/localAreas";
 
 const offices = [
   {
-    name: "Arthro Cure Clinic",
-    city: "Starogard Gdański",
-    address: "Al. Jana Pawła II 1/U9",
-  },
-  {
     name: "Centrum Medyczno-Estetyczne Zielińscy Premium",
     city: "Nowa Wieś Rzeczna",
     address: "ul. Kasztanowa 1",
+    availability: "Wszystkie dni poza wtorkiem",
+  },
+  {
+    name: "Arthro Cure Clinic",
+    city: "Starogard Gdański",
+    address: "Al. Jana Pawła II 1/U9",
+    availability: "Tylko we wtorki",
   },
 ] as const;
 
@@ -86,6 +88,7 @@ export default function LocalAreaPage({ area }: { area: LocalArea }) {
               <p className="mt-5 text-sm font-semibold uppercase tracking-[0.18em] text-[#6D7A62]">Rzeczywista lokalizacja spotkań</p>
               <h2 className="mt-2 text-2xl font-bold">{office.name}</h2>
               <p className="mt-3 leading-7 text-gray-600">{office.address}<br />{office.city}</p>
+              <p className="mt-4 rounded-xl bg-[#EEF1EB] px-3 py-2 text-sm font-semibold text-[#55624D]">Przyjęcia: {office.availability}</p>
             </article>
           ))}
         </div>

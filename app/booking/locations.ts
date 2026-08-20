@@ -1,17 +1,19 @@
 export const bookingLocationConfig = {
-  "arthro-cure-clinic": {
-    name: "Arthro Cure Clinic",
-    bookingSnapshotName: "Arthro Cure Clinic",
-    city: "Starogard Gdański",
-    street: "Al. Jana Pawła II 1/U9",
-    image: "/images/offices/arthro1.jpg",
-  },
   "nowa-wies-rzeczna": {
     name: "Centrum Medyczno-Estetyczne Zielińscy Premium",
     bookingSnapshotName: "Nowa Wieś Rzeczna",
     city: "Nowa Wieś Rzeczna",
     street: "Kasztanowa 1",
     image: "/images/offices/zielinscy.jpg",
+    availabilityLabel: "Przyjęcia: wszystkie dni poza wtorkiem",
+  },
+  "arthro-cure-clinic": {
+    name: "Arthro Cure Clinic",
+    bookingSnapshotName: "Arthro Cure Clinic",
+    city: "Starogard Gdański",
+    street: "Al. Jana Pawła II 1/U9",
+    image: "/images/offices/arthro1.jpg",
+    availabilityLabel: "Przyjęcia: tylko we wtorki",
   },
 } as const;
 

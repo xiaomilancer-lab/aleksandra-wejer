@@ -8,7 +8,7 @@ import { submitRoomFeedbackAction, type RoomFeedbackState } from "./actions";
 const initialState: RoomFeedbackState = { kind: "idle", message: "" };
 
 export default function RoomFeedbackForm({ suggestedLocationId, canSendPrivate }: { suggestedLocationId: string | null; canSendPrivate: boolean }) {
-  const initialLocation = isReviewLocationId(suggestedLocationId) ? suggestedLocationId : "arthro-cure-clinic";
+  const initialLocation = isReviewLocationId(suggestedLocationId) ? suggestedLocationId : "nowa-wies-rzeczna";
   const [locationId, setLocationId] = useState<ReviewLocationId>(initialLocation);
   const [state, formAction, pending] = useActionState(submitRoomFeedbackAction, initialState);
 

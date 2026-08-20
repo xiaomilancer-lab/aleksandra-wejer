@@ -53,6 +53,9 @@ export default function LocationCard({
             <br />
             {location.city}
           </p>
+          <p className="mt-3 rounded-xl bg-[#EEF1EB] px-3 py-2 text-sm font-semibold leading-5 text-[#55624D]">
+            {location.availabilityLabel}
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
