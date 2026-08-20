@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Download, Eraser, Expand, Paintbrush, RefreshCw, Undo2 } from "lucide-react";
+import { Download, Eraser, Expand, Minimize2, Paintbrush, RefreshCw, Undo2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const coloringPages = [
@@ -23,6 +23,7 @@ export default function PsycholkaColoring() {
   const [eraser, setEraser] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [historySize, setHistorySize] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
   const page = coloringPages[pageIndex];
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function PsycholkaColoring() {
     resize();
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, []);
+  }, [isExpanded]);
 
   function saveHistory() {
     const canvas = canvasRef.current;
@@ -110,10 +111,6 @@ export default function PsycholkaColoring() {
     setPageIndex(index);
   }
 
-  async function enterFullscreen() {
-    await canvasRef.current?.parentElement?.requestFullscreen?.();
-  }
-
   return (
     <section className="rounded-3xl border border-[#E5E1D8] bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -132,12 +129,16 @@ export default function PsycholkaColoring() {
         <button type="button" aria-pressed={eraser} onClick={() => setEraser((value) => !value)} className={`inline-flex min-h-11 items-center gap-2 rounded-xl border px-3 py-2 font-semibold ${eraser ? "border-[#6D7A62] bg-[#EEF1EB]" : "border-[#D8DDD4]"}`}><Eraser size={18} aria-hidden="true" />Gumka</button>
         <button type="button" onClick={undo} disabled={historySize === 0} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-3 py-2 font-semibold disabled:cursor-not-allowed disabled:opacity-45"><Undo2 size={18} aria-hidden="true" />Cofnij ruch</button>
         <button type="button" onClick={clear} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-3 py-2 font-semibold"><RefreshCw size={18} aria-hidden="true" />Od nowa</button>
-        <button type="button" onClick={() => { void enterFullscreen(); }} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-3 py-2 font-semibold"><Expand size={18} aria-hidden="true" />Pełny ekran</button>
+        <button type="button" onClick={() => setIsExpanded(true)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-3 py-2 font-semibold"><Expand size={18} aria-hidden="true" />Pełny ekran</button>
       </div>
       <label className="mt-4 block text-sm font-semibold"><span className="inline-flex items-center gap-2"><Paintbrush size={17} aria-hidden="true" />Grubość kredki</span><input type="range" min="7" max="42" value={lineWidth} onChange={(event) => setLineWidth(Number(event.target.value))} className="ml-3 w-40 align-middle accent-[#6D7A62]" /></label>
-      <div className="relative mx-auto mt-5 aspect-[3/5] max-h-[740px] w-full max-w-[520px] overflow-hidden rounded-2xl border-2 border-dashed border-[#CBD3C6] bg-white">
-        <canvas ref={canvasRef} onPointerDown={start} onPointerMove={draw} onPointerUp={() => { drawingRef.current = false; }} onPointerCancel={() => { drawingRef.current = false; }} className="absolute inset-0 z-10 h-full w-full touch-none" aria-label="Kolorowanka PsychOLKI do malowania palcem lub myszką" />
-        <Image src={page.path} alt={page.alt} fill sizes="(max-width: 640px) 92vw, 520px" className="pointer-events-none z-20 object-contain mix-blend-multiply" priority={false} />
+      <div className={isExpanded ? "fixed inset-0 z-[200] flex items-center justify-center bg-[#F8F5F0] p-4 sm:p-8" : "relative mx-auto mt-5 aspect-[3/5] max-h-[740px] w-full max-w-[520px] overflow-hidden rounded-2xl border-2 border-dashed border-[#CBD3C6] bg-white"}>
+        {isExpanded && <button type="button" onClick={() => setIsExpanded(false)} className="absolute right-4 top-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] bg-white px-4 py-2 font-semibold shadow-sm"><Minimize2 size={18} aria-hidden="true" />Wróć</button>}
+        {isExpanded && <p className="absolute left-4 top-5 z-30 text-sm font-semibold text-[#2D4739]">{page.label}</p>}
+        <div className={isExpanded ? "relative aspect-[3/5] h-full max-h-[calc(100vh-2rem)] w-auto max-w-full overflow-hidden rounded-2xl border-2 border-dashed border-[#CBD3C6] bg-white" : "contents"}>
+          <canvas ref={canvasRef} onPointerDown={start} onPointerMove={draw} onPointerUp={() => { drawingRef.current = false; }} onPointerCancel={() => { drawingRef.current = false; }} className="absolute inset-0 z-10 h-full w-full touch-none" aria-label="Kolorowanka PsychOLKI do malowania palcem lub myszką" />
+          <Image src={page.path} alt={page.alt} fill sizes="(max-width: 640px) 92vw, 520px" className="pointer-events-none z-20 object-contain mix-blend-multiply" priority={false} />
+        </div>
       </div>
       <p className="mt-3 text-xs text-gray-500">Kolorowanie zostaje tylko na tym ekranie. Pusty kontur możesz też pobrać i wydrukować.</p>
     </section>

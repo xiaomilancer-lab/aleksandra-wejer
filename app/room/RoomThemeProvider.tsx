@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Palette, X } from "lucide-react";
-import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, type ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 type RoomTheme = "calm" | "forest" | "lavender" | "sky" | "peach";
 
@@ -19,17 +19,21 @@ const RoomThemeContext = createContext<{ theme: RoomTheme; chooseTheme: (theme: 
 
 export default function RoomThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<RoomTheme>("calm");
+  const hasChosenTheme = useRef(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY) as RoomTheme | null;
     if (!saved || !validThemes.has(saved)) return;
-    const timer = window.setTimeout(() => setTheme(saved), 0);
+    const timer = window.setTimeout(() => {
+      if (!hasChosenTheme.current) setTheme(saved);
+    }, 0);
     return () => window.clearTimeout(timer);
   }, []);
 
   const value = useMemo(() => ({
     theme,
     chooseTheme(nextTheme: RoomTheme) {
+      hasChosenTheme.current = true;
       setTheme(nextTheme);
       window.localStorage.setItem(STORAGE_KEY, nextTheme);
     },
