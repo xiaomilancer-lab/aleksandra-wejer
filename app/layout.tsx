@@ -5,6 +5,7 @@ import "./globals.css";
 import PublicSitePulseTracker from "./site-pulse/PublicSitePulseTracker";
 import PwaInstallPrompt from "./pwa/PwaInstallPrompt";
 import PwaServiceWorker from "./pwa/PwaServiceWorker";
+import { PUBLIC_PWA_PROMOTION_ENABLED } from "./lib/publicFeatures";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,7 +72,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
   {children}
-  <PwaInstallPrompt />
+  {PUBLIC_PWA_PROMOTION_ENABLED ? <PwaInstallPrompt /> : null}
   <PwaServiceWorker />
   <PublicSitePulseTracker />
   <Analytics />

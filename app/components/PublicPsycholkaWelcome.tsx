@@ -8,6 +8,7 @@ import { PSYCHOLKA_DEBUG } from "../panel/psycholka/psycholkaConfig";
 import { PUBLIC_GUIDE_START_EVENT } from "./PublicPsycholkaGuide";
 import PublicQuickContact from "./PublicQuickContact";
 import { CHARACTER_NAME } from "../lib/branding";
+import { PUBLIC_PWA_PROMOTION_ENABLED } from "../lib/publicFeatures";
 
 const PUBLIC_WELCOME_KEY = "psycholka-public-welcome-seen";
 
@@ -88,7 +89,7 @@ export default function PublicPsycholkaWelcome() {
 
   return (
     <section id="start" data-scroll-anchor="start" aria-labelledby="public-psycholka-welcome-title" className="relative min-h-screen scroll-mt-6 overflow-hidden bg-[#F9F6F1] px-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-8 sm:px-6 md:scroll-mt-24 md:py-14">
-      <button type="button" onClick={() => setIsAppInfoOpen(true)} className="absolute right-3 top-3 z-20 inline-flex max-w-28 items-center gap-1.5 rounded-xl border border-[#DCE8E2] bg-white/90 px-2 py-1.5 text-left text-[10px] font-semibold leading-3 text-[#31584F] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8] sm:right-6 sm:top-6 sm:max-w-48 sm:gap-2 sm:rounded-2xl sm:px-3 sm:py-2 sm:text-xs sm:leading-4"><Smartphone size={13} className="shrink-0 sm:h-[17px] sm:w-[17px]" aria-hidden="true" />Aplikacja dla pacjentów<br />już powstaje ❤️</button>
+      {PUBLIC_PWA_PROMOTION_ENABLED && <button type="button" onClick={() => setIsAppInfoOpen(true)} className="absolute right-3 top-3 z-20 inline-flex max-w-28 items-center gap-1.5 rounded-xl border border-[#DCE8E2] bg-white/90 px-2 py-1.5 text-left text-[10px] font-semibold leading-3 text-[#31584F] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8] sm:right-6 sm:top-6 sm:max-w-48 sm:gap-2 sm:rounded-2xl sm:px-3 sm:py-2 sm:text-xs sm:leading-4"><Smartphone size={13} className="shrink-0 sm:h-[17px] sm:w-[17px]" aria-hidden="true" />Aplikacja dla pacjentów<br />już powstaje ❤️</button>}
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 text-center md:gap-8">
         <div className="md:hidden">{firstVisit ? <PsycholkaGreetingSequence className="public-psycholka-welcome-mobile" /> : <PsycholkaWidget context="welcome" action="wave" fallbackAction="greeting" className="public-psycholka-welcome-mobile" />}</div>
         <div className="hidden md:block">{firstVisit ? <PsycholkaGreetingSequence className="public-psycholka-welcome" /> : <PsycholkaWidget context="welcome" action="wave" fallbackAction="greeting" className="public-psycholka-welcome" />}</div>
@@ -112,7 +113,7 @@ export default function PublicPsycholkaWelcome() {
           <a href="https://wa.me/48510777469" target="_blank" rel="noreferrer" className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#1FAE57] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2">📱 WhatsApp</a>
         </div>
       </div>
-      {isAppInfoOpen && <div className="fixed inset-0 z-50 grid place-items-center bg-[#23332F]/25 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="patient-app-title">
+      {PUBLIC_PWA_PROMOTION_ENABLED && isAppInfoOpen && <div className="fixed inset-0 z-50 grid place-items-center bg-[#23332F]/25 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="patient-app-title">
         <div className="relative w-full max-w-md rounded-3xl border border-[#DCE8E2] bg-white p-6 text-left shadow-2xl">
           <button type="button" onClick={() => setIsAppInfoOpen(false)} aria-label="Zamknij" className="absolute right-4 top-4 rounded-xl p-2 text-[#55624D] transition hover:bg-[#F8F5F0] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]"><X size={18} aria-hidden="true" /></button>
           <div className="flex items-center gap-3 pr-10"><span className="rounded-2xl bg-[#EEF1EB] p-3 text-[#6D7A62]"><Smartphone size={22} aria-hidden="true" /></span><h2 id="patient-app-title" className="text-xl font-bold text-[#2D4739]">Aplikacja psychOLKA powstaje</h2></div>
