@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PublicSitePulseTracker from "./site-pulse/PublicSitePulseTracker";
+import PwaInstallPrompt from "./pwa/PwaInstallPrompt";
+import PwaServiceWorker from "./pwa/PwaServiceWorker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,6 +21,16 @@ export const metadata: Metadata = {
   title: "Aleksandra Wejer | Psycholog | Starogard Gdański",
   description:
   "Aleksandra Wejer – psycholog w Starogardzie Gdańskim. Pomoc psychologiczna dla dzieci, młodzieży, dorosłych, par i rodzin. Konsultacje stacjonarne oraz online.",
+  applicationName: "PsychOLKA",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "PsychOLKA",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   alternates: {
     canonical: "/",
   },
@@ -43,6 +55,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#2D4739",
 };
 
 export default function RootLayout({
@@ -57,6 +71,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
   {children}
+  <PwaInstallPrompt />
+  <PwaServiceWorker />
   <PublicSitePulseTracker />
   <Analytics />
 </body>
