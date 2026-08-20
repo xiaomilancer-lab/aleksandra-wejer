@@ -178,3 +178,26 @@ html,
 body {
   scroll-behavior: smooth;
 }
+
+/* Motywy prywatnego pokoju. Kolory są lokalne dla /room i nie dotykają panelu gabinetu. */
+.room-theme-shell {
+  --room-bg: #F8F5F0;
+  --room-card: #FFFFFF;
+  --room-soft: #EEF1EB;
+  --room-border: #E5E1D8;
+  --room-accent: #6D7A62;
+  --room-ink: #2D4739;
+  min-height: 100vh;
+  background: var(--room-bg);
+  color: var(--room-ink);
+}
+.room-theme-shell[data-room-theme="forest"] { --room-bg: #EFF4EE; --room-card: #FBFDF9; --room-soft: #E1ECE0; --room-border: #CEDBCB; --room-accent: #53705B; --room-ink: #244535; }
+.room-theme-shell[data-room-theme="lavender"] { --room-bg: #F5F1F8; --room-card: #FFFFFF; --room-soft: #ECE4F1; --room-border: #DDD3E4; --room-accent: #776888; --room-ink: #463A52; }
+.room-theme-shell[data-room-theme="sky"] { --room-bg: #EFF6F8; --room-card: #FFFFFF; --room-soft: #DFEDF1; --room-border: #CFE0E5; --room-accent: #557986; --room-ink: #294D59; }
+.room-theme-shell[data-room-theme="peach"] { --room-bg: #FCF2EC; --room-card: #FFFDFC; --room-soft: #F6E2D8; --room-border: #EAD4C8; --room-accent: #A86F5A; --room-ink: #604235; }
+.room-theme-shell main { background: var(--room-bg) !important; color: var(--room-ink) !important; transition: background-color 180ms ease-out; }
+.room-theme-shell main .bg-white { background-color: var(--room-card) !important; }
+.room-theme-shell main .border-\[\#E5E1D8\] { border-color: var(--room-border) !important; }
+.room-theme-shell main .bg-\[\#EEF1EB\] { background-color: var(--room-soft) !important; }
+.room-theme-shell main .text-\[\#2D4739\] { color: var(--room-ink) !important; }
+.room-theme-shell main .bg-\[\#6D7A62\] { background-color: var(--room-accent) !important; }

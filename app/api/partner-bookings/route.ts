@@ -3,6 +3,7 @@ import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locat
 import { getBookingContext, getPartnerConfig } from "@/app/partners/booking/partnerConfig";
 import { isPartnerSlotAllowed } from "@/app/partners/booking/partnerAvailabilityRules";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { sendBookingNotification } from "@/app/lib/bookingNotifications";
 
 const conflictMessage = "Ten termin został właśnie zajęty. ❤️ Wybierzmy inny.";
 
@@ -17,6 +18,8 @@ export async function POST(request: Request) {
     const { error } = await supabaseAdmin.from("bookings").insert({ location_id: context.locationId, location: getBookingLocationName(context.locationId), source: context.source, visit_date: body.date, visit_time: body.time, name: body.name, phone: body.phone, email: body.email ?? "", message: body.message ?? "", status: "Nowe" });
     if (error?.code === "23505") return Response.json({ success: false, message: conflictMessage }, { status: 409 });
     if (error) return Response.json({ success: false, message: "Nie udało się zapisać rezerwacji. Spróbuj ponownie za chwilę. ❤️" }, { status: 503 });
+    const notification = await sendBookingNotification({ locationId: context.locationId, visitDate: body.date, visitTime: body.time, name: body.name, phone: body.phone, email: body.email, message: body.message });
+    if (!notification.sent) console.error("[mail] partner booking notification was not delivered", { reason: notification.reason });
     return Response.json({ success: true, message: "Gotowe. ❤️ Aleksandra otrzymała Twoją rezerwację." });
   } catch (error) {
     if (error instanceof AvailabilityError) return Response.json({ success: false, message: "Nie udało się teraz sprawdzić terminów. Spróbuj ponownie za chwilę. ❤️" }, { status: 503 });

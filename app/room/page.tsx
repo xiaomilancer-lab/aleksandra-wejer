@@ -3,6 +3,7 @@ import { ArrowRight, CalendarDays, Car, Download, Gift, House, MessageCircleHear
 import { requireMember } from "@/app/room/server/requireMember";
 import RoomLogoutButton from "@/app/room/RoomLogoutButton";
 import { getMemberPatientAccess } from "@/app/room/server/memberContext";
+import { RoomThemePicker } from "@/app/room/RoomThemeProvider";
 
 export default async function MemberRoomPage() {
   const member = await requireMember();
@@ -23,6 +24,7 @@ export default async function MemberRoomPage() {
             {hasBothContexts && <p className="mt-2 text-sm font-semibold text-[#6D7A62]">Jedno konto · dostęp pacjenta i rodzica</p>}
           </div>
           <div className="flex flex-wrap gap-2">
+            <RoomThemePicker />
             <Link href="/" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D5DCCF] px-4 py-2.5 text-sm font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]">
               <House size={17} aria-hidden="true" />Strona główna
             </Link>

@@ -1,6 +1,7 @@
 import { isSlotAvailable, AvailabilityError } from "@/app/booking/server/availability";
 import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locations";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { sendBookingNotification } from "@/app/lib/bookingNotifications";
 
 const allowedSources = new Set(["main-site", "zielinscy", "arthro"]);
 const conflictMessage = "Ten termin został właśnie zajęty. ❤️ Wybierzmy inny.";
@@ -13,6 +14,8 @@ export async function POST(request: Request) {
     const { error } = await supabaseAdmin.from("bookings").insert({ location_id: body.locationId, location: getBookingLocationName(body.locationId), source: body.source, visit_date: body.date, visit_time: body.time, name: body.name, phone: body.phone, email: body.email ?? "", message: body.message ?? "", status: "Nowe" });
     if (error?.code === "23505") return Response.json({ success: false, message: conflictMessage }, { status: 409 });
     if (error) return Response.json({ success: false, message: "Nie udało się zapisać rezerwacji. Spróbuj ponownie za chwilę. ❤️" }, { status: 503 });
+    const notification = await sendBookingNotification({ locationId: body.locationId, visitDate: body.date, visitTime: body.time, name: body.name, phone: body.phone, email: body.email, message: body.message });
+    if (!notification.sent) console.error("[mail] booking notification was not delivered", { reason: notification.reason });
     return Response.json({ success: true, message: "Gotowe. ❤️ Aleksandra otrzymała Twoją rezerwację." });
   } catch (error) {
     const message = error instanceof AvailabilityError ? "Nie udało się teraz sprawdzić terminów. Spróbuj ponownie za chwilę. ❤️" : "Nie udało się zapisać rezerwacji. Spróbuj ponownie za chwilę. ❤️";

@@ -70,26 +70,36 @@ export default function SoothingSounds() {
     sourceRef.current?.disconnect();
     filterRef.current?.disconnect();
     gainRef.current?.disconnect();
-    void contextRef.current?.close();
     sourceRef.current = null;
     filterRef.current = null;
     gainRef.current = null;
-    contextRef.current = null;
     setPlaying(false);
     setRemainingSeconds(null);
   }, []);
 
-  const play = useCallback(() => {
+  const play = useCallback(async () => {
     stop();
     const AudioContextClass = window.AudioContext ||
       (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioContextClass) return;
 
-    const context = new AudioContextClass();
-    const source = context.createBufferSource();
-    const filter = context.createBiquadFilter();
-    const gain = context.createGain();
-    const buffer = context.createBuffer(1, context.sampleRate * 3, context.sampleRate);
+    const context = contextRef.current?.state !== "closed"
+      ? contextRef.current
+      : null;
+    const activeContext = context ?? new AudioContextClass();
+    contextRef.current = activeContext;
+
+    try {
+      await activeContext.resume();
+    } catch {
+      // iPhone may wait for the next direct tap; the button remains available.
+      return;
+    }
+
+    const source = activeContext.createBufferSource();
+    const filter = activeContext.createBiquadFilter();
+    const gain = activeContext.createGain();
+    const buffer = activeContext.createBuffer(1, activeContext.sampleRate * 3, activeContext.sampleRate);
 
     fillNoiseBuffer(buffer, sound);
     source.buffer = buffer;
@@ -101,10 +111,9 @@ export default function SoothingSounds() {
 
     source.connect(filter);
     filter.connect(gain);
-    gain.connect(context.destination);
+    gain.connect(activeContext.destination);
     source.start();
 
-    contextRef.current = context;
     sourceRef.current = source;
     filterRef.current = filter;
     gainRef.current = gain;
@@ -136,6 +145,8 @@ export default function SoothingSounds() {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
       stop();
+      void contextRef.current?.close();
+      contextRef.current = null;
     };
   }, [stop]);
 
@@ -189,7 +200,7 @@ export default function SoothingSounds() {
         </div>
       </div>
 
-      <button type="button" onClick={playing ? stop : play} className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 font-bold text-white hover:bg-[#58644F]">
+      <button type="button" onClick={playing ? stop : () => { void play(); }} className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 font-bold text-white hover:bg-[#58644F]">
         {playing ? <Pause size={19} aria-hidden="true" /> : <Play size={19} aria-hidden="true" />}
         {playing ? "Zatrzymaj szum" : "Włącz cicho"}
       </button>

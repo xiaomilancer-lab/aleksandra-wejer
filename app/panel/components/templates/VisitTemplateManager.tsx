@@ -4,10 +4,13 @@ import {
   BookOpenCheck,
   Check,
   Copy,
+  Download,
   Edit3,
+  Eye,
   ExternalLink,
   Heart,
   Plus,
+  Printer,
   Save,
   Search,
   ShieldCheck,
@@ -33,6 +36,15 @@ interface VisitTemplateManagerProps {
   favoriteTemplates: VisitTemplate[];
 }
 
+type TemplatePreviewData = {
+  title: string;
+  category: string;
+  description: string;
+  noteTemplate: string;
+  homeworkTemplate: string;
+  ageGroup?: string;
+};
+
 const emptyDraft: VisitTemplateInput = {
   title: "",
   category: "",
@@ -54,6 +66,7 @@ export default function VisitTemplateManager({
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [previewTemplate, setPreviewTemplate] = useState<TemplatePreviewData | null>(null);
 
   const filteredTemplates = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("pl-PL");
@@ -255,19 +268,13 @@ export default function VisitTemplateManager({
                     </span>
                   ))}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => importStarterTemplate(starter)}
-                  disabled={isPending || imported}
-                  className={`mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
-                    imported
-                      ? "border border-[#CFD8CB] bg-[#F3F7F1] text-[#56705E]"
-                      : "bg-[#6D7A62] text-white hover:bg-[#58644F] disabled:bg-gray-400"
-                  }`}
-                >
-                  {imported ? <Check size={18} aria-hidden="true" /> : <Plus size={18} aria-hidden="true" />}
-                  {imported ? "Dodano do moich" : "Dodaj do moich szablonów"}
-                </button>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button type="button" onClick={() => setPreviewTemplate(starter)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D8DDD4] bg-white px-4 py-2.5 text-sm font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]"><Eye size={18} aria-hidden="true" />Otwórz arkusz</button>
+                  <button type="button" onClick={() => importStarterTemplate(starter)} disabled={isPending || imported} className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${imported ? "border border-[#CFD8CB] bg-[#F3F7F1] text-[#56705E]" : "bg-[#6D7A62] text-white hover:bg-[#58644F] disabled:bg-gray-400"}`}>
+                    {imported ? <Check size={18} aria-hidden="true" /> : <Plus size={18} aria-hidden="true" />}
+                    {imported ? "Dodano do moich" : "Dodaj do moich szablonów"}
+                  </button>
+                </div>
               </article>
             );
           })}
@@ -307,7 +314,7 @@ export default function VisitTemplateManager({
           <p className="mt-5 rounded-2xl bg-[#F8F5F0] px-4 py-5 text-sm text-gray-500">Nie masz jeszcze ulubionych szablonów.</p>
         ) : (
           <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {favoriteTemplates.map((template) => <FavoriteTemplate key={template.id} template={template} onUse={() => openEditForm(template)} />)}
+            {favoriteTemplates.map((template) => <FavoriteTemplate key={template.id} template={template} onUse={() => setPreviewTemplate(toPreview(template))} />)}
           </div>
         )}
       </section>
@@ -318,10 +325,11 @@ export default function VisitTemplateManager({
           <p className="mt-5 rounded-2xl bg-[#F8F5F0] px-4 py-6 text-center text-sm text-gray-500">{templates.length === 0 ? "Nie masz jeszcze żadnych szablonów." : "Nie znaleziono pasujących szablonów."}</p>
         ) : (
           <div className="mt-5 space-y-4">
-            {filteredTemplates.map((template) => <TemplateCard key={template.id} template={template} isPending={isPending} onEdit={() => openEditForm(template)} onDuplicate={() => duplicateTemplate(template)} onDelete={() => removeTemplate(template)} />)}
+            {filteredTemplates.map((template) => <TemplateCard key={template.id} template={template} isPending={isPending} onOpen={() => setPreviewTemplate(toPreview(template))} onEdit={() => openEditForm(template)} onDuplicate={() => duplicateTemplate(template)} onDelete={() => removeTemplate(template)} />)}
           </div>
         )}
       </section>
+      {previewTemplate && <TemplatePreview template={previewTemplate} onClose={() => setPreviewTemplate(null)} />}
     </div>
   );
 }
@@ -335,8 +343,22 @@ function Field({ label, value, onChange, disabled, required, textarea }: { label
 
 function FavoriteTemplate({ template, onUse }: { template: VisitTemplate; onUse: () => void }) { return <button type="button" onClick={onUse} className="rounded-2xl bg-[#F8F5F0] p-4 text-left transition hover:bg-[#EEF1EB]"><p className="font-semibold text-[#2D4739]">{template.title}</p><p className="mt-1 text-sm text-gray-500">{template.category}</p></button>; }
 
-function TemplateCard({ template, isPending, onEdit, onDuplicate, onDelete }: { template: VisitTemplate; isPending: boolean; onEdit: () => void; onDuplicate: () => void; onDelete: () => void }) { return <article className="rounded-2xl bg-[#F8F5F0] p-5"><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><div className="flex flex-wrap items-center gap-2"><h3 className="font-semibold text-[#2D4739]">{template.title}</h3>{template.is_favorite && <Heart size={16} className="text-[#B7791F]" fill="currentColor" aria-label="Ulubiony" />}</div><p className="mt-1 text-sm font-medium text-[#6D7A62]">{template.category}</p>{template.description && <p className="mt-3 text-sm text-gray-600">{template.description}</p>}</div><div className="flex gap-1"><IconButton label="Edytuj" onClick={onEdit} disabled={isPending}><Edit3 size={17} /></IconButton><IconButton label="Duplikuj" onClick={onDuplicate} disabled={isPending}><Copy size={17} /></IconButton><IconButton label="Usuń" onClick={onDelete} disabled={isPending} destructive><Trash2 size={17} /></IconButton></div></div></article>; }
+function TemplateCard({ template, isPending, onOpen, onEdit, onDuplicate, onDelete }: { template: VisitTemplate; isPending: boolean; onOpen: () => void; onEdit: () => void; onDuplicate: () => void; onDelete: () => void }) { return <article className="rounded-2xl bg-[#F8F5F0] p-5"><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><div className="flex flex-wrap items-center gap-2"><h3 className="font-semibold text-[#2D4739]">{template.title}</h3>{template.is_favorite && <Heart size={16} className="text-[#B7791F]" fill="currentColor" aria-label="Ulubiony" />}</div><p className="mt-1 text-sm font-medium text-[#6D7A62]">{template.category}</p>{template.description && <p className="mt-3 text-sm text-gray-600">{template.description}</p>}</div><div className="flex gap-1"><IconButton label="Otwórz arkusz" onClick={onOpen} disabled={isPending}><Eye size={17} /></IconButton><IconButton label="Edytuj" onClick={onEdit} disabled={isPending}><Edit3 size={17} /></IconButton><IconButton label="Duplikuj" onClick={onDuplicate} disabled={isPending}><Copy size={17} /></IconButton><IconButton label="Usuń" onClick={onDelete} disabled={isPending} destructive><Trash2 size={17} /></IconButton></div></div></article>; }
 
 function IconButton({ label, onClick, disabled, destructive, children }: { label: string; onClick: () => void; disabled: boolean; destructive?: boolean; children: ReactNode }) { return <button type="button" onClick={onClick} disabled={disabled} aria-label={label} className={`rounded-lg p-2 hover:bg-white disabled:cursor-not-allowed ${destructive ? "text-red-600" : "text-[#6D7A62]"}`}>{children}</button>; }
 
 function toDraft(template: VisitTemplate): VisitTemplateInput { return { title: template.title, category: template.category, description: template.description, noteTemplate: template.note_template, homeworkTemplate: template.homework_template, isFavorite: template.is_favorite }; }
+
+function toPreview(template: VisitTemplate): TemplatePreviewData { return { title: template.title, category: template.category, description: template.description, noteTemplate: template.note_template, homeworkTemplate: template.homework_template }; }
+
+function TemplatePreview({ template, onClose }: { template: TemplatePreviewData; onClose: () => void }) {
+  function downloadText() {
+    const content = `${template.title}\n${template.category}\n\n${template.description}\n\nNOTATKA ZE SPOTKANIA\n${template.noteTemplate}\n\nZADANIE / PRAKTYKA MIĘDZY SPOTKANIAMI\n${template.homeworkTemplate}`;
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([content], { type: "text/plain;charset=utf-8" }));
+    link.download = `${template.title.toLocaleLowerCase("pl-PL").replace(/[^a-z0-9]+/g, "-") || "szablon"}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+  return <div className="fixed inset-0 z-50 overflow-y-auto bg-[#203328]/45 p-4 sm:p-8" role="dialog" aria-modal="true" aria-label={`Arkusz ${template.title}`}><div className="mx-auto max-w-3xl rounded-3xl bg-white p-5 shadow-2xl sm:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-sm font-semibold text-[#6D7A62]">Arkusz do prowadzenia spotkania</p><h2 className="mt-1 text-2xl font-bold text-[#2D4739]">{template.title}</h2><p className="mt-2 text-sm text-gray-500">{template.category}{template.ageGroup ? ` · ${template.ageGroup}` : ""}</p></div><button type="button" onClick={onClose} aria-label="Zamknij arkusz" className="rounded-xl border border-[#E5E1D8] p-2 text-[#2D4739] hover:bg-[#F8F5F0]"><X size={20} /></button></div><p className="mt-5 text-sm leading-6 text-gray-700">{template.description}</p><div className="mt-6 grid gap-5"><section className="rounded-2xl bg-[#F8F5F0] p-5"><h3 className="font-bold text-[#2D4739]">Notatka ze spotkania</h3><pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-6 text-gray-700">{template.noteTemplate || "Miejsce na spokojne notatki."}</pre></section><section className="rounded-2xl bg-[#EEF3EB] p-5"><h3 className="font-bold text-[#2D4739]">Zadanie / praktyka między spotkaniami</h3><pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-6 text-gray-700">{template.homeworkTemplate || "Miejsce na ustalone kroki."}</pre></section></div><div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => window.print()} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#58644F]"><Printer size={17} />Drukuj</button><button type="button" onClick={downloadText} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#D8DDD4] px-4 py-2.5 text-sm font-semibold text-[#2D4739] hover:bg-[#F8F5F0]"><Download size={17} />Pobierz tekst</button></div></div></div>;
+}
