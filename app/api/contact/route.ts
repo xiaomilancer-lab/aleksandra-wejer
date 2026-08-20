@@ -1,10 +1,17 @@
 import { sendContactNotification } from "@/app/lib/bookingNotifications";
+import { acceptsPublicJson, cleanOptionalText, cleanRequiredText, isValidEmail, isValidPhone, PUBLIC_INPUT_LIMITS } from "@/app/api/_shared/publicInput";
 
 export async function POST(req: Request) {
   try {
-    const { name, phone, email, category, message } = await req.json();
+    if (!acceptsPublicJson(req)) return Response.json({ success: false, message: "Nieprawidłowe dane wiadomości." }, { status: 400 });
+    const body = await req.json().catch(() => null) as Record<string, unknown> | null;
+    const name = cleanRequiredText(body?.name, PUBLIC_INPUT_LIMITS.name);
+    const phone = cleanRequiredText(body?.phone, PUBLIC_INPUT_LIMITS.phone);
+    const email = cleanOptionalText(body?.email, PUBLIC_INPUT_LIMITS.email);
+    const category = cleanRequiredText(body?.category, PUBLIC_INPUT_LIMITS.category);
+    const message = cleanRequiredText(body?.message, PUBLIC_INPUT_LIMITS.message);
 
-    if (typeof name !== "string" || typeof phone !== "string" || typeof email !== "string" || typeof category !== "string" || typeof message !== "string") {
+    if (!name || !phone || email === null || !category || !message || !isValidPhone(phone) || !isValidEmail(email)) {
       return Response.json({ success: false, message: "Nieprawidłowe dane wiadomości." }, { status: 400 });
     }
 

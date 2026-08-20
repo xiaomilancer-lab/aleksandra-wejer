@@ -1,9 +1,9 @@
 "use server";
 
 import { getVisitBrief } from "../services/visitBriefService";
-import { requirePsychologist } from "../server/requirePsychologist";
+import { requirePatientVaultAccess } from "../server/patientVault";
 
 export async function getVisitBriefAction(patientId: string, visitId: number) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   return getVisitBrief(patientId, visitId);
 }

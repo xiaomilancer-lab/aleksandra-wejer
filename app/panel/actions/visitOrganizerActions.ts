@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { VISIT_RECORD_KINDS, type VisitRecordKind } from "../domain/booking";
-import { requirePsychologist } from "../server/requirePsychologist";
+import { requirePatientVaultAccess } from "../server/patientVault";
 import { updateVisitRecordKind } from "../services/visitOrganizerService";
 import { createHistoricalVisit } from "../services/visitOrganizerService";
 
@@ -18,7 +18,7 @@ export interface HistoricalVisitInput {
 }
 
 export async function classifyVisitAction(id: number, recordKind: VisitRecordKind) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   if (!Number.isInteger(id) || id < 1 || !VISIT_RECORD_KINDS.includes(recordKind)) throw new Error("Nieprawidłowe dane wizyty.");
   await updateVisitRecordKind(id, recordKind);
   revalidatePath("/panel");
@@ -26,7 +26,7 @@ export async function classifyVisitAction(id: number, recordKind: VisitRecordKin
 }
 
 export async function createHistoricalVisitAction(input: HistoricalVisitInput) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   if (!input.patientId && !input.name.trim()) throw new Error("Wpisz imię i nazwisko pacjenta.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.visitDate)) throw new Error("Wybierz prawidłową datę.");
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(input.visitTime)) throw new Error("Wybierz prawidłową godzinę.");

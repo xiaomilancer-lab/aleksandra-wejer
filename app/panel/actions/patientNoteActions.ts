@@ -8,7 +8,7 @@ import {
   recordTimelineEvent,
   updatePatientNote,
 } from "../services/patientService";
-import { requirePsychologist } from "../server/requirePsychologist";
+import { requirePatientVaultAccess } from "../server/patientVault";
 
 function validateNote(title: string, content: string) {
   if (!title.trim() || !content.trim()) {
@@ -17,7 +17,7 @@ function validateNote(title: string, content: string) {
 }
 
 export async function createPatientNoteAction(input: PatientNoteInput) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   validateNote(input.title, input.content);
   const note = await createPatientNote(input);
   await recordTimelineEvent({
@@ -37,7 +37,7 @@ export async function updatePatientNoteAction(
   patientId: string,
   input: Pick<PatientNoteInput, "title" | "content" | "visitId">
 ) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   validateNote(input.title, input.content);
   const note = await updatePatientNote(noteId, input);
   revalidatePath(`/panel/patients/${patientId}`);
@@ -45,7 +45,7 @@ export async function updatePatientNoteAction(
 }
 
 export async function deletePatientNoteAction(noteId: string, patientId: string) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   await deletePatientNote(noteId);
   revalidatePath(`/panel/patients/${patientId}`);
 }

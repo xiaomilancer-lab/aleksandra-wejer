@@ -6,6 +6,13 @@ import { closePatientVaultSession, configurePatientVault, getPatientVaultState, 
 
 export type VaultActionState = { error: string };
 
+function getSafeReturnTo(formData: FormData) {
+  const value = String(formData.get("returnTo") ?? "");
+  return /^\/panel(?:\/[a-zA-Z0-9._~!$&'()*+,;=:@%/-]*)?(?:\?[a-zA-Z0-9._~!$&'()*+,;=:@%/?-]*)?$/.test(value)
+    ? value
+    : "/panel/patients";
+}
+
 export async function setupPatientVaultAction(_: VaultActionState, formData: FormData): Promise<VaultActionState> {
   const identity = await requirePsychologist();
   const pin = String(formData.get("pin") ?? "");
@@ -17,7 +24,7 @@ export async function setupPatientVaultAction(_: VaultActionState, formData: For
   if (state.configured) return { error: "PIN został już ustawiony. Odśwież stronę." };
   if (!await verifyAccountPassword(identity.email, password)) return { error: "Hasło do konta gabinetu jest nieprawidłowe." };
   await configurePatientVault(identity.userId, pin);
-  redirect("/panel/patients");
+  redirect(getSafeReturnTo(formData));
 }
 
 export async function unlockPatientVaultAction(_: VaultActionState, formData: FormData): Promise<VaultActionState> {
@@ -33,7 +40,7 @@ export async function unlockPatientVaultAction(_: VaultActionState, formData: Fo
     await new Promise((resolve) => setTimeout(resolve, 650));
     return { error: "Nieprawidłowy PIN." };
   }
-  redirect("/panel/patients");
+  redirect(getSafeReturnTo(formData));
 }
 
 export async function lockPatientVaultAction() {

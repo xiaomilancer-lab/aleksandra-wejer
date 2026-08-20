@@ -8,8 +8,15 @@ const cookieOptions = {
   sameSite: "lax" as const,
   secure: process.env.NODE_ENV === "production",
   path: "/",
-  maxAge: 60 * 60,
+  maxAge: 30 * 60,
+  priority: "high" as const,
 };
+
+const noStoreHeaders = { "Cache-Control": "private, no-store, max-age=0", Pragma: "no-cache" };
+
+function json(body: object, init?: { status?: number }) {
+  return NextResponse.json(body, { ...init, headers: noStoreHeaders });
+}
 
 function clearCookie(response: NextResponse, name: string) {
   response.cookies.set(name, "", { ...cookieOptions, maxAge: 0 });
@@ -18,10 +25,10 @@ function clearCookie(response: NextResponse, name: string) {
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null) as { accessToken?: unknown } | null;
   const accessToken = typeof body?.accessToken === "string" ? body.accessToken : null;
-  if (!accessToken) return NextResponse.json({ message: "Brak uwierzytelnienia." }, { status: 401 });
+  if (!accessToken || accessToken.length > 8_192) return json({ message: "Brak uwierzytelnienia." }, { status: 401 });
 
   const { data, error } = await supabaseAdmin.auth.getUser(accessToken);
-  if (error || !data.user) return NextResponse.json({ message: "Nieprawidłowa sesja." }, { status: 401 });
+  if (error || !data.user) return json({ message: "Nieprawidłowa sesja." }, { status: 401 });
 
   const { data: profile, error: profileError } = await supabaseAdmin
     .from("profiles")
@@ -30,29 +37,43 @@ export async function POST(request: Request) {
     .maybeSingle();
 
   if (profileError || !profile) {
-    return NextResponse.json({ message: "Konto nie ma jeszcze aktywnego profilu." }, { status: 403 });
+    return json({ message: "Konto nie ma jeszcze aktywnego profilu." }, { status: 403 });
   }
 
   if (profile.role === "psychologist") {
-    const response = NextResponse.json({ success: true, role: profile.role, destination: "/panel" });
+    const response = json({ success: true, role: profile.role, destination: "/panel" });
     response.cookies.set(PANEL_SESSION_COOKIE, accessToken, cookieOptions);
     clearCookie(response, MEMBER_SESSION_COOKIE);
     return response;
   }
 
   if (profile.role === "patient" || profile.role === "parent") {
-    const response = NextResponse.json({ success: true, role: profile.role, destination: "/room" });
+    const response = json({ success: true, role: profile.role, destination: "/room" });
     response.cookies.set(MEMBER_SESSION_COOKIE, accessToken, cookieOptions);
     clearCookie(response, PANEL_SESSION_COOKIE);
     return response;
   }
 
-  return NextResponse.json({ message: "To konto nie ma dostępu do aplikacji." }, { status: 403 });
+  return json({ message: "To konto nie ma dostępu do aplikacji." }, { status: 403 });
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ success: true });
+  const response = json({ success: true });
   clearCookie(response, PANEL_SESSION_COOKIE);
   clearCookie(response, MEMBER_SESSION_COOKIE);
+  response.cookies.set("psycholka-patient-vault", "", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    path: "/panel",
+    maxAge: 0,
+  });
+  response.cookies.set("psycholka-patient-vault", "", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    path: "/panel/patients",
+    maxAge: 0,
+  });
   return response;
 }

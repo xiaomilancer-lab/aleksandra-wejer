@@ -3,9 +3,15 @@ import { CheckCircle2, CircleDot, Clock3, MailCheck, UserRound } from "lucide-re
 import AuthGuard from "../components/AuthGuard";
 import Dashboard from "../components/Dashboard";
 import { getMemberUserDirectory, type MemberUserEntry } from "../services/memberUserService";
+import { requirePsychologist } from "../server/requirePsychologist";
+import { getPatientVaultState } from "../server/patientVault";
+import PatientVaultGate from "../patients/PatientVaultGate";
 
 export default async function PanelUsersPage() {
   await connection();
+  const identity = await requirePsychologist();
+  const vault = await getPatientVaultState(identity.userId);
+  if (!vault.unlocked) return <AuthGuard><Dashboard><PatientVaultGate configured={vault.configured} lockedUntil={vault.lockedUntil} returnTo="/panel/users" /></Dashboard></AuthGuard>;
 
   let entries: MemberUserEntry[] = [];
   let presenceAvailable = false;

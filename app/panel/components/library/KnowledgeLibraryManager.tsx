@@ -1,11 +1,12 @@
 "use client";
 
-import { BookOpen, Copy, Edit3, Pin, Plus, Printer, Save, Search, Trash2, X } from "lucide-react";
+import { BookOpen, Copy, Download, Edit3, Pin, Plus, Printer, Save, Search, ShieldCheck, Sparkles, Trash2, X } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createKnowledgeMaterialAction, deleteKnowledgeMaterialAction, updateKnowledgeMaterialAction } from "../../actions/knowledgeLibraryActions";
 import { STARTER_KNOWLEDGE_MATERIALS } from "../../data/starterKnowledgeMaterials";
 import { knowledgeCategories, type KnowledgeCategory, type KnowledgeMaterial, type KnowledgeMaterialInput } from "../../domain";
+import { searchKnowledgeMaterials } from "../../lib/knowledgeSearch";
 
 type Audience = "Wszyscy" | "Dzieci" | "Nastolatki" | "Dorośli" | "Pary i rodziny";
 type Format = "Wszystkie" | "Plan sesji" | "Gra i zabawa" | "Obrazkowe" | "Tekstowe" | "Do domu";
@@ -33,7 +34,7 @@ function matchesFormat(material: KnowledgeMaterial, format: Format) {
   return text.includes("do domu") || text.includes("między spotkaniami");
 }
 
-export default function KnowledgeLibraryManager({ materials }: { materials: KnowledgeMaterial[] }) {
+export default function KnowledgeLibraryManager({ materials, privateLibraryAvailable = true }: { materials: KnowledgeMaterial[]; privateLibraryAvailable?: boolean }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<"Wszystkie" | KnowledgeCategory>("Wszystkie");
@@ -49,8 +50,7 @@ export default function KnowledgeLibraryManager({ materials }: { materials: Know
   const [isPending, startTransition] = useTransition();
   const allMaterials = useMemo(() => [...STARTER_KNOWLEDGE_MATERIALS, ...materials], [materials]);
   const filtered = useMemo(() => {
-    const term = query.trim().toLocaleLowerCase("pl-PL");
-    return allMaterials.filter((material) => (!term || materialText(material).includes(term)) && (category === "Wszystkie" || material.category === category) && matchesAudience(material, audience) && matchesFormat(material, format) && (!pinnedOnly || material.is_pinned));
+    return searchKnowledgeMaterials(allMaterials, query).filter((material) => (category === "Wszystkie" || material.category === category) && matchesAudience(material, audience) && matchesFormat(material, format) && (!pinnedOnly || material.is_pinned));
   }, [allMaterials, audience, category, format, pinnedOnly, query]);
 
   const closeForm = () => { setDraft(emptyDraft); setEditingId(null); setFormOpen(false); setError(null); };
@@ -77,15 +77,29 @@ export default function KnowledgeLibraryManager({ materials }: { materials: Know
     startTransition(async () => { try { await deleteKnowledgeMaterialAction(id); setSelected(null); setMessage("Materiał usunięty."); router.refresh(); } catch { setError("Nie udało się usunąć materiału."); } });
   };
   const resetFilters = () => { setQuery(""); setCategory("Wszystkie"); setAudience("Wszyscy"); setFormat("Wszystkie"); setPinnedOnly(false); };
+  const downloadOfflinePack = () => {
+    const text = STARTER_KNOWLEDGE_MATERIALS.map((material) => `${material.title}\n${material.category}\n${material.description}\n\n${material.content}`).join(`\n\n${"=".repeat(72)}\n\n`);
+    const url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "PsychOLKA-biblioteka-offline.txt";
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  };
 
   return <div className="space-y-6">
     <section className="rounded-3xl border border-[#E5E1D8] bg-white p-5 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-7">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-sm text-gray-500">Prywatny warsztat Aleksandry</p><h1 className="mt-1 text-2xl font-bold text-[#2D4739] sm:text-3xl">Biblioteka materiałów</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-gray-600">Gotowe plany spotkań, zabawy, arkusze obrazkowe i ćwiczenia do domu. Otwieraj na telefonie, drukuj albo utwórz własną edytowalną kopię.</p></div>{!formOpen && <button type="button" onClick={() => setFormOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-3 text-sm font-semibold text-white"><Plus size={18} /> Własny materiał</button>}</div>
       <div className="mt-6 grid gap-3 sm:grid-cols-3"><Stat value={STARTER_KNOWLEDGE_MATERIALS.length} label="gotowych materiałów" /><Stat value={materials.length} label="prywatnych kopii" /><Stat value={filtered.length} label="widocznych wyników" /></div>
+      {!privateLibraryAvailable && <p className="mt-4 rounded-xl border border-[#E8D6B8] bg-[#FFF9EE] px-4 py-3 text-sm text-[#6F5732]">Połączenie z prywatnymi kopiami jest chwilowo niedostępne. Gotowy katalog i wyszukiwanie nadal działają lokalnie; zapisywanie wróci po odzyskaniu połączenia.</p>}
+      <div className="mt-4 grid gap-3 lg:grid-cols-2">
+        <div className="rounded-2xl border border-[#D8E2D4] bg-[#F3F7F1] p-4"><p className="flex items-center gap-2 text-sm font-bold text-[#2D4739]"><ShieldCheck size={18} />Rdzeń działa bez AI</p><p className="mt-1 text-xs leading-5 text-[#59685D]">26 gotowych materiałów i inteligentne wyszukiwanie są częścią aplikacji. AI będzie później opcjonalnie proponować dodatki do zatwierdzenia — nigdy nie zastąpi biblioteki.</p><button type="button" onClick={downloadOfflinePack} className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#CBD7C7] bg-white px-4 py-2 text-sm font-semibold text-[#2D4739]"><Download size={17} />Pobierz pakiet offline</button></div>
+        <div className="rounded-2xl border border-[#E8DDBE] bg-[#FFF9EE] p-4"><p className="flex items-center gap-2 text-sm font-bold text-[#2D4739]"><Sparkles size={18} />Warstwa AI — przygotowana jako dodatek</p><p className="mt-1 text-xs leading-5 text-[#6F5732]">Po podłączeniu API wpisane hasła będą mogły rozszerzać wyszukiwanie i tworzyć propozycje w kolejce „do akceptacji”. Nic nie trafi automatycznie do pracy z pacjentem bez decyzji Aleksandry.</p></div>
+      </div>
       <div className="relative mt-6"><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Szukaj: ADHD, mutyzm, żałoba, lęk, para, ćwiczenie do domu..." className="w-full rounded-xl border border-[#D9D6CD] bg-[#F8F5F0] py-3.5 pl-12 pr-4 text-sm outline-none focus:border-[#6D7A62] focus:ring-4 focus:ring-[#EEF1EB]" /></div>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><Filter label="Temat" value={category} onChange={(value) => setCategory(value as typeof category)} options={["Wszystkie", ...knowledgeCategories]} /><Filter label="Dla kogo" value={audience} onChange={(value) => setAudience(value as Audience)} options={audiences} /><Filter label="Rodzaj" value={format} onChange={(value) => setFormat(value as Format)} options={formats} /><label className="flex min-h-11 items-center gap-3 rounded-xl border border-[#E5E1D8] px-4 text-sm font-medium text-[#2D4739]"><input type="checkbox" checked={pinnedOnly} onChange={(event) => setPinnedOnly(event.target.checked)} className="h-4 w-4 accent-[#6D7A62]" />Tylko przypięte</label></div>
       {(query || category !== "Wszystkie" || audience !== "Wszyscy" || format !== "Wszystkie" || pinnedOnly) && <button type="button" onClick={resetFilters} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#6D7A62]"><X size={16} /> Wyczyść filtry</button>}
-      {formOpen && <MaterialForm draft={draft} isPending={isPending} isEditing={Boolean(editingId)} onChange={setDraft} onCancel={closeForm} onSave={save} />}
+      {formOpen && <MaterialForm draft={draft} isPending={isPending || !privateLibraryAvailable} isEditing={Boolean(editingId)} onChange={setDraft} onCancel={closeForm} onSave={save} />}
       {message && <p className="mt-4 rounded-xl bg-[#EEF4EA] px-4 py-3 text-sm text-[#365342]">{message}</p>}{error && <p className="mt-4 rounded-xl bg-[#FFF0F0] px-4 py-3 text-sm text-red-700">{error}</p>}
     </section>
     <section className="rounded-3xl border border-[#E5E1D8] bg-white p-5 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-7">
@@ -101,7 +115,7 @@ function Filter({ label, value, options, onChange }: { label: string; value: str
 
 function MaterialCard({ material, isPending, onOpen, onEdit, onDuplicate, onDelete }: { material: KnowledgeMaterial; isPending: boolean; onOpen: () => void; onEdit: () => void; onDuplicate: () => void; onDelete: () => void }) {
   const starter = isStarter(material);
-  return <article className="flex h-full flex-col rounded-2xl border border-[#E5E1D8] bg-[#F8F5F0] p-5"><div className="flex flex-wrap items-center gap-2"><span className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${starter ? "bg-[#E9F1E7] text-[#496149]" : "bg-[#FFF1D6] text-[#8B641F]"}`}>{starter ? "Gotowy" : "Prywatny"}</span>{material.is_pinned && <Pin size={15} className="text-[#B7791F]" aria-label="Przypięty" />}</div><h3 className="mt-3 text-lg font-bold leading-snug text-[#2D4739]">{material.title}</h3><p className="mt-1 text-sm font-semibold text-[#6D7A62]">{material.category}</p><p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">{material.description}</p><div className="mt-3 flex flex-wrap gap-1.5">{material.tags.slice(0, 5).map((tag) => <span key={tag} className="rounded-full bg-white px-2.5 py-1 text-[11px] text-[#55624D]">{tag}</span>)}</div><div className="mt-auto flex flex-wrap gap-2 pt-5"><button type="button" onClick={onOpen} className="rounded-xl bg-[#6D7A62] px-3.5 py-2 text-sm font-semibold text-white">Otwórz</button><button type="button" onClick={onDuplicate} disabled={isPending} className="inline-flex items-center gap-1.5 rounded-xl border border-[#D9D6CD] bg-white px-3.5 py-2 text-sm font-semibold text-[#2D4739]"><Copy size={15} /> Duplikuj</button>{!starter && <><IconButton label="Edytuj" onClick={onEdit} disabled={isPending}><Edit3 size={17} /></IconButton><IconButton label="Usuń" onClick={onDelete} disabled={isPending} destructive><Trash2 size={17} /></IconButton></>}</div></article>;
+  return <article className="flex h-full flex-col rounded-2xl border border-[#E5E1D8] bg-[#F8F5F0] p-5"><button type="button" onClick={onOpen} className="text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#DDE5D8]" aria-label={`Otwórz materiał: ${material.title}`}><div className="flex flex-wrap items-center gap-2"><span className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${starter ? "bg-[#E9F1E7] text-[#496149]" : "bg-[#FFF1D6] text-[#8B641F]"}`}>{starter ? "Gotowy" : "Prywatny"}</span>{material.is_pinned && <Pin size={15} className="text-[#B7791F]" aria-label="Przypięty" />}</div><h3 className="mt-3 text-lg font-bold leading-snug text-[#2D4739]">{material.title}</h3><p className="mt-1 text-sm font-semibold text-[#6D7A62]">{material.category}</p><p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">{material.description}</p></button><div className="mt-3 flex flex-wrap gap-1.5">{material.tags.slice(0, 5).map((tag) => <span key={tag} className="rounded-full bg-white px-2.5 py-1 text-[11px] text-[#55624D]">{tag}</span>)}</div><div className="mt-auto grid gap-2 pt-5 sm:grid-cols-2"><button type="button" onClick={onOpen} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-3.5 py-2 text-sm font-semibold text-white"><BookOpen size={16} />Otwórz pełny materiał</button><button type="button" onClick={onDuplicate} disabled={isPending} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-[#D9D6CD] bg-white px-3.5 py-2 text-sm font-semibold text-[#2D4739]"><Copy size={15} /> Duplikuj</button>{!starter && <div className="flex gap-1 sm:col-span-2"><IconButton label="Edytuj" onClick={onEdit} disabled={isPending}><Edit3 size={17} /></IconButton><IconButton label="Usuń" onClick={onDelete} disabled={isPending} destructive><Trash2 size={17} /></IconButton></div>}</div></article>;
 }
 
 function MaterialPreview({ material, isPending, onClose, onDuplicate, onEdit, onDelete }: { material: KnowledgeMaterial; isPending: boolean; onClose: () => void; onDuplicate: () => void; onEdit: () => void; onDelete: () => void }) {

@@ -19,9 +19,15 @@ import { getOpenFollowupRemindersForNearestVisits } from "./services/followupRem
 import { getImportantDateOccurrences, getImportantDates } from "./services/importantDateService";
 import { getSitePulseDashboardData } from "./services/sitePulseService";
 import { emptySitePulseDashboardData, type SitePulseDashboardData } from "@/app/site-pulse/domain";
+import { requirePsychologist } from "./server/requirePsychologist";
+import { getPatientVaultState } from "./server/patientVault";
+import PatientVaultGate from "./patients/PatientVaultGate";
 
 export default async function PanelPage() {
   await connection();
+  const identity = await requirePsychologist();
+  const vault = await getPatientVaultState(identity.userId);
+  if (!vault.unlocked) return <AuthGuard><Dashboard><PatientVaultGate configured={vault.configured} lockedUntil={vault.lockedUntil} returnTo="/panel" /></Dashboard></AuthGuard>;
   const now = new Date();
   let dashboardData: DashboardDayData = { todayVisits: [], nextVisit: null, attentionVisits: [], newPatientsToday: null };
   let weekData: DashboardWeekData = { days: [], totalVisits: 0, isAvailable: false };

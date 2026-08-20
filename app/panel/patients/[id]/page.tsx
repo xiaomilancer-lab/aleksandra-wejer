@@ -39,7 +39,7 @@ export default async function PatientPage({ params, searchParams }: PatientPageP
   const identity = await requirePsychologist();
   const vault = await getPatientVaultState(identity.userId);
   if (!vault.unlocked) {
-    return <AuthGuard><Dashboard><PatientVaultGate configured={vault.configured} lockedUntil={vault.lockedUntil} /></Dashboard></AuthGuard>;
+    return <AuthGuard><Dashboard><PatientVaultGate configured={vault.configured} lockedUntil={vault.lockedUntil} returnTo={`/panel/patients/${id}${tab ? `?tab=${encodeURIComponent(tab)}` : ""}`} /></Dashboard></AuthGuard>;
   }
   const patient = await getPatientById(id);
 

@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createHash, createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { requirePsychologist } from "@/app/panel/server/requirePsychologist";
 
 const COOKIE_NAME = "psycholka-patient-vault";
 const SESSION_SECONDS = 10 * 60;
@@ -82,6 +83,15 @@ export async function getPatientVaultState(userId: string): Promise<PatientVault
   };
 }
 
+export async function requirePatientVaultAccess() {
+  const identity = await requirePsychologist();
+  const state = await getPatientVaultState(identity.userId);
+  if (!state.configured || !state.unlocked) {
+    throw new Error("Sejf danych pacjentów jest zablokowany. Odblokuj go kodem PIN.");
+  }
+  return identity;
+}
+
 export async function verifyAccountPassword(email: string | null, password: string) {
   if (!email || !password) return false;
   const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
@@ -146,14 +156,28 @@ async function openPatientVaultSession(userId: string) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    path: "/panel/patients",
+    path: "/panel",
     maxAge: SESSION_SECONDS,
     priority: "high",
+  });
+  cookieStore.set(COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/panel/patients",
+    maxAge: 0,
   });
 }
 
 export async function closePatientVaultSession() {
   const cookieStore = await cookies();
+  cookieStore.set(COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/panel",
+    maxAge: 0,
+  });
   cookieStore.set(COOKIE_NAME, "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

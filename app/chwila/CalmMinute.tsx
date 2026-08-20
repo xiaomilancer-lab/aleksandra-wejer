@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { Check, Home, Pause, Play, RefreshCw, Share2, Sparkles } from "lucide-react";
+import { Check, Pause, Play, RefreshCw, Share2, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import AccountHomeLink from "@/app/components/AccountHomeLink";
 
 const phases = [
   { label: "Spokojny wdech", seconds: 4, scale: 1.45 },
@@ -81,7 +81,7 @@ export default function CalmMinute() {
             <h1 className="mt-1 text-3xl font-bold">Chwila z PsychOLKĄ 🌸</h1>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-gray-600">Prosta minuta oddechu i mała podpowiedź na teraz. Bez konta, oceniania i zapisywania odpowiedzi.</p>
           </div>
-          <Link href="/" className="inline-flex min-h-12 w-fit items-center gap-2 rounded-2xl border border-[#D5DCCF] px-4 py-3 font-semibold"><Home size={18} aria-hidden="true" />Strona główna</Link>
+          <AccountHomeLink />
         </header>
 
         <section className="overflow-hidden rounded-[2rem] border border-[#D9E1D5] bg-gradient-to-br from-[#294A3A] to-[#42614F] p-6 text-center text-white shadow-xl sm:p-10">

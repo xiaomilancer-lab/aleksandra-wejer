@@ -8,7 +8,7 @@ import {
   recordTimelineEvent,
   updatePatientTask,
 } from "../services/patientService";
-import { requirePsychologist } from "../server/requirePsychologist";
+import { requirePatientVaultAccess } from "../server/patientVault";
 
 function validateTask(title: string) {
   if (!title.trim()) {
@@ -17,7 +17,7 @@ function validateTask(title: string) {
 }
 
 export async function createPatientTaskAction(input: PatientTaskInput) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   validateTask(input.title);
   const task = await createPatientTask(input);
   await recordTimelineEvent({
@@ -37,7 +37,7 @@ export async function updatePatientTaskAction(
   patientId: string,
   input: Pick<PatientTaskInput, "visitId" | "title" | "description" | "status" | "dueDate">
 ) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   validateTask(input.title);
   const task = await updatePatientTask(taskId, input);
   revalidatePath(`/panel/patients/${patientId}`);
@@ -45,7 +45,7 @@ export async function updatePatientTaskAction(
 }
 
 export async function deletePatientTaskAction(taskId: string, patientId: string) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   await deletePatientTask(taskId);
   revalidatePath(`/panel/patients/${patientId}`);
 }

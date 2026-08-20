@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import PanelSessionBridge from "./components/PanelSessionBridge";
 import { requirePsychologist } from "./server/requirePsychologist";
+import SessionInactivityGuard from "@/app/components/security/SessionInactivityGuard";
 
 export default async function PanelLayout({
   children,
@@ -12,6 +13,7 @@ export default async function PanelLayout({
   return (
     <div className="min-h-screen w-full min-w-0 max-w-full bg-[#F8F5F0]">
       <PanelSessionBridge />
+      <SessionInactivityGuard />
       {children}
     </div>
   );

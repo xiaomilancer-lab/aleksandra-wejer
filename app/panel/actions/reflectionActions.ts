@@ -3,15 +3,15 @@
 import { revalidatePath } from "next/cache";
 import type { VisitReflectionInput } from "../domain";
 import { getReflection, saveReflection, updateReflection } from "../services/reflectionService";
-import { requirePsychologist } from "../server/requirePsychologist";
+import { requirePatientVaultAccess } from "../server/patientVault";
 
 export async function getReflectionAction(visitId: number) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   return getReflection(visitId);
 }
 
 export async function saveReflectionAction(input: VisitReflectionInput, reflectionId?: string) {
-  await requirePsychologist();
+  await requirePatientVaultAccess();
   const reflection = reflectionId ? await updateReflection(reflectionId, input) : await saveReflection(input);
   revalidatePath("/panel");
   revalidatePath(`/panel/patients/${input.patientId}`);
