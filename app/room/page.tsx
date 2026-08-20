@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Car, Download, Gift, House, MessageCircleHeart, Palette, Sparkles, Star } from "lucide-react";
+import { ArrowRight, CalendarDays, Car, Download, Gift, House, MessageCircleHeart, Palette, Sparkles, Star, TimerReset } from "lucide-react";
 import { requireMember } from "@/app/room/server/requireMember";
 import RoomLogoutButton from "@/app/room/RoomLogoutButton";
 import { getMemberPatientAccess } from "@/app/room/server/memberContext";
 import { RoomThemePicker } from "@/app/room/RoomThemeProvider";
+import RoomDailyCompanion from "@/app/room/RoomDailyCompanion";
 
 export default async function MemberRoomPage() {
   const member = await requireMember();
@@ -44,7 +45,10 @@ export default async function MemberRoomPage() {
           </section>
         )}
 
+        <RoomDailyCompanion />
+
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <RoomCard icon={TimerReset} title="Chwila z PsychOLKĄ" description="Spokojna minuta działająca także bez internetu." href="/chwila" />
           <RoomCard icon={CalendarDays} title="Wizyty" description="Terminy, historia i bezpieczna prośba o przełożenie." href="/room/visits" />
           <RoomCard icon={MessageCircleHeart} title="Od Aleksandry" description="Prywatne wiadomości i udostępnione materiały." href="/room/messages" />
           <RoomCard icon={Gift} title="Prezenty i konkursy" description="Nagrody, rabaty i spokojne niespodzianki." />

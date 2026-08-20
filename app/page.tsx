@@ -13,6 +13,7 @@ import PublicWelcomeReplay from "./components/PublicWelcomeReplay";
 import PatientAccountTeaser from "./components/PatientAccountTeaser";
 import PublicGuidedJourneyEnd from "./components/PublicGuidedJourneyEnd";
 import MobilePsycholkaJourney from "./components/MobilePsycholkaJourney";
+import PublicCalmMinuteTeaser from "./components/PublicCalmMinuteTeaser";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       <PublicBookingAccess />
       <PublicPsycholkaWelcome />
       <MobilePsycholkaJourney />
+      <PublicCalmMinuteTeaser />
 
      <div className="hidden md:block"><Quote /></div>
 

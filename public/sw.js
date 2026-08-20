@@ -1,8 +1,9 @@
 /* PsychOLKA PWA: cache contains only public assets. Never cache patient or panel data. */
 const CACHE_PREFIX = "psycholka-public-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const PUBLIC_ASSETS = [
   "/offline",
+  "/chwila",
   "/pwa/icon-192.png",
   "/pwa/icon-512.png",
   "/pwa/icon-maskable-512.png",
@@ -56,6 +57,10 @@ self.addEventListener("fetch", (event) => {
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(async () => {
+        if (url.pathname === "/chwila") {
+          const cachedCalmMinute = await caches.match("/chwila");
+          if (cachedCalmMinute) return cachedCalmMinute;
+        }
         const cachedOffline = await caches.match("/offline");
         return cachedOffline || Response.error();
       }),

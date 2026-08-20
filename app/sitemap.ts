@@ -23,6 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.2,
     },
+    {
+      url: `${baseUrl}/chwila`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
     ...localAreas.map((area) => ({
       url: `${baseUrl}/${area.slug}`,
       lastModified: new Date(),

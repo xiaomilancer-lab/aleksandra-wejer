@@ -50,6 +50,20 @@ export default function manifest(): MetadataRoute.Manifest {
         url: "/#booking",
         icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
       },
+      {
+        name: "Chwila z PsychOLKĄ",
+        short_name: "Chwila",
+        description: "Spokojna minuta działająca również bez internetu",
+        url: "/chwila?source=pwa-shortcut",
+        icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
+      },
+      {
+        name: "Babyroom",
+        short_name: "Babyroom",
+        description: "Bezpieczne aktywności i mini-gry bez reklam",
+        url: "/room/babyroom?source=pwa-shortcut",
+        icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
+      },
     ],
   };
 }
