@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { requirePsychologist } from "@/app/panel/server/requirePsychologist";
-import { closePatientVaultSession, configurePatientVault, getPatientVaultState, verifyAccountPassword, verifyPatientVaultPin } from "@/app/panel/server/patientVault";
+import { closePatientVaultSession, configurePatientVault, getPatientVaultState, replacePatientVaultPin, verifyAccountPassword, verifyPatientVaultPin } from "@/app/panel/server/patientVault";
 
-export type VaultActionState = { error: string };
+export type VaultActionState = { error: string; success?: string };
 
 function getSafeReturnTo(formData: FormData) {
   const value = String(formData.get("returnTo") ?? "");
@@ -41,6 +41,18 @@ export async function unlockPatientVaultAction(_: VaultActionState, formData: Fo
     return { error: "Nieprawidłowy PIN." };
   }
   redirect(getSafeReturnTo(formData));
+}
+
+export async function resetPatientVaultPinAction(_: VaultActionState, formData: FormData): Promise<VaultActionState> {
+  const identity = await requirePsychologist();
+  const pin = String(formData.get("pin") ?? "");
+  const confirmation = String(formData.get("pinConfirmation") ?? "");
+  const password = String(formData.get("password") ?? "");
+  if (!/^\d{6,10}$/.test(pin)) return { error: "Nowy PIN musi mieć od 6 do 10 cyfr." };
+  if (pin !== confirmation) return { error: "Wpisane kody PIN nie są takie same." };
+  if (!await verifyAccountPassword(identity.email, password)) return { error: "Hasło do konta gabinetu jest nieprawidłowe." };
+  await replacePatientVaultPin(identity.userId, pin);
+  return { error: "", success: "Nowy PIN został zapisany, a sejf jest odblokowany na 10 minut." };
 }
 
 export async function lockPatientVaultAction() {

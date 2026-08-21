@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { LockKeyhole, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { setupPatientVaultAction, unlockPatientVaultAction, type VaultActionState } from "./vaultActions";
 
 const initialState: VaultActionState = { error: "" };
@@ -39,6 +40,7 @@ export default function PatientVaultGate({ configured, lockedUntil, returnTo = "
         </form>
       )}
       <p className="mt-5 text-xs leading-5 text-gray-500">PIN nie jest zapisywany w czytelnej postaci. Po pięciu błędnych próbach dostęp jest czasowo blokowany.</p>
+      {configured && <Link href="/panel/settings#security" className="mt-3 inline-flex min-h-11 items-center font-semibold text-[#52654F] underline decoration-[#AAB5A4] underline-offset-4">Nie pamiętasz PIN-u? Ustaw nowy w Ustawieniach</Link>}
     </section>
   );
 }

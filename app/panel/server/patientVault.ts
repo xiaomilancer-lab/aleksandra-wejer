@@ -78,7 +78,11 @@ export async function getPatientVaultState(userId: string): Promise<PatientVault
     : null;
   return {
     configured: Boolean(metadata.patient_vault_pin_hash && metadata.patient_vault_pin_salt),
-    unlocked: validSessionToken(cookieStore.get(COOKIE_NAME)?.value, userId),
+    // Older deployments used a narrower /panel/patients cookie. A browser can
+    // temporarily send both cookie variants with the same name, so accepting
+    // only the first one can create an unlock loop even when the new token is
+    // valid. Check every matching cookie and accept any valid signed session.
+    unlocked: cookieStore.getAll(COOKIE_NAME).some((cookie) => validSessionToken(cookie.value, userId)),
     lockedUntil,
   };
 }
@@ -105,6 +109,21 @@ export async function verifyAccountPassword(email: string | null, password: stri
 export async function configurePatientVault(userId: string, pin: string) {
   const { metadata } = await getUserMetadata(userId);
   if (metadata.patient_vault_pin_hash) throw new Error("PIN jest już ustawiony.");
+  const salt = randomBytes(16).toString("hex");
+  await updateMetadata(userId, {
+    ...metadata,
+    patient_vault_pin_hash: pinHash(pin, salt),
+    patient_vault_pin_salt: salt,
+    patient_vault_pin_set_at: new Date().toISOString(),
+    patient_vault_failed_attempts: 0,
+    patient_vault_last_failed_at: undefined,
+    patient_vault_locked_until: null,
+  });
+  await openPatientVaultSession(userId);
+}
+
+export async function replacePatientVaultPin(userId: string, pin: string) {
+  const { metadata } = await getUserMetadata(userId);
   const salt = randomBytes(16).toString("hex");
   await updateMetadata(userId, {
     ...metadata,
