@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Clock3, ShieldCheck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
-const INACTIVITY_MS = 30 * 60 * 1000;
+const INACTIVITY_MS = 10 * 60 * 1000;
 const WARNING_MS = 2 * 60 * 1000;
 const REFRESH_MS = 5 * 60 * 1000;
 const STORAGE_KEY = "psycholka:last-activity";
@@ -98,7 +98,7 @@ export default function SessionInactivityGuard() {
       <section className="w-full max-w-md rounded-[28px] border border-[#D5DCCF] bg-white p-6 text-[#2D4739] shadow-2xl sm:p-8">
         <span className="inline-flex rounded-2xl bg-[#FFF4D9] p-3 text-[#9B6A08]"><Clock3 size={25} aria-hidden="true" /></span>
         <h2 id="session-warning-title" className="mt-5 text-2xl font-bold">Sesja wkrótce wygaśnie</h2>
-        <p className="mt-3 leading-7 text-gray-600">Dla ochrony danych wylogujemy Cię po 30 minutach bezczynności.</p>
+        <p className="mt-3 leading-7 text-gray-600">Dla ochrony danych wylogujemy Cię po 10 minutach bezczynności.</p>
         <p className="mt-4 rounded-2xl bg-[#F8F5F0] p-4 text-center text-2xl font-bold tabular-nums">{minutes}:{rest}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <button type="button" onClick={() => recordActivity(true)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#6D7A62] px-4 py-3 font-bold text-white"><ShieldCheck size={18} /> Pozostań</button>

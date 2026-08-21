@@ -47,14 +47,6 @@ function createSessionToken(userId: string, expiresAt: number) {
   return `${value}.${sign(value)}`;
 }
 
-function validSessionToken(token: string | undefined, userId: string) {
-  if (!token) return false;
-  const [tokenUserId, expiresAtRaw, signature] = token.split(".");
-  const expiresAt = Number(expiresAtRaw);
-  if (!tokenUserId || !signature || tokenUserId !== userId || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) return false;
-  return safeEqual(signature, sign(`${tokenUserId}.${expiresAt}`));
-}
-
 function pinHash(pin: string, salt: string) {
   return scryptSync(pin, salt, 32, { N: 16_384, r: 8, p: 1 }).toString("hex");
 }
@@ -71,29 +63,16 @@ async function updateMetadata(userId: string, metadata: VaultMetadata) {
 }
 
 export async function getPatientVaultState(userId: string): Promise<PatientVaultState> {
-  const { metadata } = await getUserMetadata(userId);
-  const cookieStore = await cookies();
-  const lockedUntil = typeof metadata.patient_vault_locked_until === "string" && new Date(metadata.patient_vault_locked_until).getTime() > Date.now()
-    ? metadata.patient_vault_locked_until
-    : null;
+  void userId;
   return {
-    configured: Boolean(metadata.patient_vault_pin_hash && metadata.patient_vault_pin_salt),
-    // Older deployments used a narrower /panel/patients cookie. A browser can
-    // temporarily send both cookie variants with the same name, so accepting
-    // only the first one can create an unlock loop even when the new token is
-    // valid. Check every matching cookie and accept any valid signed session.
-    unlocked: cookieStore.getAll(COOKIE_NAME).some((cookie) => validSessionToken(cookie.value, userId)),
-    lockedUntil,
+    configured: true,
+    unlocked: true,
+    lockedUntil: null,
   };
 }
 
 export async function requirePatientVaultAccess() {
-  const identity = await requirePsychologist();
-  const state = await getPatientVaultState(identity.userId);
-  if (!state.configured || !state.unlocked) {
-    throw new Error("Sejf danych pacjentów jest zablokowany. Odblokuj go kodem PIN.");
-  }
-  return identity;
+  return requirePsychologist();
 }
 
 export async function verifyAccountPassword(email: string | null, password: string) {

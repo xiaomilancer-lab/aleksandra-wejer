@@ -7,7 +7,6 @@ import { getPatients } from "../services/patientService";
 import { requirePsychologist } from "../server/requirePsychologist";
 import { getPatientVaultState } from "../server/patientVault";
 import PatientVaultGate from "./PatientVaultGate";
-import PatientVaultLockButton from "./PatientVaultLockButton";
 
 export default async function PatientsPage() {
   await connection();
@@ -30,7 +29,7 @@ export default async function PatientsPage() {
   return (
     <AuthGuard>
       <Dashboard>
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><h1 className="text-4xl font-bold text-[#2D4739]">Pacjenci</h1><p className="mt-3 text-gray-600">W tym miejscu znajdziesz wszystkie karty pacjentów.</p></div><PatientVaultLockButton /></div>
+        <div><h1 className="text-4xl font-bold text-[#2D4739]">Pacjenci</h1><p className="mt-3 text-gray-600">W tym miejscu znajdziesz wszystkie karty pacjentów.</p></div>
 
         {loadError ? (
           <div className="mt-8 rounded-3xl border border-[#E5E1D8] bg-[#FFF9EE] p-6 text-[#7A6540]">

@@ -8,7 +8,7 @@ const cookieOptions = {
   sameSite: "lax" as const,
   secure: process.env.NODE_ENV === "production",
   path: "/",
-  maxAge: 30 * 60,
+  maxAge: 10 * 60,
   priority: "high" as const,
 };
 

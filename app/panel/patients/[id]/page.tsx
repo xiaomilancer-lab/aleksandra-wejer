@@ -23,7 +23,6 @@ import { formatDate } from "../../utils/formatDate";
 import { requirePsychologist } from "../../server/requirePsychologist";
 import { getPatientVaultState } from "../../server/patientVault";
 import PatientVaultGate from "../PatientVaultGate";
-import PatientVaultLockButton from "../PatientVaultLockButton";
 
 interface PatientPageProps {
   params: Promise<{ id: string }>;
@@ -76,7 +75,7 @@ export default async function PatientPage({ params, searchParams }: PatientPageP
     <AuthGuard>
       <Dashboard>
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap items-center justify-between gap-3"><Link href="/panel/patients" className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]"><ArrowLeft size={19} aria-hidden="true" />Powrót do listy</Link><PatientVaultLockButton /></div>
+          <div className="flex flex-wrap items-center justify-between gap-3"><Link href="/panel/patients" className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739] transition hover:bg-[#F8F5F0]"><ArrowLeft size={19} aria-hidden="true" />Powrót do listy</Link></div>
 
           <div className="mt-5">
             <PatientProfile
