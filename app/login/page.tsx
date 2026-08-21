@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function establishAppSession(accessToken: string) {
@@ -30,6 +31,15 @@ export default function LoginPage() {
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    let notice = "";
+    if (params.get("passwordChanged") === "1") {
+      notice = "Hasło zostało zmienione. Możesz zalogować się nowym hasłem.";
+    } else if (params.get("reason") === "inactivity") {
+      notice = "Dla bezpieczeństwa wylogowaliśmy Cię po 10 minutach bezczynności.";
+    }
+    const noticeTimer = window.setTimeout(() => setStatusMessage(notice), 0);
+
     async function restorePanelSession() {
       const { data } = await supabase.auth.getSession();
       const appSession = data.session ? await establishAppSession(data.session.access_token) : null;
@@ -38,6 +48,7 @@ export default function LoginPage() {
       }
     }
     void restorePanelSession();
+    return () => window.clearTimeout(noticeTimer);
   }, [router]);
 
   async function handleLogin(e: React.FormEvent) {
@@ -120,6 +131,13 @@ export default function LoginPage() {
           />
         </label>
 
+        <div className="mt-3 text-right">
+          <Link href="/forgot-password" className="text-sm font-semibold text-[#526A5B] underline decoration-[#AAB5A4] underline-offset-4 transition hover:text-[#2D4739]">
+            Nie pamiętam hasła
+          </Link>
+        </div>
+
+        {statusMessage && <p role="status" className="mt-5 rounded-2xl border border-[#CAD9C4] bg-[#F1F6EF] px-4 py-3 text-sm font-semibold text-[#2D4739]">{statusMessage}</p>}
         {errorMessage && <p role="alert" className="mt-5 rounded-2xl border border-[#E8D6B8] bg-[#FFF9EE] px-4 py-3 text-sm text-[#6F5732]">{errorMessage}</p>}
 
         <button
