@@ -14,6 +14,12 @@ export async function getKnowledgeMaterials(): Promise<KnowledgeMaterial[]> {
   return (data ?? []) as KnowledgeMaterial[];
 }
 
+export async function getKnowledgeMaterialById(id: string): Promise<KnowledgeMaterial | null> {
+  const { data, error } = await supabaseAdmin.from("knowledge_library").select(materialFields).eq("id", id).maybeSingle();
+  if (error) { if (isLibraryMissing(error.code)) return null; throw error; }
+  return data as KnowledgeMaterial | null;
+}
+
 export async function createKnowledgeMaterial(input: KnowledgeMaterialInput): Promise<KnowledgeMaterial> {
   const { data, error } = await supabaseAdmin.from("knowledge_library").insert(toRecord(input)).select(materialFields).single();
   if (error) throw error;

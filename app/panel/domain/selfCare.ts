@@ -7,6 +7,9 @@ export type SelfCareInspiration = {
   title: string;
   description: string;
   note: string;
+  sourceLabel?: string | null;
+  sourceUrl?: string | null;
+  live?: boolean;
 };
 
 export const selfCareInspirations: SelfCareInspiration[] = [

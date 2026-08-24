@@ -60,6 +60,18 @@ export default function SoothingSounds() {
   const [volume, setVolume] = useState(18);
   const [timerMinutes, setTimerMinutes] = useState<number | null>(30);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
+  const [audioMessage, setAudioMessage] = useState<string | null>(null);
+
+  const discardContext = useCallback(async () => {
+    const context = contextRef.current;
+    contextRef.current = null;
+    if (!context || context.state === "closed") return;
+    try {
+      await context.close();
+    } catch {
+      // Safari can already be disposing an interrupted context.
+    }
+  }, []);
 
   const stop = useCallback(() => {
     try {
@@ -79,20 +91,38 @@ export default function SoothingSounds() {
 
   const play = useCallback(async () => {
     stop();
+    setAudioMessage(null);
     const AudioContextClass = window.AudioContext ||
       (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
+    if (!AudioContextClass) {
+      setAudioMessage("Ta przeglądarka nie obsługuje odtwarzania szumu.");
+      return;
+    }
 
-    const context = contextRef.current?.state !== "closed"
-      ? contextRef.current
-      : null;
-    const activeContext = context ?? new AudioContextClass();
+    let activeContext = contextRef.current;
+    if (!activeContext || activeContext.state === "closed" || (activeContext.state as string) === "interrupted") {
+      await discardContext();
+      activeContext = new AudioContextClass();
+    }
     contextRef.current = activeContext;
 
     try {
       await activeContext.resume();
+      if (activeContext.state !== "running") {
+        await discardContext();
+        activeContext = new AudioContextClass();
+        contextRef.current = activeContext;
+        await activeContext.resume();
+      }
     } catch {
-      // iPhone may wait for the next direct tap; the button remains available.
+      await discardContext();
+      setAudioMessage("iPhone wstrzymał dźwięk. Dotknij przycisku jeszcze raz.");
+      return;
+    }
+
+    if (activeContext.state !== "running") {
+      await discardContext();
+      setAudioMessage("Dźwięk został wstrzymany przez telefon. Dotknij ponownie.");
       return;
     }
 
@@ -119,7 +149,7 @@ export default function SoothingSounds() {
     gainRef.current = gain;
     setPlaying(true);
     setRemainingSeconds(timerMinutes ? timerMinutes * 60 : null);
-  }, [sound, stop, timerMinutes, volume]);
+  }, [discardContext, sound, stop, timerMinutes, volume]);
 
   useEffect(() => {
     if (gainRef.current) gainRef.current.gain.value = (volume / 100) * 0.22;
@@ -139,16 +169,18 @@ export default function SoothingSounds() {
 
   useEffect(() => {
     const handleVisibility = () => {
-      if (document.hidden) stop();
+      if (document.hidden) {
+        stop();
+        void discardContext();
+      }
     };
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
       stop();
-      void contextRef.current?.close();
-      contextRef.current = null;
+      void discardContext();
     };
-  }, [stop]);
+  }, [discardContext, stop]);
 
   const remainingLabel = remainingSeconds === null
     ? "bez limitu"
@@ -204,6 +236,7 @@ export default function SoothingSounds() {
         {playing ? <Pause size={19} aria-hidden="true" /> : <Play size={19} aria-hidden="true" />}
         {playing ? "Zatrzymaj szum" : "Włącz cicho"}
       </button>
+      {audioMessage && <p className="mt-3 text-sm font-semibold text-[#8A5B2D]" role="status">{audioMessage}</p>}
       <p className="mt-4 max-w-3xl text-xs leading-relaxed text-gray-500">Dźwięk jest generowany tylko na tym urządzeniu i nie jest nagrywany. Ustaw go cicho, korzystaj razem z opiekunem i zawsze zachowaj możliwość usłyszenia dziecka oraz otoczenia.</p>
     </section>
   );

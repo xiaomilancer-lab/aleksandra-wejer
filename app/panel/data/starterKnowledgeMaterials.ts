@@ -169,5 +169,120 @@ const activities: KnowledgeMaterial[] = [
   ),
 ];
 
-export const STARTER_KNOWLEDGE_MATERIALS: KnowledgeMaterial[] = [...sessionPlans, ...activities];
+const colorfulActivities: KnowledgeMaterial[] = [
+  activity(
+    "emotion-town",
+    "Kolorowe miasteczko emocji — scenki do opowiadania",
+    "Dzieci",
+    "Cztery barwne scenki pomagające dziecku zauważyć emocje, potrzeby i różne możliwe zakończenia historii.",
+    ["5–11 lat", "emocje", "potrzeby", "scenki", "forma:obrazkowe", "forma:gra", "do gabinetu", "do domu"],
+    `KOLOROWE MIASTECZKO
+Narysuj cztery domki albo wydrukuj cztery osobne karty.
 
+🟡 DOMEK SŁOŃCA
+Bohater czeka na swoją kolej, ale ktoś wchodzi przed niego.
+Co może czuć? Czego potrzebuje? Co może powiedzieć lub pokazać?
+
+🔵 DOMEK DESZCZU
+Bohater nie został zaproszony do wspólnej zabawy.
+Jakie sygnały mogą pojawić się w ciele? Kto mógłby go wesprzeć?
+
+🟢 DOMEK OGRODU
+Bohater próbuje czegoś nowego i popełnia błąd.
+Jak można zmienić zakończenie, żeby błąd stał się informacją, a nie oceną?
+
+🟣 DOMEK CISZY
+Bohater ma za dużo dźwięków, pytań albo osób wokół.
+Jak może poprosić o przerwę bez używania słów?
+
+ZABAWA
+Dziecko wybiera kolory, rysuje miny i dopowiada co najmniej dwa możliwe zakończenia. Nie szukamy jednej „dobrej” odpowiedzi.
+
+DOMKNIĘCIE
+Który domek był dziś najłatwiejszy? Który odkładamy na później?`,
+    true,
+  ),
+  activity(
+    "needs-detective",
+    "Detektyw potrzeb — obrazkowe karty tropów",
+    "Dzieci",
+    "Gra w łączenie zachowania z możliwą potrzebą, bez oceniania i bez zgadywania jednej pewnej przyczyny.",
+    ["6–12 lat", "potrzeby", "emocje", "komunikacja", "forma:obrazkowe", "forma:gra", "do gabinetu"],
+    `PRZYGOTUJ KARTY TROPÓW
+✋ PRZERWA  🫶 WSPARCIE  🔇 CISZA  🎯 JASNA INSTRUKCJA
+🧩 WYBÓR  🚶 RUCH  ⏳ WIĘCEJ CZASU  💬 BYCIE WYSŁUCHANYM
+
+MISJE DETEKTYWA
+1. Ktoś odsuwa kartkę i przestaje pracować.
+2. Ktoś mówi bardzo głośno, gdy zmienia się plan.
+3. Ktoś stoi obok grupy, ale nie dołącza.
+4. Ktoś trzy razy pyta, co będzie potem.
+
+PRZEBIEG
+Dziecko wybiera jeden lub kilka możliwych tropów. Potem tworzy pytanie sprawdzające, np. „Potrzebujesz przerwy czy wolisz, żebym pokazał pierwszy krok?”.
+
+SUPERMOCE DETEKTYWA
+□ nie czytam w myślach
+□ sprawdzam zamiast oceniać
+□ akceptuję odpowiedź „nie wiem”
+□ pamiętam, że zachowanie może mieć kilka przyczyn
+
+WŁASNA KARTA
+Dziecko projektuje symbol potrzeby, której zabrakło w talii.`,
+  ),
+  activity(
+    "space-team",
+    "Kosmiczna drużyna — współpraca i elastyczny plan",
+    "ADHD",
+    "Ruchowa misja z kolorowymi planetami do ćwiczenia rozpoczynania, dzielenia zadania i spokojnej zmiany planu.",
+    ["7–13 lat", "ADHD", "funkcje wykonawcze", "współpraca", "forma:obrazkowe", "forma:gra", "ruch", "do gabinetu"],
+    `PLANSZA
+Narysuj drogę rakiety przez cztery planety:
+🔴 START — jaki jest pierwszy najmniejszy ruch?
+🟠 PALIWO — jakiej pomocy lub przypomnienia potrzebuję?
+🟢 MISJA — które trzy kroki wykonamy?
+🔵 PLAN B — co zrobimy, gdy coś się zmieni?
+
+ROLE
+Nawigator pokazuje następny krok. Pilot wykonuje krok. Mechanik zauważa przeciążenie i może użyć karty PRZERWA. Role można zamieniać.
+
+NIESPODZIANKA
+Po drugim kroku wylosuj bezpieczną zmianę: mniej czasu / inny przyrząd / dodatkowa przerwa / zamiana ról. Drużyna wybiera plan B.
+
+PUNKTY DRUŻYNY
+Nie przyznajemy punktów za szybkość. Gwiazdka pojawia się za: poproszenie o pomoc, zauważenie potrzeby przerwy, zmianę planu albo powrót po rozproszeniu.
+
+PYTANIE NA KONIEC
+Która pomoc była dziś paliwem rakiety?`,
+    true,
+  ),
+  activity(
+    "weather-map",
+    "Pogodowa mapa dnia — emocje dla młodszych",
+    "Dzieci",
+    "Prosty, kolorowy arkusz pozwalający pokazać nastrój i potrzebę również bez mówienia.",
+    ["5–9 lat", "emocje", "samoregulacja", "komunikacja", "forma:obrazkowe", "do gabinetu", "do domu"],
+    `MOJA POGODA TERAZ
+☀️ słonecznie  🌤️ trochę chmur  🌧️ deszczowo  ⛈️ burzowo  🌫️ mgliście  🌈 różnie naraz
+
+DZIECKO MOŻE
+• zakreślić symbol,
+• pokolorować niebo,
+• narysować własną pogodę,
+• niczego nie wyjaśniać.
+
+CO MOŻE POMÓC TEJ POGODZIE?
+🫶 ktoś obok  🔇 ciszej  🚶 ruch  🧸 bezpieczny przedmiot
+🎨 rysowanie  ⏸️ przerwa  💬 rozmowa  ❓ jeszcze nie wiem
+
+TRZY KLATKI
+1. Pogoda rano: ___
+2. Pogoda teraz: ___
+3. Pogoda, której potrzebuję po spotkaniu: ___
+
+DLA DOROSŁEGO
+Nie poprawiaj pogody i nie wymagaj „słońca”. Zapytaj: „Czy chcesz, żebym tylko zobaczył, czy mamy coś zrobić?”.`,
+  ),
+];
+
+export const STARTER_KNOWLEDGE_MATERIALS: KnowledgeMaterial[] = [...sessionPlans, ...activities, ...colorfulActivities];

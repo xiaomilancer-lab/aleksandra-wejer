@@ -54,7 +54,7 @@ export default async function MemberRoomPage() {
           <RoomCard icon={Gift} title="Prezenty i konkursy" description="Nagrody, rabaty i spokojne niespodzianki." />
           <RoomCard icon={Palette} title="Babyroom" description="Rysowanie i bezpieczne mini-gry bez reklam." href="/room/babyroom" />
           <RoomCard icon={Car} title="Dojazd" description="Samochód, komunikacja miejska i Bolt do obu gabinetów." href="/room/travel" />
-          <RoomCard icon={Sparkles} title="Co warto zrobić?" description="Rodzinne atrakcje pobierane ze wspólnego cache." />
+          <RoomCard icon={Sparkles} title="Co warto zrobić?" description="Rodzinne atrakcje pobierane ze wspólnego pakietu PsychOLKI." href="/room/explore" />
           <RoomCard icon={Star} title="Twoja opinia" description="Prywatna wiadomość lub dobrowolna opinia Google dla właściwego gabinetu." href="/room/feedback" />
         </section>
       </div>

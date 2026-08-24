@@ -17,3 +17,4 @@ export * from "./knowledgeLibrary";
 export * from "./notification";
 export * from "./status";
 export * from "./moodEntry";
+export * from "./materialAssistant";
