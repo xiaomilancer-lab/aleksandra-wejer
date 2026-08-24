@@ -63,7 +63,7 @@ export default function AccountSecuritySettings({ email }: { email: string }) {
         <span className="rounded-2xl bg-[#EEF1EB] p-3 text-[#6D7A62]"><ShieldCheck size={23} aria-hidden="true" /></span>
         <div>
           <h2 className="text-xl font-bold text-[#2D4739]">Zabezpieczenia konta</h2>
-          <p className="mt-1 text-sm leading-relaxed text-gray-600">Tutaj możesz bezpiecznie zmienić hasło do panelu. Po 10 minutach bezczynności panel wyloguje Cię automatycznie.</p>
+          <p className="mt-1 text-sm leading-relaxed text-gray-600">Tutaj możesz bezpiecznie zmienić hasło do panelu. Po godzinie bezczynności panel wyloguje Cię automatycznie.</p>
         </div>
       </div>
 

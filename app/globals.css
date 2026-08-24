@@ -120,6 +120,29 @@ body {
 .psycholka-desk-surface { position: absolute; right: 0; bottom: 5px; left: 0; height: 14px; border-radius: 999px; background: rgba(255,255,255,.18); }
 .psycholka-desk-surface span { display: none; }
 .psycholka-desk-message { min-height: 1.25rem; margin-top: .35rem; color: #DDE6D7; font-size: .75rem; opacity: 0; transition: opacity 180ms ease-out; }
+
+/*
+ * Mobile Safari automatically zooms the page when a focused form control uses
+ * text smaller than 16px. Keep panel controls readable and prevent that zoom
+ * from carrying over when navigating between Library, Templates and Visits.
+ */
+@media (max-width: 767px) {
+  [data-panel-root] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  [data-panel-root] textarea,
+  [data-panel-root] select {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px;
+    color: #2D4739;
+    caret-color: #2D4739;
+  }
+
+  [data-panel-root] input::placeholder,
+  [data-panel-root] textarea::placeholder {
+    color: #667085;
+    opacity: 1;
+  }
+}
 .psycholka-desk-message-visible { opacity: 1; }
 .psycholka-desk:hover .psycholka-visual { animation-play-state: paused; }
 .psycholka-desk-look .psycholka-visual { animation: psycholka-desk-look 1.4s ease-in-out both; }

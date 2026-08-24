@@ -36,7 +36,7 @@ export default function LoginPage() {
     if (params.get("passwordChanged") === "1") {
       notice = "Hasło zostało zmienione. Możesz zalogować się nowym hasłem.";
     } else if (params.get("reason") === "inactivity") {
-      notice = "Dla bezpieczeństwa wylogowaliśmy Cię po 10 minutach bezczynności.";
+      notice = "Dla bezpieczeństwa wylogowaliśmy Cię po godzinie bezczynności.";
     }
     const noticeTimer = window.setTimeout(() => setStatusMessage(notice), 0);
 

@@ -92,7 +92,7 @@ export default function LibraryMaterialAssistant({ privateLibraryAvailable }: { 
 }
 
 function Select({ label, value, options, onChange }: { label: string; value: string; options: readonly string[]; onChange: (value: string) => void }) {
-  return <label className="text-sm font-semibold text-[#2D4739]">{label}<select value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-[#CBD7C7] bg-white px-3 outline-none focus:border-[#6D7A62]">{options.map((option) => <option key={option}>{option}</option>)}</select></label>;
+  return <label className="text-sm font-semibold text-[#2D4739]">{label}<select value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-[#CBD7C7] bg-white px-3 text-base text-[#2D4739] outline-none focus:border-[#6D7A62]">{options.map((option) => <option key={option}>{option}</option>)}</select></label>;
 }
 
 function DraftCard({ label, draft, saved, disabled, onSave }: { label: string; draft: GeneratedMaterialDraft; saved: boolean; disabled: boolean; onSave: () => void }) {
