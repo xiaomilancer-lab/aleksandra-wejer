@@ -14,7 +14,9 @@ export async function generateMetadata({ params }: { params: Promise<{ location:
   const area = getLocalArea(location);
   if (!area) return {};
 
-  const title = `Psycholog ${area.name} | Aleksandra Wejer`;
+  const title = area.slug === "starogard"
+    ? "Psycholog | Starogard Gdański | Aleksandra Wejer"
+    : `Psycholog | Starogard Gdański | ${area.name} | Aleksandra Wejer`;
   const description = `${area.intro} Sprawdź dwie lokalizacje gabinetu i dostępne terminy konsultacji.`;
 
   return {
