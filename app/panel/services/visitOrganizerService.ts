@@ -3,7 +3,8 @@ import "server-only";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Visit, VisitRecordKind } from "../domain/booking";
 import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locations";
-import { getPatientById } from "./patientService";
+import { findOrCreatePatient, getPatientById, recordTimelineEvent } from "./patientService";
+import type { Patient } from "../domain/patient";
 import type { HistoricalVisitInput } from "../actions/visitOrganizerActions";
 
 const fields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source, record_kind";
@@ -30,6 +31,47 @@ export async function getVisitOrganizerData(): Promise<VisitOrganizerData> {
 export async function updateVisitRecordKind(id: number, recordKind: VisitRecordKind) {
   const { error } = await supabaseAdmin.from("bookings").update({ record_kind: recordKind }).eq("id", id);
   if (error) throw error;
+}
+
+export async function assignVisitToPatient(id: number, patientId: string): Promise<Patient> {
+  const [visit, patient] = await Promise.all([getOrganizerVisitById(id), getPatientById(patientId)]);
+  if (!visit) throw new Error("Nie znaleziono wizyty.");
+  if ((visit.record_kind ?? "real") === "test") throw new Error("Wizyta testowa nie może zostać przypisana do karty pacjenta.");
+  if (!patient) throw new Error("Nie znaleziono wybranej karty pacjenta.");
+
+  const { error } = await supabaseAdmin.from("bookings").update({ patient_id: patient.id }).eq("id", id);
+  if (error) throw error;
+  await recordTimelineEvent({
+    patientId: patient.id,
+    visitId: id,
+    eventType: "visit_created",
+    title: "Przypisano istniejącą wizytę",
+    description: `${visit.visit_date} · ${visit.visit_time}`,
+  });
+  return patient;
+}
+
+export async function createOrMatchPatientFromVisit(id: number): Promise<Patient> {
+  const visit = await getOrganizerVisitById(id);
+  if (!visit) throw new Error("Nie znaleziono wizyty.");
+  if ((visit.record_kind ?? "real") === "test") throw new Error("Wizyta testowa nie może utworzyć karty pacjenta.");
+  if (visit.patient_id) {
+    const linked = await getPatientById(visit.patient_id);
+    if (linked) return linked;
+  }
+
+  const patient = await findOrCreatePatient({ name: visit.name, phone: visit.phone, email: visit.email });
+  if (!patient) throw new Error("Nie udało się utworzyć karty pacjenta.");
+  const { error } = await supabaseAdmin.from("bookings").update({ patient_id: patient.id }).eq("id", id);
+  if (error) throw error;
+  await recordTimelineEvent({
+    patientId: patient.id,
+    visitId: id,
+    eventType: "visit_created",
+    title: "Połączono wizytę z kartą pacjenta",
+    description: `${visit.visit_date} · ${visit.visit_time}`,
+  });
+  return patient;
 }
 
 export async function getOrganizerVisitById(id: number): Promise<Visit | null> {

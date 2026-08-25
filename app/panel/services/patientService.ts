@@ -156,9 +156,49 @@ export async function createPatient() {
   throw new Error("Not implemented");
 }
 
-// Updates an existing patient through the API.
-export async function updatePatient() {
-  throw new Error("Not implemented");
+// Updates the contact identity stored on the patient card. Historical bookings
+// keep the contact snapshot that was captured when the visit was created.
+export async function updatePatient(
+  patientId: string,
+  identity: PatientIdentity,
+): Promise<Patient> {
+  const normalizedEmail = normalizeEmail(identity.email);
+  const normalizedPhone = normalizePhone(identity.phone);
+
+  const { data: otherPatients, error: lookupError } = await supabaseAdmin
+    .from("patients")
+    .select("id, phone, email")
+    .neq("id", patientId);
+  if (lookupError) throw lookupError;
+
+  const duplicate = (otherPatients ?? []).find((patient) =>
+    (normalizedEmail && normalizeEmail(patient.email) === normalizedEmail)
+    || (normalizedPhone && normalizePhone(patient.phone) === normalizedPhone),
+  );
+  if (duplicate) {
+    throw new Error("Inna karta pacjenta ma już ten sam e-mail lub numer telefonu. Połącz wizytę z istniejącą kartą zamiast tworzyć duplikat.");
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("patients")
+    .update({
+      name: identity.name.trim(),
+      phone: identity.phone?.trim() || null,
+      email: normalizedEmail,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", patientId)
+    .select("id, name, phone, email, created_at, updated_at")
+    .single();
+  if (error) throw error;
+
+  await recordTimelineEvent({
+    patientId,
+    eventType: "note_updated",
+    title: "Zaktualizowano dane kontaktowe",
+    description: "Zmieniono dane na karcie pacjenta.",
+  });
+  return data as Patient;
 }
 
 // Deletes a patient through the API.

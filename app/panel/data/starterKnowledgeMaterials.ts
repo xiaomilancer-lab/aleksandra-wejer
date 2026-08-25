@@ -285,4 +285,58 @@ Nie poprawiaj pogody i nie wymagaj „słońca”. Zapytaj: „Czy chcesz, żeby
   ),
 ];
 
-export const STARTER_KNOWLEDGE_MATERIALS: KnowledgeMaterial[] = [...sessionPlans, ...activities, ...colorfulActivities];
+const illustratedScenarios: KnowledgeMaterial[] = [
+  activity(
+    "peer-group-first-step",
+    "Scenka: Pierwszy krok do grupy — nastolatka poza paczką",
+    "Nastolatki",
+    "Zobrazowany scenariusz rozmowy o samotności i bezpiecznym rozpoczęciu kontaktu bez udawania kogoś innego.",
+    ["12–17 lat", "relacje rówieśnicze", "samotność", "forma:scenki", "scenariusz zobrazowany", "do gabinetu", "do domu"],
+    `🎯 CEL\nZnaleźć jeden mały, autentyczny sposób wejścia w kontakt — bez presji, że trzeba od razu zdobyć całą grupę.\n\n🖼️ SCENERIA\nPrzerwa w szkole. Przy oknie stoi Lena. Obok trzy osoby rozmawiają o serialu. Nad Leną narysuj trzy chmurki: „Podejdę”, „Poczekam”, „Zapytam jedną osobę”.\n\n🎬 SCENA 1 — STOP-KLATKA\nCo Lena zauważa w ciele? Jaką myśl dopowiada jej lęk? Jakie inne wyjaśnienia zachowania grupy są możliwe?\n\n🗣️ ZACZEPKI ROZMOWY\n• „Słyszałam tytuł — warto zacząć oglądać?”\n• „Mogę usiąść obok?”\n• „Nie wiem, jak zacząć, ale chciałam dołączyć.”\nPsycholog i pacjent odgrywają każdą wersję w tempie 25%, 50% i naturalnym.\n\n🧩 WYBÓR PACJENTA\nZielona karta: mogę spróbować. Żółta: potrzebuję wsparcia. Czerwona: dziś tylko obserwuję. Każdy wybór jest ważny.\n\n🏠 DO DOMU\nJedno mikro-połączenie: kontakt wzrokowy, krótkie pytanie albo wiadomość do jednej bezpiecznej osoby. Po próbie zapisać nie wynik, lecz odwagę i poziom napięcia.\n\n🛟 BEZPIECZEŃSTWO\nNie ćwiczymy dopasowania za wszelką cenę. Sprawdzamy też, czy grupa jest życzliwa i bezpieczna.`,
+    true,
+  ),
+  activity(
+    "adhd-energy-station",
+    "Scenka: Stacja energii — dziecko z ADHD zaczyna zadanie",
+    "ADHD",
+    "Kolorowa misja pokazująca, jak rozpocząć zadanie, poprosić o pomoc i wrócić po rozproszeniu.",
+    ["7–13 lat", "ADHD", "funkcje wykonawcze", "forma:scenki", "scenariusz zobrazowany", "forma:obrazkowe", "do gabinetu"],
+    `🎯 CEL\nOddzielić „nie mogę zacząć” od „nie chcę” i wspólnie znaleźć paliwo do pierwszego kroku.\n\n🖼️ SCENERIA\nKosmiczna stacja ma cztery pulpity: START, PALIWO, PRZERWA, POWRÓT. Dziecko wybiera postać pilota i rysuje jej wskaźnik energii.\n\n🎬 SCENA 1 — ZAMROŻONY START\nNa biurku leży zadanie. Pilot chodzi po pokoju i dotyka innych rzeczy. Co mówi ciało? Czego brakuje: jasnego pierwszego kroku, ruchu, obecności dorosłego czy czasu?\n\n🗣️ ZACZEPKI ROZMOWY\n• „Pokaż mi najmniejszy możliwy start.”\n• „Chcesz, żebym był nawigatorem czy tylko obserwatorem?”\n• „Jak poznamy, że potrzebna jest przerwa?”\n\n🧩 TRZY KARTY POMOCY\n🚀 Zaczynamy razem przez 30 sekund.  🗺️ Rysujemy trzy kroki.  ⚡ Najpierw ruch, potem powrót.\n\n🏠 DO DOMU\nWybrać jedną codzienną czynność i przetestować jedną kartę pomocy. Dorosły pyta, co zadziałało, bez oceniania szybkości.\n\n🛟 BEZPIECZEŃSTWO\nNie odbieramy ruchu jako kary i nie używamy scenki do diagnozowania.`,
+    true,
+  ),
+  activity(
+    "mutism-choice-bridge",
+    "Scenka: Most wyborów — komunikacja bez presji mówienia",
+    "Mutyzm",
+    "Bezpieczny scenariusz pozwalający uczestniczyć gestem, obrazkiem lub słowem, bez wymuszania głosu.",
+    ["6–14 lat", "mutyzm", "komunikacja", "forma:scenki", "scenariusz zobrazowany", "forma:obrazkowe", "do gabinetu"],
+    `🎯 CEL\nZbudować poczucie wpływu i kilka równorzędnych dróg komunikacji.\n\n🖼️ SCENERIA\nMiędzy dwiema wyspami jest most z kart: 👀 patrzę, 👉 wskazuję, ✍️ piszę, 🎨 rysuję, 💬 mówię jeśli chcę. Pacjent ustala kolejność kart.\n\n🎬 SCENA 1 — PYTANIE W SKLEPIE\nBohater chce wybrać sok. Jak może przekazać wybór bez mówienia? Psycholog gra życzliwego sprzedawcę, który cierpliwie czeka.\n\n🗣️ ZACZEPKI DLA PSYCHOLOGA\n• „Możesz odpowiedzieć na dowolny sposób albo pominąć.”\n• „Która karta jest dziś najbezpieczniejsza?”\n• „Czy mam zgadywać, czy wolisz mi pokazać?”\n\n🧩 ZMIANA SCENY\nSzkoła / dom / gabinet. Pacjent wybiera tylko jedną scenerię i może zatrzymać grę kartą STOP.\n\n🏠 DO DOMU\nStworzyć mały osobisty zestaw dwóch kart komunikacyjnych do użycia w jednej bezpiecznej sytuacji.\n\n🛟 BEZPIECZEŃSTWO\nMówienie nie jest nagrodą ani warunkiem sukcesu. Tempo ustala pacjent.`,
+    true,
+  ),
+  activity(
+    "two-homes-backpack",
+    "Scenka: Plecak między dwoma domami — rozstanie rodziców",
+    "Rodzina",
+    "Obrazkowa historia pomagająca dziecku nazwać potrzeby i oddzielić sprawy dorosłych od własnej odpowiedzialności.",
+    ["7–15 lat", "rozwód", "dwa domy", "rodzina", "forma:scenki", "scenariusz zobrazowany", "do gabinetu", "do domu"],
+    `🎯 CEL\nPokazać, że dziecko nie musi wybierać strony ani naprawiać relacji dorosłych.\n\n🖼️ SCENERIA\nNarysuj dwa domy i drogę. Bohater niesie plecak. Do plecaka wkłada symbole: rzeczy potrzebne, pytania, tęsknotę, złość i „to nie jest moje zadanie”.\n\n🎬 SCENA 1 — PRZEKAZANIE\nDorośli są spięci. Bohater słyszy: „Powiedz mamie…” albo „Zapytaj tatę…”. Gdzie może odłożyć taką wiadomość? Kto dorosły powinien ją przenieść?\n\n🗣️ ZACZEPKI ROZMOWY\n• „Co chciałbyś mieć tak samo w obu domach?”\n• „Jak dorośli mogą ułatwić drogę?”\n• „Jakie zdanie ochronne pasuje: «Proszę, porozmawiajcie ze sobą»?”\n\n🧩 KARTA WPŁYWU\nMam wpływ: co zabieram, komu mówię, czego potrzebuję. Nie mam wpływu: decyzje dorosłych, ich emocje, ich spory.\n\n🏠 DO DOMU\nDorośli ustalają jedną przewidywalną rzecz wspólną dla obu domów. Dziecko nie jest posłańcem.\n\n🛟 BEZPIECZEŃSTWO\nPrzy podejrzeniu przemocy lub zagrożenia scenkę zastępuje ocena bezpieczeństwa i właściwa procedura.`,
+  ),
+  activity(
+    "memory-lighthouse",
+    "Scenka: Latarnia wspomnień — po stracie bliskiej osoby",
+    "Rodzina",
+    "Delikatna historia do rozmowy o tęsknocie i pamięci z pełnym prawem do przerwy oraz niewiedzy.",
+    ["dzieci", "nastolatki", "żałoba", "strata", "forma:scenki", "scenariusz zobrazowany", "forma:obrazkowe", "do gabinetu"],
+    `🎯 CEL\nDać język tęsknocie bez narzucania sposobu przeżywania żałoby.\n\n🖼️ SCENERIA\nNa brzegu stoi latarnia. Każde okno może przechować jedno wspomnienie: obraz, słowo, kolor albo pozostać puste.\n\n🎬 SCENA 1 — FALA\nBohatera nagle zalewa fala wspomnienia w zwykłym dniu. Co może zrobić ciało? Kogo może zawołać? Co pomaga przeczekać falę?\n\n🗣️ ZACZEPKI ROZMOWY\n• „Czy dziś otwieramy okno, czy tylko patrzymy na latarnię?”\n• „Jakiego koloru jest tęsknota?”\n• „Co chciałbyś, żeby dorośli rozumieli bez pytania?”\n\n🧩 WYBÓR\nNarysować / opowiedzieć / wybrać przedmiot / ominąć. Pacjent może zamknąć okno w dowolnym momencie.\n\n🏠 DO DOMU\nJeśli pacjent chce: stworzyć małe bezpieczne pudełko pamięci i ustalić, kto może je otwierać.\n\n🛟 BEZPIECZEŃSTWO\nPrzed ćwiczeniem sprawdzić gotowość, aktualne wsparcie i ryzyko. Nie wymuszać ekspozycji na wspomnienia.`,
+  ),
+  activity(
+    "couple-translation-room",
+    "Scenka: Pokój tłumaczy — para w trudnej rozmowie",
+    "Pary",
+    "Scenariusz pomagający zamienić oskarżenie na obserwację, emocję, potrzebę i konkretną prośbę.",
+    ["dorośli", "para", "komunikacja", "konflikt", "forma:scenki", "scenariusz zobrazowany", "do gabinetu", "do domu"],
+    `🎯 CEL\nSpowolnić konflikt i przełożyć obronę na komunikat, który druga osoba może usłyszeć.\n\n🖼️ SCENERIA\nMiędzy dwiema osobami stoi konsola z czterema przyciskami: FAKT, EMOCJA, POTRZEBA, PROŚBA. Psycholog jest tłumaczem, nie sędzią.\n\n🎬 SCENA 1 — SPÓŹNIENIE\nZdanie wejściowe: „Nigdy się ze mną nie liczysz”. Zatrzymujemy obraz i sprawdzamy, co jest obserwacją, a co interpretacją.\n\n🗣️ WERSJA PO TŁUMACZENIU\n„Kiedy wróciłeś później i nie dostałam wiadomości, poczułam napięcie i samotność. Potrzebuję przewidywalności. Czy następnym razem napiszesz krótką wiadomość?”\n\n🧩 ZMIANA RÓL\nDruga osoba najpierw powtarza sens własnymi słowami, bez zgadzania się lub bronienia. Potem role się zmieniają. Każdy ma kartę PAUZA.\n\n🏠 DO DOMU\nJedna dziesięciominutowa rozmowa o małym temacie z użyciem czterech przycisków. Zakończyć przed eskalacją.\n\n🛟 BEZPIECZEŃSTWO\nNie stosować wspólnej scenki przy przemocy, zastraszaniu lub braku bezpieczeństwa.`,
+  ),
+];
+
+export const STARTER_KNOWLEDGE_MATERIALS: KnowledgeMaterial[] = [...sessionPlans, ...activities, ...colorfulActivities, ...illustratedScenarios];
