@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Clock3, Mail, MapPin, Phone, ShieldCheck, UsersRound } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock3, House, Mail, MapPin, Phone, ShieldCheck, UsersRound } from "lucide-react";
 import type { LocalArea } from "@/app/lib/localAreas";
 import { localAreas } from "@/app/lib/localAreas";
 
@@ -73,7 +73,20 @@ export default function LocalAreaPage({ area }: { area: LocalArea }) {
           <p className="mt-8 text-sm font-bold uppercase tracking-[0.24em] text-[#6D7A62]">Wsparcie w rejonie Starogardu Gdańskiego</p>
           <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl">Psycholog dla mieszkańców {area.name}</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-gray-600">{area.intro}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/"
+            className="mt-8 flex w-full max-w-3xl items-center gap-4 rounded-2xl border border-[#AFC0AA] bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#6D7A62] hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#AFC0AA] sm:px-6"
+          >
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#E8EEE5] text-[#2D4739]">
+              <House size={24} aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-lg font-bold sm:text-xl">Przejdź na główną stronę</span>
+              <span className="mt-1 block text-sm leading-6 text-gray-600">Poznaj Aleksandrę, zakres wsparcia i wszystkie możliwości strony.</span>
+            </span>
+            <ArrowRight className="shrink-0 text-[#6D7A62]" size={24} aria-hidden="true" />
+          </Link>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <Link href="/#kalendarz" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 font-bold text-white"><CalendarDays size={19} aria-hidden="true" />Sprawdź wolne terminy</Link>
             <a href="tel:+48510777469" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#6D7A62] bg-white px-5 py-3 font-bold"><Phone size={19} aria-hidden="true" />Zadzwoń: 510 777 469</a>
           </div>
