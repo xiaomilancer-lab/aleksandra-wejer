@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Clock3, House, Mail, MapPin, Phone, ShieldCheck, UsersRound } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, CalendarDays, Clock3, Mail, MapPin, Phone, ShieldCheck, UsersRound } from "lucide-react";
 import type { LocalArea } from "@/app/lib/localAreas";
 import { localAreas } from "@/app/lib/localAreas";
 
@@ -75,16 +76,23 @@ export default function LocalAreaPage({ area }: { area: LocalArea }) {
           <p className="mt-6 max-w-3xl text-lg leading-8 text-gray-600">{area.intro}</p>
           <Link
             href="/"
-            className="mt-8 flex w-full max-w-3xl items-center gap-4 rounded-2xl border border-[#AFC0AA] bg-white px-5 py-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#6D7A62] hover:shadow-md focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#AFC0AA] sm:px-6"
+            className="group mt-8 flex w-full max-w-3xl items-center gap-3 overflow-hidden rounded-2xl border border-[#AFC0AA] bg-gradient-to-r from-white via-white to-[#F2F6EF] px-4 py-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#6D7A62] hover:shadow-lg focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#AFC0AA] sm:gap-5 sm:px-6 sm:py-5"
           >
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#E8EEE5] text-[#2D4739]">
-              <House size={24} aria-hidden="true" />
+            <span className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-white bg-[#E8EEE5] shadow-lg ring-1 ring-[#AFC0AA] sm:h-24 sm:w-24">
+              <Image
+                src="/images/about-aleksandra-v2.png"
+                alt="Aleksandra Wejer"
+                fill
+                sizes="(max-width: 640px) 80px, 96px"
+                className="object-cover object-[50%_28%] transition duration-300 group-hover:scale-[1.04]"
+              />
             </span>
             <span className="min-w-0 flex-1">
+              <span className="mb-1 hidden text-xs font-bold uppercase tracking-[0.16em] text-[#6D7A62] sm:block">Oficjalna strona Aleksandry</span>
               <span className="block text-lg font-bold sm:text-xl">Przejdź na główną stronę</span>
-              <span className="mt-1 block text-sm leading-6 text-gray-600">Poznaj Aleksandrę, zakres wsparcia i wszystkie możliwości strony.</span>
+              <span className="mt-1 hidden text-sm leading-6 text-gray-600 sm:block">Poznaj Aleksandrę, zakres wsparcia i wszystkie możliwości strony.</span>
             </span>
-            <ArrowRight className="shrink-0 text-[#6D7A62]" size={24} aria-hidden="true" />
+            <ArrowRight className="shrink-0 text-[#6D7A62] transition group-hover:translate-x-1" size={24} aria-hidden="true" />
           </Link>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <Link href="/#kalendarz" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-5 py-3 font-bold text-white"><CalendarDays size={19} aria-hidden="true" />Sprawdź wolne terminy</Link>
