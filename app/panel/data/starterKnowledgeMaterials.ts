@@ -339,4 +339,88 @@ const illustratedScenarios: KnowledgeMaterial[] = [
   ),
 ];
 
-export const STARTER_KNOWLEDGE_MATERIALS: KnowledgeMaterial[] = [...sessionPlans, ...activities, ...colorfulActivities, ...illustratedScenarios];
+const printableWorksheets: KnowledgeMaterial[] = [
+  activity(
+    "match-emotions-needs",
+    "Karta pracy: Połącz emocję z potrzebą",
+    "Dzieci",
+    "Kolorowa karta do łączenia emocji z możliwymi potrzebami; pomocna przy trudnościach w nazywaniu stanów i proszeniu o wsparcie.",
+    ["6–12 lat", "emocje", "potrzeby", "samoregulacja", "forma:karta-pracy", "arkusz:emocje-potrzeby", "do gabinetu", "do domu"],
+    `CEL
+Dziecko łączy emocje z potrzebami, które czasem mogą im towarzyszyć. Nie ma jednego obowiązkowego rozwiązania.
+
+PRZEBIEG
+1. Najpierw nazwijcie lub pokolorujcie buźki.
+2. Połączcie linią każdą emocję z jedną albo kilkoma potrzebami.
+3. Dziecko może dopisać własną emocję i własną potrzebę.
+
+PYTANIA
+• Po czym Twoje ciało poznaje tę emocję?
+• Która potrzeba pasuje dzisiaj najbardziej?
+• Jak można o nią poprosić?
+
+WAŻNE
+Połączenia są propozycjami do rozmowy, a nie kluczem poprawnych odpowiedzi.`,
+    true,
+  ),
+  activity(
+    "body-tension-thermometer",
+    "Karta pracy: Termometr napięcia w ciele",
+    "Dzieci",
+    "Obrazkowy termometr i mapa ciała do zauważania napięcia przed wybuchem, wycofaniem lub przeciążeniem.",
+    ["7–14 lat", "ADHD", "spektrum autyzmu", "złość", "lęk", "samoregulacja", "forma:karta-pracy", "arkusz:termometr", "do gabinetu", "do domu"],
+    `CEL
+Zauważyć wcześniejsze sygnały napięcia i dobrać pomoc, zanim poziom stanie się zbyt wysoki.
+
+PRZEBIEG
+1. Pokoloruj poziom napięcia od 0 do 10.
+2. Na sylwetce zaznacz miejsca, w których ciało mówi: „robi się trudno”.
+3. Wpisz trzy rzeczy pomocne przy poziomie 4–6 i jedną osobę, do której można się zwrócić.
+
+PYTANIA
+• Jaki jest pierwszy mały sygnał?
+• Co pomaga, zanim pojawi się 8 lub 9?
+• Jak dorosły ma poznać, że potrzebujesz przerwy?`,
+  ),
+  activity(
+    "traffic-light-break-plan",
+    "Karta pracy: Sygnalizator przerwy",
+    "ADHD",
+    "Trzyetapowy plan STOP–SPRAWDŹ–WYBIERZ dla dzieci z impulsywnością, przeciążeniem lub trudnością w powrocie do zadania.",
+    ["7–13 lat", "ADHD", "spektrum autyzmu", "impulsywność", "przeciążenie", "forma:karta-pracy", "arkusz:sygnalizator", "do gabinetu", "do domu"],
+    `CEL
+Stworzyć prosty, wspólny język przerwy bez zawstydzania i bez odbierania ruchu jako kary.
+
+CZERWONE — STOP
+Co zauważam w ciele i zachowaniu? Jaki znak może pokazać dorosły?
+
+ŻÓŁTE — SPRAWDŹ
+Czego potrzebuję: ruchu, ciszy, pomocy w pierwszym kroku, wody czy krótkiej zmiany miejsca?
+
+ZIELONE — WYBIERZ
+Jaki najmniejszy krok zrobię po przerwie? Kto może być moim nawigatorem?
+
+WAŻNE
+Powrót jest częścią planu. Przerwa nie jest nagrodą ani karą.`,
+  ),
+  activity(
+    "support-network-circles",
+    "Karta pracy: Moje kręgi wsparcia",
+    "Rodzina",
+    "Delikatna mapa osób i miejsc wsparcia dla dziecka przeżywającego samotność, zmianę rodzinną, rozwód lub stratę.",
+    ["8–16 lat", "samotność", "rozwód", "żałoba", "strata", "relacje", "forma:karta-pracy", "arkusz:siec-wsparcia", "do gabinetu"],
+    `CEL
+Zobaczyć, że wsparcie może mieć różne odległości i formy, a puste miejsce nie oznacza porażki.
+
+PRZEBIEG
+1. W środku dziecko wpisuje imię, symbol albo rysuje siebie.
+2. W pierwszym kręgu umieszcza osoby, przy których zwykle czuje się bezpiecznie.
+3. W drugim — osoby lub miejsca, do których czasem może się zwrócić.
+4. Obok zapisuje jedno zdanie lub znak pomagający poprosić o kontakt.
+
+WAŻNE
+Nie wymuszamy wpisywania rodziców ani opowiadania o relacjach. Przy ujawnieniu zagrożenia obowiązuje ocena bezpieczeństwa i właściwa procedura.`,
+  ),
+];
+
+export const STARTER_KNOWLEDGE_MATERIALS: KnowledgeMaterial[] = [...sessionPlans, ...activities, ...colorfulActivities, ...illustratedScenarios, ...printableWorksheets];

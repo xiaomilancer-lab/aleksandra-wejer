@@ -20,10 +20,14 @@ const offices = [
 ] as const;
 
 export default function LocalAreaPage({ area }: { area: LocalArea }) {
+  const localPageTitle = area.slug === "starogard"
+    ? "Psycholog w Starogardzie Gdańskim"
+    : `Psycholog Starogard Gdański — dla mieszkańców ${area.name}`;
+
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: `Konsultacje psychologiczne dla mieszkańców ${area.name}`,
+    name: `${localPageTitle} — Aleksandra Wejer`,
     description: area.intro,
     url: `https://aleksandrawejer.pl/${area.slug}`,
     areaServed: { "@type": "AdministrativeArea", name: area.name },
@@ -52,7 +56,7 @@ export default function LocalAreaPage({ area }: { area: LocalArea }) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Strona główna", item: "https://aleksandrawejer.pl" },
-      { "@type": "ListItem", position: 2, name: `Psycholog ${area.name}`, item: `https://aleksandrawejer.pl/${area.slug}` },
+      { "@type": "ListItem", position: 2, name: localPageTitle, item: `https://aleksandrawejer.pl/${area.slug}` },
     ],
   };
 
@@ -70,9 +74,9 @@ export default function LocalAreaPage({ area }: { area: LocalArea }) {
 
       <section className="px-5 pb-14 pt-14 sm:px-8 sm:pb-20 sm:pt-20">
         <div className="mx-auto max-w-5xl">
-          <nav className="text-sm text-gray-500" aria-label="Okruszki"><Link href="/" className="hover:text-[#2D4739]">Strona główna</Link><span aria-hidden="true"> / </span><span>Psycholog {area.name}</span></nav>
+          <nav className="text-sm text-gray-500" aria-label="Okruszki"><Link href="/" className="hover:text-[#2D4739]">Strona główna</Link><span aria-hidden="true"> / </span><span>{localPageTitle}</span></nav>
           <p className="mt-8 text-sm font-bold uppercase tracking-[0.24em] text-[#6D7A62]">Wsparcie w rejonie Starogardu Gdańskiego</p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl">Psycholog dla mieszkańców {area.name}</h1>
+          <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl">{localPageTitle}</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-gray-600">{area.intro}</p>
           <Link
             href="/"

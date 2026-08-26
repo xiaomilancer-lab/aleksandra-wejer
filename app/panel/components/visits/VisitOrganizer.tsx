@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Visit, VisitRecordKind } from "../../domain/booking";
 import { VISIT_STATUSES } from "../../domain/status";
-import { classifyVisitAction } from "../../actions/visitOrganizerActions";
+import { classifyVisitAction, createManualVisitAction } from "../../actions/visitOrganizerActions";
 import { updateBooking } from "../../services/bookingService";
 import StatusBadge from "../StatusBadge";
 import type { Patient } from "../../domain/patient";
@@ -23,6 +23,7 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
   const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
   const [patientCards, setPatientCards] = useState(patients);
 
   const visible = useMemo(() => {
@@ -68,7 +69,7 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
 
   return <div className="space-y-6">
     <header className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-8">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm text-gray-500">Porządek bez usuwania historii</p><h1 className="mt-1 text-3xl font-bold text-[#2D4739]">Wizyty</h1><p className="mt-2 text-gray-600">Oznacz wizyty testowe, uporządkuj statusy i zachowaj prawdziwą historię gabinetu.</p></div><div className="flex flex-col gap-2 sm:items-end"><Link href="/panel/visits/after-visit-preview" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><Printer size={18} />Podgląd karty po spotkaniu</Link><button type="button" onClick={() => setHistoryOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę historyczną</button></div></div>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm text-gray-500">Porządek bez usuwania historii</p><h1 className="mt-1 text-3xl font-bold text-[#2D4739]">Wizyty</h1><p className="mt-2 text-gray-600">Oznacz wizyty testowe, uporządkuj statusy i zachowaj prawdziwą historię gabinetu.</p></div><div className="flex flex-col gap-2 sm:items-end"><Link href="/panel/visits/after-visit-preview" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><Printer size={18} />Podgląd karty po spotkaniu</Link><button type="button" onClick={() => setManualOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#2D4739] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę poza grafikiem</button><button type="button" onClick={() => setHistoryOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę historyczną</button></div></div>
     </header>
     {!classificationAvailable && <p className="rounded-2xl border border-[#E8D39D] bg-[#FFF9E9] px-5 py-4 text-sm text-[#725C28]">Klasyfikacja „Prawdziwa / Testowa” czeka na uruchomienie przygotowanej migracji Supabase. Pozostałe dane są bezpieczne.</p>}
     <section className="rounded-3xl border border-[#E5E1D8] bg-white p-5 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-6">
@@ -80,7 +81,37 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
     <section className="grid gap-4 xl:grid-cols-2">{visible.map((visit) => <VisitOrganizerCard key={visit.id} visit={visit} patients={patientCards} pending={isPending} classificationAvailable={classificationAvailable} onSave={save} onLink={linkPatientCard} />)}</section>
     {visible.length === 0 && <p className="rounded-3xl bg-white p-8 text-center text-gray-500">Nie znaleziono wizyt pasujących do wybranych filtrów.</p>}
     {historyOpen && <HistoricalVisitDialog patients={patientCards} pending={isPending} onClose={() => setHistoryOpen(false)} onSaved={() => { setHistoryOpen(false); setMessage("Dodano prawdziwą wizytę historyczną — bez wysyłania wiadomości i prośby o opinię."); router.refresh(); }} />}
+    {manualOpen && <ManualVisitDialog patients={patientCards} pending={isPending} onClose={() => setManualOpen(false)} onSaved={() => { setManualOpen(false); setMessage("Wizyta została wpisana ręcznie poza grafikiem."); router.refresh(); }} />}
   </div>;
+}
+
+function ManualVisitDialog({ patients, pending, onClose, onSaved }: { patients: Patient[]; pending: boolean; onClose: () => void; onSaved: () => void }) {
+  const [patientId, setPatientId] = useState(""); const [name, setName] = useState(""); const [phone, setPhone] = useState(""); const [email, setEmail] = useState(""); const [visitDate, setVisitDate] = useState(""); const [visitTime, setVisitTime] = useState(""); const [locationId, setLocationId] = useState<"arthro-cure-clinic" | "nowa-wies-rzeczna">("nowa-wies-rzeczna"); const [status, setStatus] = useState<(typeof VISIT_STATUSES)[number]>("Nowe"); const [description, setDescription] = useState(""); const [error, setError] = useState(""); const [saving, startSaving] = useTransition();
+  function submit(event: React.FormEvent) { event.preventDefault(); setError(""); startSaving(async () => { try { await createManualVisitAction({ patientId: patientId || null, name, phone, email, visitDate, visitTime, locationId, status, description }); onSaved(); } catch (reason) { setError(reason instanceof Error ? reason.message : "Nie udało się dodać wizyty."); } }); }
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#1F3028]/50 p-3 sm:items-center">
+      <form onSubmit={submit} className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl sm:p-7">
+        <div className="flex items-start justify-between gap-4">
+          <div><p className="text-sm text-gray-500">Ręczny wpis Aleksandry</p><h2 className="text-2xl font-bold text-[#2D4739]">Dodaj wizytę poza grafikiem</h2></div>
+          <button type="button" onClick={onClose} className="rounded-xl border border-[#E5E1D8] p-2" aria-label="Zamknij"><X size={20} /></button>
+        </div>
+        <p className="mt-3 rounded-xl border border-[#D8E2D4] bg-[#F3F7F1] p-3 text-sm leading-6 text-[#55624D]">Ta funkcja omija tygodniowy grafik i wyjątki dostępności. Chroni jednak zajęty termin — nie pozwoli wpisać dwóch prawdziwych wizyt w tym samym gabinecie, dniu i godzinie.</p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <Field label="Istniejąca karta pacjenta"><select value={patientId} onChange={(event) => setPatientId(event.target.value)} className={inputClass}><option value="">Bez przypisanej karty</option>{patients.map((patient) => <option key={patient.id} value={patient.id}>{patient.name}</option>)}</select></Field>
+          <Field label="Imię i nazwisko"><input value={name} onChange={(event) => setName(event.target.value)} disabled={Boolean(patientId)} className={inputClass} placeholder="Gdy nie wybierasz karty" /></Field>
+          <Field label="Telefon"><input value={phone} onChange={(event) => setPhone(event.target.value)} disabled={Boolean(patientId)} className={inputClass} /></Field>
+          <Field label="E-mail"><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} disabled={Boolean(patientId)} className={inputClass} /></Field>
+          <Field label="Data"><input type="date" value={visitDate} onChange={(event) => setVisitDate(event.target.value)} required className={inputClass} /></Field>
+          <Field label="Godzina"><input type="time" value={visitTime} onChange={(event) => setVisitTime(event.target.value)} required className={inputClass} /></Field>
+          <Field label="Miejsce"><select value={locationId} onChange={(event) => setLocationId(event.target.value as typeof locationId)} className={inputClass}><option value="nowa-wies-rzeczna">Centrum Zielińscy Premium</option><option value="arthro-cure-clinic">Arthro Cure Clinic</option></select></Field>
+          <Field label="Status"><select value={status} onChange={(event) => setStatus(event.target.value as typeof status)} className={inputClass}>{VISIT_STATUSES.map((item) => <option key={item}>{item}</option>)}</select></Field>
+          <div className="sm:col-span-2"><Field label="Krótki opis"><input value={description} onChange={(event) => setDescription(event.target.value)} className={inputClass} placeholder="Opcjonalnie" /></Field></div>
+        </div>
+        {error && <p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        <div className="mt-6 flex justify-end gap-3"><button type="button" onClick={onClose} className="rounded-xl border border-[#D5DCCF] px-4 py-2.5 font-semibold">Anuluj</button><button type="submit" disabled={saving || pending} className="rounded-xl bg-[#2D4739] px-4 py-2.5 font-semibold text-white disabled:bg-gray-400">{saving ? "Zapisywanie…" : "Wpisz wizytę"}</button></div>
+      </form>
+    </div>
+  );
 }
 
 function HistoricalVisitDialog({ patients, pending, onClose, onSaved }: { patients: Patient[]; pending: boolean; onClose: () => void; onSaved: () => void }) {

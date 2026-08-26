@@ -5,7 +5,7 @@ import type { Visit, VisitRecordKind } from "../domain/booking";
 import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locations";
 import { findOrCreatePatient, getPatientById, recordTimelineEvent } from "./patientService";
 import type { Patient } from "../domain/patient";
-import type { HistoricalVisitInput } from "../actions/visitOrganizerActions";
+import type { HistoricalVisitInput, ManualVisitInput } from "../actions/visitOrganizerActions";
 
 const fields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source, record_kind";
 const fallbackFields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source";
@@ -98,7 +98,7 @@ export async function getNextOrganizerVisit(visit: Visit): Promise<Visit | null>
   ) ?? null;
 }
 
-export async function createHistoricalVisit(input: HistoricalVisitInput) {
+async function createOrganizerVisit(input: HistoricalVisitInput, options: { status: string; source: string }) {
   if (!isBookingLocationId(input.locationId)) throw new Error("Nieprawidłowa lokalizacja.");
   const patient = input.patientId ? await getPatientById(input.patientId) : null;
   if (input.patientId && !patient) throw new Error("Nie znaleziono wybranej karty pacjenta.");
@@ -116,11 +116,19 @@ export async function createHistoricalVisit(input: HistoricalVisitInput) {
     location: getBookingLocationName(input.locationId),
     visit_date: input.visitDate,
     visit_time: input.visitTime,
-    status: "Zrealizowane",
+    status: options.status,
     record_kind: "real",
-    source: "panel-history",
+    source: options.source,
     message: input.description.trim(),
   });
   if (error?.code === "23505") throw new Error("W tym terminie istnieje już prawdziwa wizyta.");
   if (error) throw error;
+}
+
+export async function createHistoricalVisit(input: HistoricalVisitInput) {
+  await createOrganizerVisit(input, { status: "Zrealizowane", source: "panel-history" });
+}
+
+export async function createManualVisit(input: ManualVisitInput) {
+  await createOrganizerVisit(input, { status: input.status, source: "panel-manual" });
 }
