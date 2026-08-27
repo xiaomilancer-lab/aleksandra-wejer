@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { EyeOff, Link2, Plus, Printer, Search, SlidersHorizontal, UserPlus, X } from "lucide-react";
+import { CalendarClock, EyeOff, Link2, Plus, Printer, Search, SlidersHorizontal, UserPlus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Visit, VisitRecordKind } from "../../domain/booking";
 import { VISIT_STATUSES } from "../../domain/status";
-import { classifyVisitAction, createManualVisitAction } from "../../actions/visitOrganizerActions";
+import { classifyVisitAction, createManualVisitAction, rescheduleVisitAction } from "../../actions/visitOrganizerActions";
 import { updateBooking } from "../../services/bookingService";
 import StatusBadge from "../StatusBadge";
 import type { Patient } from "../../domain/patient";
@@ -69,6 +69,21 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
     });
   }
 
+  function reschedule(visit: Visit, visitDate: string, visitTime: string) {
+    setMessage("");
+    startTransition(async () => {
+      try {
+        const updated = await rescheduleVisitAction(visit.id, { visitDate, visitTime });
+        setVisits((current) => current
+          .map((item) => item.id === visit.id ? updated : item)
+          .sort((left, right) => `${right.visit_date}T${right.visit_time}`.localeCompare(`${left.visit_date}T${left.visit_time}`)));
+        setMessage(`Przeniesiono wizytę ${visit.name} na ${formatDate(updated.visit_date)}, ${updated.visit_time.slice(0, 5)}. Poprzedni termin jest już wolny.`);
+      } catch (error) {
+        setMessage(error instanceof Error ? error.message : "Nie udało się zmienić terminu wizyty.");
+      }
+    });
+  }
+
   return <div className="space-y-6">
     <header className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm text-gray-500">Porządek bez usuwania historii</p><h1 className="mt-1 text-3xl font-bold text-[#2D4739]">Wizyty</h1><p className="mt-2 text-gray-600">Oznacz wizyty testowe, uporządkuj statusy i zachowaj prawdziwą historię gabinetu.</p></div><div className="flex flex-col gap-2 sm:items-end"><Link href="/panel/visits/after-visit-preview" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><Printer size={18} />Podgląd karty po spotkaniu</Link><button type="button" onClick={() => setManualOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#2D4739] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę poza grafikiem</button><button type="button" onClick={() => setHistoryOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę historyczną</button></div></div>
@@ -85,7 +100,7 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
       <label className="mt-5 flex items-center gap-3 rounded-2xl border border-[#E5E1D8] bg-[#F8F5F0] px-4 py-3"><Search size={20} className="text-gray-400" /><span className="sr-only">Szukaj wizyty</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Szukaj po nazwie, telefonie lub e-mailu…" className="w-full bg-transparent outline-none" /></label>
     </section>
     {message && <p role="status" className="rounded-2xl bg-[#EEF1EB] px-5 py-3 text-sm font-semibold text-[#2D4739]">{message}</p>}
-    <section className="grid gap-4 xl:grid-cols-2">{visible.map((visit) => <VisitOrganizerCard key={visit.id} visit={visit} patients={patientCards} pending={isPending} classificationAvailable={classificationAvailable} onSave={save} onLink={linkPatientCard} />)}</section>
+    <section className="grid gap-4 xl:grid-cols-2">{visible.map((visit) => <VisitOrganizerCard key={visit.id} visit={visit} patients={patientCards} pending={isPending} classificationAvailable={classificationAvailable} onSave={save} onLink={linkPatientCard} onReschedule={reschedule} />)}</section>
     {visible.length === 0 && <p className="rounded-3xl bg-white p-8 text-center text-gray-500">Nie znaleziono wizyt pasujących do wybranych filtrów.</p>}
     {historyOpen && <HistoricalVisitDialog patients={patientCards} pending={isPending} onClose={() => setHistoryOpen(false)} onSaved={() => { setHistoryOpen(false); setMessage("Dodano prawdziwą wizytę historyczną — bez wysyłania wiadomości i prośby o opinię."); router.refresh(); }} />}
     {manualOpen && <ManualVisitDialog patients={patientCards} pending={isPending} onClose={() => setManualOpen(false)} onSaved={() => { setManualOpen(false); setMessage("Wizyta została wpisana ręcznie poza grafikiem."); router.refresh(); }} />}
@@ -152,14 +167,22 @@ function HistoricalVisitDialog({ patients, pending, onClose, onSaved }: { patien
 const inputClass = "mt-2 w-full rounded-xl border border-[#D5DCCF] bg-white px-3 py-2.5 text-[#263E32] placeholder:text-[#7B847E] outline-none focus:border-[#6D7A62] disabled:bg-gray-100";
 function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="text-sm font-semibold text-[#2D4739]">{label}{children}</label>; }
 
-function VisitOrganizerCard({ visit, patients, pending, classificationAvailable, onSave, onLink }: { visit: Visit; patients: Patient[]; pending: boolean; classificationAvailable: boolean; onSave: (visit: Visit, kind: VisitRecordKind, status: string) => void; onLink: (visit: Visit, patientId: string) => void }) {
+function VisitOrganizerCard({ visit, patients, pending, classificationAvailable, onSave, onLink, onReschedule }: { visit: Visit; patients: Patient[]; pending: boolean; classificationAvailable: boolean; onSave: (visit: Visit, kind: VisitRecordKind, status: string) => void; onLink: (visit: Visit, patientId: string) => void; onReschedule: (visit: Visit, visitDate: string, visitTime: string) => void }) {
   const [kind, setKind] = useState<VisitRecordKind>(visit.record_kind ?? "real");
   const [status, setStatus] = useState(visit.status);
   const [selectedPatientId, setSelectedPatientId] = useState("");
+  const [visitDate, setVisitDate] = useState(visit.visit_date);
+  const [visitTime, setVisitTime] = useState(visit.visit_time.slice(0, 5));
   const changed = kind !== (visit.record_kind ?? "real") || status !== visit.status;
+  const scheduleChanged = visitDate !== visit.visit_date || visitTime !== visit.visit_time.slice(0, 5);
   return <article className={`rounded-3xl border p-5 shadow-[0_10px_30px_rgba(45,71,57,0.05)] ${kind === "test" ? "border-[#E8D39D] bg-[#FFF9E9]" : "border-[#E5E1D8] bg-white"}`}>
-    <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D7A62]">#{visit.id} · {kind === "test" ? "Wizyta testowa" : "Wizyta prawdziwa"}</p><h2 className="mt-1 text-xl font-bold text-[#2D4739]">{visit.name}</h2><p className="mt-1 text-sm text-gray-600">{formatDate(visit.visit_date)} · {visit.visit_time}</p><p className="mt-1 text-sm text-gray-600">{visit.location}</p></div><StatusBadge status={visit.status} /></div>
+    <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D7A62]">#{visit.id} · {kind === "test" ? "Wizyta testowa" : "Wizyta prawdziwa"}</p><h2 className="mt-1 text-xl font-bold text-[#2D4739]">{visit.name}</h2><p className="mt-1 text-sm text-gray-600">{formatDate(visit.visit_date)} · {visit.visit_time.slice(0, 5)}</p><p className="mt-1 text-sm text-gray-600">{visit.location}</p></div><StatusBadge status={visit.status} /></div>
     <div className="mt-4 grid gap-3 sm:grid-cols-2"><label className="text-sm font-semibold text-[#2D4739]">Rodzaj<select value={kind} onChange={(event) => setKind(event.target.value as VisitRecordKind)} disabled={pending || !classificationAvailable} className="mt-2 w-full rounded-xl border border-[#D5DCCF] bg-white px-3 py-2.5 disabled:bg-gray-100"><option value="real">Prawdziwa</option><option value="test">Testowa</option></select></label><label className="text-sm font-semibold text-[#2D4739]">Status<select value={status} onChange={(event) => setStatus(event.target.value)} disabled={pending} className="mt-2 w-full rounded-xl border border-[#D5DCCF] bg-white px-3 py-2.5">{VISIT_STATUSES.map((item) => <option key={item}>{item}</option>)}</select></label></div>
+    <div className="mt-4 rounded-2xl border border-[#D8E2D4] bg-[#F3F7F1] p-4">
+      <div className="flex items-center gap-2 text-[#2D4739]"><CalendarClock size={18} aria-hidden="true" /><p className="text-sm font-bold">Zmień datę lub godzinę</p></div>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2"><Field label="Nowa data"><input type="date" value={visitDate} onChange={(event) => setVisitDate(event.target.value)} disabled={pending} className={inputClass} /></Field><Field label="Nowa godzina"><input type="time" value={visitTime} onChange={(event) => setVisitTime(event.target.value)} disabled={pending} className={inputClass} /></Field></div>
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><p className="text-xs leading-5 text-[#55624D]">Po zapisaniu poprzedni termin zwolni się automatycznie. Zmiana nie wysyła pacjentowi wiadomości.</p><button type="button" disabled={pending || !scheduleChanged || !visitDate || !visitTime} onClick={() => onReschedule(visit, visitDate, visitTime)} className="min-h-11 shrink-0 rounded-xl bg-[#2D4739] px-4 py-2.5 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300">Zmień termin</button></div>
+    </div>
     {kind !== "test" && <div className="mt-4 rounded-2xl border border-[#E5E1D8] bg-[#F8F5F0] p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6D7A62]">Karta pacjenta</p>
       {visit.patient_id ? <div className="mt-2 flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-[#465449]">Wizyta jest przypisana. W karcie będą wspólnie widoczne wizyty, materiały, notatki i zadania.</p><Link href={`/panel/patients/${visit.patient_id}`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-white px-4 py-2 font-semibold text-[#2D4739]"><Link2 size={16} /> Otwórz kartę</Link></div> : <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]"><label className="text-sm font-semibold text-[#2D4739]"><span className="sr-only">Wybierz istniejącą kartę</span><select value={selectedPatientId} onChange={(event) => setSelectedPatientId(event.target.value)} disabled={pending} className="w-full rounded-xl border border-[#D5DCCF] bg-white px-3 py-2.5 text-[#263E32]"><option value="">Utwórz lub dopasuj z danych wizyty</option>{patients.map((patient) => <option key={patient.id} value={patient.id}>{patient.name}{patient.email ? ` · ${patient.email}` : ""}</option>)}</select></label><button type="button" disabled={pending} onClick={() => onLink(visit, selectedPatientId)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#2D4739] px-4 py-2.5 font-semibold text-white disabled:bg-gray-400"><UserPlus size={17} /> {selectedPatientId ? "Przypisz kartę" : "Utwórz kartę"}</button></div>}

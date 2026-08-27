@@ -4,8 +4,7 @@ import { revalidatePath } from "next/cache";
 import { VISIT_RECORD_KINDS, type VisitRecordKind } from "../domain/booking";
 import { isVisitStatus, type VisitStatus } from "../domain/status";
 import { requirePatientVaultAccess } from "../server/patientVault";
-import { updateVisitRecordKind } from "../services/visitOrganizerService";
-import { createHistoricalVisit, createManualVisit } from "../services/visitOrganizerService";
+import { createHistoricalVisit, createManualVisit, rescheduleVisit, updateVisitRecordKind } from "../services/visitOrganizerService";
 
 export interface HistoricalVisitInput {
   patientId: string | null;
@@ -22,8 +21,12 @@ export interface ManualVisitInput extends HistoricalVisitInput {
   status: VisitStatus;
 }
 
-function validateVisitInput(input: HistoricalVisitInput) {
-  if (!input.patientId && !input.name.trim()) throw new Error("Wpisz imię i nazwisko pacjenta.");
+export interface RescheduleVisitInput {
+  visitDate: string;
+  visitTime: string;
+}
+
+function validateVisitSlot(input: RescheduleVisitInput) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.visitDate)) throw new Error("Wybierz prawidłową datę.");
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(input.visitTime)) throw new Error("Wybierz prawidłową godzinę.");
 
@@ -36,6 +39,11 @@ function validateVisitInput(input: HistoricalVisitInput) {
   ) {
     throw new Error("Wybierz prawidłową datę.");
   }
+}
+
+function validateVisitInput(input: HistoricalVisitInput) {
+  if (!input.patientId && !input.name.trim()) throw new Error("Wpisz imię i nazwisko pacjenta.");
+  validateVisitSlot(input);
 }
 
 export async function classifyVisitAction(id: number, recordKind: VisitRecordKind) {
@@ -63,4 +71,15 @@ export async function createManualVisitAction(input: ManualVisitInput) {
   await createManualVisit(input);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+}
+
+export async function rescheduleVisitAction(id: number, input: RescheduleVisitInput) {
+  await requirePatientVaultAccess();
+  if (!Number.isInteger(id) || id < 1) throw new Error("Nieprawidłowa wizyta.");
+  validateVisitSlot(input);
+  const visit = await rescheduleVisit(id, input);
+  revalidatePath("/panel");
+  revalidatePath("/panel/visits");
+  if (visit.patient_id) revalidatePath(`/panel/patients/${visit.patient_id}`);
+  return visit;
 }

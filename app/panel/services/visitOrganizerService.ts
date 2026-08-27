@@ -5,7 +5,7 @@ import type { Visit, VisitRecordKind } from "../domain/booking";
 import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locations";
 import { findOrCreatePatient, getPatientById, recordTimelineEvent } from "./patientService";
 import type { Patient } from "../domain/patient";
-import type { HistoricalVisitInput, ManualVisitInput } from "../actions/visitOrganizerActions";
+import type { HistoricalVisitInput, ManualVisitInput, RescheduleVisitInput } from "../actions/visitOrganizerActions";
 
 const fields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source, record_kind";
 const fallbackFields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source";
@@ -131,4 +131,53 @@ export async function createHistoricalVisit(input: HistoricalVisitInput) {
 
 export async function createManualVisit(input: ManualVisitInput) {
   await createOrganizerVisit(input, { status: input.status, source: "panel-manual" });
+}
+
+export async function rescheduleVisit(id: number, input: RescheduleVisitInput): Promise<Visit> {
+  const visit = await getOrganizerVisitById(id);
+  if (!visit) throw new Error("Nie znaleziono wizyty.");
+
+  if (visit.visit_date === input.visitDate && visit.visit_time.slice(0, 5) === input.visitTime) return visit;
+
+  if ((visit.record_kind ?? "real") === "real" && visit.status !== "Odwołane" && visit.location_id) {
+    const { data: conflict, error: conflictError } = await supabaseAdmin
+      .from("bookings")
+      .select("id")
+      .eq("location_id", visit.location_id)
+      .eq("visit_date", input.visitDate)
+      .eq("visit_time", input.visitTime)
+      .eq("record_kind", "real")
+      .neq("status", "Odwołane")
+      .neq("id", id)
+      .limit(1);
+    if (conflictError) throw conflictError;
+    if (conflict?.length) throw new Error("W tym gabinecie jest już prawdziwa wizyta o wybranej porze.");
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("bookings")
+    .update({ visit_date: input.visitDate, visit_time: input.visitTime })
+    .eq("id", id)
+    .select(fields)
+    .single();
+  if (error?.code === "23505") throw new Error("W tym gabinecie jest już prawdziwa wizyta o wybranej porze.");
+  if (error) throw error;
+
+  const updated = data as Visit;
+  if (updated.patient_id) {
+    await recordTimelineEvent({
+      patientId: updated.patient_id,
+      visitId: updated.id,
+      eventType: "status_changed",
+      title: "Zmieniono termin wizyty",
+      description: `${visit.visit_date} · ${visit.visit_time.slice(0, 5)} → ${updated.visit_date} · ${updated.visit_time.slice(0, 5)}`,
+      metadata: {
+        previous_date: visit.visit_date,
+        previous_time: visit.visit_time.slice(0, 5),
+        new_date: updated.visit_date,
+        new_time: updated.visit_time.slice(0, 5),
+      },
+    });
+  }
+  return updated;
 }
