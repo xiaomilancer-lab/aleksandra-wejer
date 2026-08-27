@@ -162,9 +162,42 @@ export async function findOrCreatePatient(
   return patient;
 }
 
-// Creates a new patient through the API.
-export async function createPatient() {
-  throw new Error("Not implemented");
+export async function createPatient(identity: PatientIdentity): Promise<Patient> {
+  const normalizedEmail = normalizeEmail(identity.email);
+  const normalizedPhone = normalizePhone(identity.phone);
+
+  const { data: existingPatients, error: lookupError } = await supabaseAdmin
+    .from("patients")
+    .select("id, name, phone, email");
+  if (lookupError) throw lookupError;
+
+  const duplicate = (existingPatients ?? []).find((patient) =>
+    (normalizedEmail && normalizeEmail(patient.email) === normalizedEmail)
+    || (normalizedPhone && normalizePhone(patient.phone) === normalizedPhone),
+  );
+  if (duplicate) {
+    throw new Error(`Karta dla ${duplicate.name} z tym samym e-mailem lub telefonem już istnieje.`);
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("patients")
+    .insert({
+      name: identity.name.trim(),
+      phone: identity.phone?.trim() || null,
+      email: normalizedEmail,
+    })
+    .select("id, name, phone, email, created_at, updated_at")
+    .single();
+  if (error) throw error;
+
+  const patient = data as Patient;
+  await recordTimelineEvent({
+    patientId: patient.id,
+    eventType: "patient_created",
+    title: "Utworzono kartę pacjenta",
+    description: "Karta została dodana ręcznie w panelu.",
+  });
+  return patient;
 }
 
 // Updates the contact identity stored on the patient card. Historical bookings

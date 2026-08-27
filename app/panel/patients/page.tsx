@@ -29,7 +29,7 @@ export default async function PatientsPage() {
   return (
     <AuthGuard>
       <Dashboard>
-        <div><h1 className="text-4xl font-bold text-[#2D4739]">Pacjenci</h1><p className="mt-3 text-gray-600">W tym miejscu znajdziesz wszystkie karty pacjentów.</p></div>
+        <div className="mx-auto max-w-7xl"><div><h1 className="text-4xl font-bold text-[#2D4739]">Pacjenci</h1><p className="mt-3 text-gray-600">Twórz karty, przypisuj wizyty i zapisuj tylko informacje pomocne w dalszej pracy.</p></div>
 
         {loadError ? (
           <div className="mt-8 rounded-3xl border border-[#E5E1D8] bg-[#FFF9EE] p-6 text-[#7A6540]">
@@ -38,6 +38,7 @@ export default async function PatientsPage() {
         ) : (
           <PatientList patients={patients} />
         )}
+        </div>
       </Dashboard>
     </AuthGuard>
   );

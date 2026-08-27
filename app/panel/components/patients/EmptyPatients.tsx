@@ -8,7 +8,7 @@ export default function EmptyPatients({ hasPatients = false }: EmptyPatientsProp
   const Icon = hasPatients ? SearchX : UserRoundPlus;
   const message = hasPatients
     ? "Nie znaleziono pacjentów pasujących do wyszukiwania."
-    : "Nie masz jeszcze żadnych pacjentów.";
+    : "Nie ma jeszcze żadnych kart. Użyj przycisku „Dodaj kartę pacjenta” powyżej.";
 
   return (
     <div className="mt-5 rounded-3xl border border-dashed border-[#D9DDD3] bg-white px-6 py-12 text-center">
