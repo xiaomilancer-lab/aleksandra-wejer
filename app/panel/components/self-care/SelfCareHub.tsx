@@ -79,7 +79,7 @@ export default function SelfCareHub() {
       if (!response.ok) throw new Error(payload.error || "Nie udało się odświeżyć kolekcji.");
       setLiveItems(Array.isArray(payload.items) ? payload.items.map(toInspiration) : []);
       setRefreshedAt(payload.refreshedAt ?? null);
-      setRefreshMessage("Gotowe — codzienne nowości i promocje zostały odświeżone. Pacjenci zobaczą tylko rodzinne inspiracje ze wspólnego cache.");
+      setRefreshMessage("Gotowe — nowości i promocje zostały odświeżone na Twoje życzenie. Pacjenci zobaczą tylko rodzinne inspiracje ze wspólnego cache.");
     } catch (error) {
       setRefreshMessage(error instanceof Error ? error.message : "PsychOLKA chwilowo odpoczywa. Kolekcja offline nadal działa.");
     } finally {
@@ -95,9 +95,9 @@ export default function SelfCareHub() {
   return <div className="space-y-6">
     <section className="overflow-hidden rounded-[28px] border border-[#DDE4D8] bg-[#2D4739] p-6 text-white shadow-[0_18px_50px_rgba(45,71,57,0.14)] sm:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-3xl"><div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]"><Sparkles size={15} />PsychOLKA dla Aleksandry</div><h1 className="text-3xl font-bold sm:text-4xl">Chwila dla siebie 🌸</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 sm:text-base">Filmy, seriale, rodzinne atrakcje, miejsca, wydarzenia i dobre okazje odświeżają się codziennie. Prezenty PsychOLKA podpowiada dopiero wtedy, gdy o nie poprosisz.</p></div>
+        <div className="max-w-3xl"><div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]"><Sparkles size={15} />PsychOLKA dla Aleksandry</div><h1 className="text-3xl font-bold sm:text-4xl">Chwila dla siebie 🌸</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-white/80 sm:text-base">Filmy, seriale, rodzinne atrakcje, miejsca, wydarzenia i dobre okazje odświeżają się tylko wtedy, gdy klikniesz przycisk. Prezenty PsychOLKA również podpowiada wyłącznie na Twoje życzenie.</p></div>
         <div className="space-y-3 rounded-2xl bg-white/10 px-5 py-4 text-sm text-white/85">
-          <div><p className="font-semibold text-white">Codzienny, oszczędny pakiet</p><p className="mt-1">{refreshedAt ? `Ostatnio: ${new Date(refreshedAt).toLocaleString("pl-PL")}` : "Kolekcja offline jest zawsze dostępna."}</p></div>
+          <div><p className="font-semibold text-white">Ręczne, oszczędne odświeżanie</p><p className="mt-1">{refreshedAt ? `Ostatnio: ${new Date(refreshedAt).toLocaleString("pl-PL")}` : "Kolekcja offline jest zawsze dostępna."}</p></div>
           <button type="button" disabled={refreshing} onClick={() => { void refreshWithAi(); }} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 font-bold text-[#2D4739] disabled:cursor-wait disabled:opacity-70">
             <RefreshCw size={17} className={refreshing ? "animate-spin" : ""} aria-hidden="true" />{refreshing ? "PsychOLKA szuka…" : "Odśwież nowości"}
           </button>

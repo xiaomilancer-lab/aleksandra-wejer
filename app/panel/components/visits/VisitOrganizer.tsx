@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Link2, Plus, Printer, Search, SlidersHorizontal, UserPlus, X } from "lucide-react";
+import { EyeOff, Link2, Plus, Printer, Search, SlidersHorizontal, UserPlus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Visit, VisitRecordKind } from "../../domain/booking";
@@ -19,6 +19,7 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
   const router = useRouter();
   const [visits, setVisits] = useState(initialVisits);
   const [filter, setFilter] = useState<Filter>("all");
+  const [hideTestVisits, setHideTestVisits] = useState(true);
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -29,11 +30,12 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
   const visible = useMemo(() => {
     const needle = query.trim().toLocaleLowerCase("pl");
     return visits.filter((visit) => {
+      if (hideTestVisits && visit.record_kind === "test") return false;
       const matchesFilter = filter === "all" || filter === visit.record_kind || (filter.startsWith("status:") && visit.status === filter.slice(7));
       const matchesSearch = !needle || [visit.name, visit.email, visit.phone].some((value) => value?.toLocaleLowerCase("pl").includes(needle));
       return matchesFilter && matchesSearch;
     });
-  }, [filter, query, visits]);
+  }, [filter, hideTestVisits, query, visits]);
 
   const counts = { all: visits.length, real: visits.filter((visit) => visit.record_kind !== "test").length, test: visits.filter((visit) => visit.record_kind === "test").length };
 
@@ -74,7 +76,12 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
     {!classificationAvailable && <p className="rounded-2xl border border-[#E8D39D] bg-[#FFF9E9] px-5 py-4 text-sm text-[#725C28]">Klasyfikacja „Prawdziwa / Testowa” czeka na uruchomienie przygotowanej migracji Supabase. Pozostałe dane są bezpieczne.</p>}
     <section className="rounded-3xl border border-[#E5E1D8] bg-white p-5 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-6">
       <div className="flex items-center gap-2 text-[#2D4739]"><SlidersHorizontal size={19} /><h2 className="font-bold">Filtry</h2></div>
-      <div className="mt-4 flex flex-wrap gap-2"><FilterButton active={filter === "all"} onClick={() => setFilter("all")}>Wszystkie ({counts.all})</FilterButton><FilterButton active={filter === "real"} onClick={() => setFilter("real")}>Prawdziwe ({counts.real})</FilterButton><FilterButton active={filter === "test"} onClick={() => setFilter("test")}>Testowe ({counts.test})</FilterButton>{VISIT_STATUSES.map((status) => <FilterButton key={status} active={filter === `status:${status}`} onClick={() => setFilter(`status:${status}`)}>{status}</FilterButton>)}</div>
+      <div className="mt-4 flex flex-wrap gap-2"><FilterButton active={filter === "all"} onClick={() => setFilter("all")}>Wszystkie ({counts.all})</FilterButton><FilterButton active={filter === "real"} onClick={() => setFilter("real")}>Prawdziwe ({counts.real})</FilterButton><FilterButton active={filter === "test"} onClick={() => { setHideTestVisits(false); setFilter("test"); }}>Testowe ({counts.test})</FilterButton>{VISIT_STATUSES.map((status) => <FilterButton key={status} active={filter === `status:${status}`} onClick={() => setFilter(`status:${status}`)}>{status}</FilterButton>)}</div>
+      <label className="mt-4 flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl border border-[#E8D39D] bg-[#FFF9E9] px-4 py-3 text-sm font-semibold text-[#725C28]">
+        <input type="checkbox" checked={hideTestVisits} onChange={(event) => { const checked = event.target.checked; setHideTestVisits(checked); if (checked && filter === "test") setFilter("all"); }} className="h-5 w-5 accent-[#6D7A62]" />
+        <EyeOff size={19} aria-hidden="true" />
+        Ukryj wizyty testowe ({counts.test})
+      </label>
       <label className="mt-5 flex items-center gap-3 rounded-2xl border border-[#E5E1D8] bg-[#F8F5F0] px-4 py-3"><Search size={20} className="text-gray-400" /><span className="sr-only">Szukaj wizyty</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Szukaj po nazwie, telefonie lub e-mailu…" className="w-full bg-transparent outline-none" /></label>
     </section>
     {message && <p role="status" className="rounded-2xl bg-[#EEF1EB] px-5 py-3 text-sm font-semibold text-[#2D4739]">{message}</p>}

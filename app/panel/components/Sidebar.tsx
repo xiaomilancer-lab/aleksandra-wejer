@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, CalendarClock, CalendarDays, CalendarHeart, CircleHelp, ClipboardList, Flower2, FolderKanban, House, Mail, Menu, Settings, UserRound, Users, X } from "lucide-react";
+import { BookOpen, Bot, CalendarClock, CalendarDays, CalendarHeart, CircleHelp, ClipboardList, Flower2, FolderKanban, House, Mail, Menu, Settings, UserRound, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -17,6 +17,7 @@ const navItems = [
   { href: "/panel/library", label: "Biblioteka", icon: BookOpen },
   { href: "/panel/important-dates", label: "Ważne daty", icon: CalendarHeart },
   { href: "/panel/self-care", label: "Chwila dla siebie", icon: Flower2 },
+  { href: "/panel/ai-chat", label: "Porozmawiaj z AI", icon: Bot },
   { href: "/panel/help", label: "Instrukcja", icon: CircleHelp },
   { href: "/panel/settings", label: "Ustawienia", icon: Settings },
   { href: "/", label: "Strona główna", icon: House },

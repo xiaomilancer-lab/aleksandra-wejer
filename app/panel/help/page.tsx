@@ -1,4 +1,4 @@
-import { BookOpen, CalendarCheck2, ClipboardList, HeartHandshake, ShieldCheck, UserRoundCog } from "lucide-react";
+import { BookOpen, Bot, CalendarCheck2, ClipboardList, HeartHandshake, ShieldCheck, UserRoundCog } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import AuthGuard from "../components/AuthGuard";
@@ -35,6 +35,11 @@ const steps = [
     title: "6. Bezpieczeństwo",
     body: "Nie przypisuj wizyt testowych do prawdziwych kart. Przed odejściem od urządzenia wyloguj się, a w karcie zapisuj tylko informacje potrzebne do prowadzenia pracy.",
   },
+  {
+    icon: Bot,
+    title: "7. Awaryjna rozmowa z AI",
+    body: "W zakładce „Porozmawiaj z AI” wybierasz neutralną grupę, temat, cel i rodzaj odpowiedzi. Nie ma tam pola na opis pacjenta. Historia zostaje tylko w używanej przeglądarce i można ją trwale usunąć.",
+  },
 ];
 
 export default function HelpPage() {
@@ -50,6 +55,7 @@ export default function HelpPage() {
               <QuickLink href="/panel/visits">Otwórz wizyty</QuickLink>
               <QuickLink href="/panel/patients">Otwórz pacjentów</QuickLink>
               <QuickLink href="/panel/library">Otwórz bibliotekę</QuickLink>
+              <QuickLink href="/panel/ai-chat">Porozmawiaj z AI</QuickLink>
             </div>
           </section>
 
@@ -66,7 +72,7 @@ export default function HelpPage() {
 
           <section className="rounded-3xl border border-[#E6D6B9] bg-[#FFF9EE] p-6 sm:p-8">
             <h2 className="text-xl font-bold text-[#2D4739]">Co zrobić z Janem i Krystyną?</h2>
-            <p className="mt-2 leading-7 text-[#6F5735]">Jeżeli to wymyślone osoby, ich wizyty oznacz jako testowe. Nie musisz usuwać historii. Istniejące testowe karty można po prostu zostawić nieużywane — nie przypisuj ich do prawdziwych wizyt.</p>
+            <p className="mt-2 leading-7 text-[#6F5735]">Stare demonstracyjne karty Jana i Krystyny są teraz ukryte na listach i w wyborze pacjenta. Powiązana historia testowa nie została skasowana, dlatego nic w bazie nie traci spójności.</p>
           </section>
         </main>
       </Dashboard>

@@ -29,6 +29,17 @@ function isPatientsTableMissing(errorCode: string | undefined) {
   return errorCode === "42P01";
 }
 
+// These two cards came from the original production smoke test. They remain in
+// the database so existing test relations are not broken, but they are omitted
+// from every patient picker and patient list.
+function isLegacyDemoPatient(patient: Patient) {
+  const normalizedName = patient.name.trim().toLocaleLowerCase("pl-PL");
+  const normalizedEmail = normalizeEmail(patient.email);
+
+  return normalizedName === "krystyna ahjujewicz"
+    || (normalizedName === "jan kowalski" && normalizedEmail === "jan.kowalski@test.pl");
+}
+
 export async function recordTimelineEvent(input: PatientTimelineEventInput) {
   try {
     await createTimelineEvent(input);
@@ -52,7 +63,7 @@ export async function getPatients(): Promise<Patient[]> {
     throw error;
   }
 
-  return (data ?? []) as Patient[];
+  return ((data ?? []) as Patient[]).filter((patient) => !isLegacyDemoPatient(patient));
 }
 
 export async function getPatientById(id: string): Promise<Patient | null> {
