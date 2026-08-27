@@ -8,6 +8,7 @@ import DashboardNewRequests from "./components/DashboardNewRequests";
 import DashboardNextVisit from "./components/DashboardNextVisit";
 import DashboardQuickActions from "./components/DashboardQuickActions";
 import DashboardSitePulse from "./components/DashboardSitePulse";
+import DashboardPracticeStats from "./components/DashboardPracticeStats";
 import DashboardWeekSchedule from "./components/DashboardWeekSchedule";
 import PsycholkaGentleCelebration from "./components/PsycholkaGentleCelebration";
 import PsycholkaOnboarding from "./components/PsycholkaOnboarding";
@@ -22,6 +23,7 @@ import { emptySitePulseDashboardData, type SitePulseDashboardData } from "@/app/
 import { requirePsychologist } from "./server/requirePsychologist";
 import { getPatientVaultState } from "./server/patientVault";
 import PatientVaultGate from "./patients/PatientVaultGate";
+import { getPracticeStatisticsData, type PracticeStatisticsData } from "./services/practiceStatisticsService";
 
 export default async function PanelPage() {
   await connection();
@@ -38,8 +40,10 @@ export default async function PanelPage() {
   let followupReminders: FollowupReminderAssignment[] = [];
   let importantDateOccurrences: ImportantDateOccurrence[] = [];
   let sitePulseData: SitePulseDashboardData = emptySitePulseDashboardData;
+  let practiceStatistics: PracticeStatisticsData | null = null;
   let loadError = false;
   const sitePulsePromise = getSitePulseDashboardData(now).catch(() => emptySitePulseDashboardData);
+  const practiceStatisticsPromise = getPracticeStatisticsData(now).catch(() => null);
 
   try {
     const [importantDates, dashboard, week, queue, upcoming, requests, attention, followups] = await Promise.all([
@@ -64,6 +68,7 @@ export default async function PanelPage() {
     loadError = true;
   }
   sitePulseData = await sitePulsePromise;
+  practiceStatistics = await practiceStatisticsPromise;
 
   const celebrationDate = getWarsawDateParts(now).date;
 
@@ -79,6 +84,7 @@ export default async function PanelPage() {
           <div className="mt-6"><TodayQueue visits={todayQueue} initialNow={now.toISOString()} /></div>
           <div className="mt-6"><DashboardAttention items={attentionItems} /></div>
           <DashboardSitePulse initialData={sitePulseData} />
+          {practiceStatistics && <DashboardPracticeStats data={practiceStatistics} />}
           <div className="mt-6 grid gap-6 xl:grid-cols-3"><DashboardWeekSchedule schedule={weekData} /><DashboardImportantDates occurrences={importantDateOccurrences} /><DashboardFollowupReminders assignments={followupReminders} /></div>
           <div className="mt-6"><DashboardQuickActions /></div>
         </div>

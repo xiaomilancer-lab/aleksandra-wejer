@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { VISIT_RECORD_KINDS, type VisitRecordKind } from "../domain/booking";
 import { isVisitStatus, type VisitStatus } from "../domain/status";
 import { requirePatientVaultAccess } from "../server/patientVault";
-import { createHistoricalVisit, createManualVisit, rescheduleVisit, updateVisitRecordKind } from "../services/visitOrganizerService";
+import { createHistoricalVisit, createManualVisit, rescheduleVisit, updateVisitFee, updateVisitRecordKind } from "../services/visitOrganizerService";
 
 export interface HistoricalVisitInput {
   patientId: string | null;
@@ -82,4 +82,24 @@ export async function rescheduleVisitAction(id: number, input: RescheduleVisitIn
   revalidatePath("/panel/visits");
   if (visit.patient_id) revalidatePath(`/panel/patients/${visit.patient_id}`);
   return visit;
+}
+
+export async function updateVisitFeeAction(id: number, value: string) {
+  await requirePatientVaultAccess();
+  if (!Number.isInteger(id) || id < 1) throw new Error("Nieprawidłowa wizyta.");
+
+  const normalized = value.trim().replace(",", ".");
+  if (normalized && !/^\d{1,6}(\.\d{1,2})?$/.test(normalized)) {
+    throw new Error("Wpisz prawidłową kwotę, np. 180 lub 180,50.");
+  }
+  const visitFee = normalized ? Number(normalized) : null;
+  if (visitFee !== null && (!Number.isFinite(visitFee) || visitFee < 0 || visitFee > 999999.99)) {
+    throw new Error("Kwota musi mieścić się w zakresie od 0 do 999 999,99 zł.");
+  }
+
+  const savedFee = await updateVisitFee(id, visitFee);
+  revalidatePath("/panel");
+  revalidatePath("/panel/visits");
+  revalidatePath("/panel/statistics");
+  return { id, visitFee: savedFee };
 }

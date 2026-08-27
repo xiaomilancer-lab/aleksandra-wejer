@@ -16,5 +16,5 @@ export default async function VisitsPage() {
     return <AuthGuard><Dashboard><PatientVaultGate configured={vault.configured} lockedUntil={vault.lockedUntil} returnTo="/panel/visits" /></Dashboard></AuthGuard>;
   }
   const [data, patients] = await Promise.all([getVisitOrganizerData(), getPatients()]);
-  return <AuthGuard><Dashboard><div className="mx-auto max-w-7xl"><VisitOrganizer initialVisits={data.visits} classificationAvailable={data.classificationAvailable} patients={patients} /></div></Dashboard></AuthGuard>;
+  return <AuthGuard><Dashboard><div className="mx-auto max-w-7xl"><VisitOrganizer initialVisits={data.visits} classificationAvailable={data.classificationAvailable} financeAvailable={data.financeAvailable} patients={patients} /></div></Dashboard></AuthGuard>;
 }

@@ -8,23 +8,36 @@ import type { Patient } from "../domain/patient";
 import type { HistoricalVisitInput, ManualVisitInput, RescheduleVisitInput } from "../actions/visitOrganizerActions";
 
 const fields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source, record_kind";
+const financeFields = `${fields}, visit_fee`;
 const fallbackFields = "id, patient_id, name, email, phone, location, location_id, visit_date, visit_time, status, message, source";
 
 export interface VisitOrganizerData {
   visits: Visit[];
   classificationAvailable: boolean;
+  financeAvailable: boolean;
 }
 
 export async function getVisitOrganizerData(): Promise<VisitOrganizerData> {
-  const result = await supabaseAdmin.from("bookings").select(fields).order("visit_date", { ascending: false }).order("visit_time", { ascending: false });
-  if (!result.error) return { visits: (result.data ?? []) as Visit[], classificationAvailable: true };
+  const result = await supabaseAdmin.from("bookings").select(financeFields).order("visit_date", { ascending: false }).order("visit_time", { ascending: false });
+  if (!result.error) return { visits: (result.data ?? []) as Visit[], classificationAvailable: true, financeAvailable: true };
 
   if (result.error.code !== "42703") throw result.error;
+  const withoutFinance = await supabaseAdmin.from("bookings").select(fields).order("visit_date", { ascending: false }).order("visit_time", { ascending: false });
+  if (!withoutFinance.error) {
+    return {
+      visits: (withoutFinance.data ?? []).map((visit) => ({ ...visit, visit_fee: null })) as Visit[],
+      classificationAvailable: true,
+      financeAvailable: false,
+    };
+  }
+
+  if (withoutFinance.error.code !== "42703") throw withoutFinance.error;
   const fallback = await supabaseAdmin.from("bookings").select(fallbackFields).order("visit_date", { ascending: false }).order("visit_time", { ascending: false });
   if (fallback.error) throw fallback.error;
   return {
-    visits: (fallback.data ?? []).map((visit) => ({ ...visit, record_kind: "real" })) as Visit[],
+    visits: (fallback.data ?? []).map((visit) => ({ ...visit, record_kind: "real", visit_fee: null })) as Visit[],
     classificationAvailable: false,
+    financeAvailable: false,
   };
 }
 
@@ -75,9 +88,17 @@ export async function createOrMatchPatientFromVisit(id: number): Promise<Patient
 }
 
 export async function getOrganizerVisitById(id: number): Promise<Visit | null> {
-  const { data, error } = await supabaseAdmin.from("bookings").select(fields).eq("id", id).maybeSingle();
-  if (error) throw error;
-  return data as Visit | null;
+  const result = await supabaseAdmin.from("bookings").select(financeFields).eq("id", id).maybeSingle();
+  if (!result.error) return result.data as Visit | null;
+  if (result.error.code !== "42703") throw result.error;
+
+  const fallback = await supabaseAdmin.from("bookings").select(fields).eq("id", id).maybeSingle();
+  if (!fallback.error) return fallback.data ? { ...(fallback.data as Visit), visit_fee: null } : null;
+  if (fallback.error.code !== "42703") throw fallback.error;
+
+  const legacy = await supabaseAdmin.from("bookings").select(fallbackFields).eq("id", id).maybeSingle();
+  if (legacy.error) throw legacy.error;
+  return legacy.data ? { ...(legacy.data as Visit), record_kind: "real", visit_fee: null } : null;
 }
 
 export async function getNextOrganizerVisit(visit: Visit): Promise<Visit | null> {
@@ -163,7 +184,7 @@ export async function rescheduleVisit(id: number, input: RescheduleVisitInput): 
   if (error?.code === "23505") throw new Error("W tym gabinecie jest już prawdziwa wizyta o wybranej porze.");
   if (error) throw error;
 
-  const updated = data as Visit;
+  const updated = { ...(data as Visit), visit_fee: visit.visit_fee ?? null };
   if (updated.patient_id) {
     await recordTimelineEvent({
       patientId: updated.patient_id,
@@ -180,4 +201,32 @@ export async function rescheduleVisit(id: number, input: RescheduleVisitInput): 
     });
   }
   return updated;
+}
+
+export async function updateVisitFee(id: number, visitFee: number | null): Promise<number | null> {
+  const visit = await getOrganizerVisitById(id);
+  if (!visit) throw new Error("Nie znaleziono wizyty.");
+  if ((visit.record_kind ?? "real") === "test") throw new Error("Kwotę można przypisać wyłącznie do prawdziwej wizyty.");
+
+  const { data, error } = await supabaseAdmin
+    .from("bookings")
+    .update({ visit_fee: visitFee })
+    .eq("id", id)
+    .select("visit_fee")
+    .single();
+  if (error?.code === "42703") throw new Error("Kwoty czekają na uruchomienie przygotowanej migracji Supabase.");
+  if (error) throw error;
+
+  const savedFee = data.visit_fee === null ? null : Number(data.visit_fee);
+  if (visit.patient_id) {
+    await recordTimelineEvent({
+      patientId: visit.patient_id,
+      visitId: visit.id,
+      eventType: "status_changed",
+      title: "Zaktualizowano kwotę wizyty",
+      description: savedFee === null ? "Usunięto orientacyjną kwotę wizyty." : `Wpisano orientacyjną kwotę ${savedFee.toFixed(2)} zł.`,
+      metadata: { visit_fee: savedFee },
+    });
+  }
+  return savedFee;
 }

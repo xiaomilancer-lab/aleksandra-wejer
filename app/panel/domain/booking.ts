@@ -12,6 +12,7 @@ export interface Visit {
   message: string | null;
   source?: string | null;
   record_kind?: VisitRecordKind;
+  visit_fee?: number | null;
 }
 
 export const VISIT_RECORD_KINDS = ["real", "test"] as const;
