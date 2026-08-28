@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarClock, EyeOff, Link2, Plus, Printer, Search, SlidersHorizontal, UserPlus, X } from "lucide-react";
+import { CalendarClock, CalendarDays, EyeOff, Link2, Plus, Printer, Search, SlidersHorizontal, UserPlus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import type { Visit, VisitRecordKind } from "../../domain/booking";
@@ -60,9 +60,15 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
         const patient = patientId
           ? await assignVisitToPatientAction(visit.id, patientId)
           : await createPatientCardFromVisitAction(visit.id);
-        setVisits((current) => current.map((item) => item.id === visit.id ? { ...item, patient_id: patient.id } : item));
+        setVisits((current) => current.map((item) => item.id === visit.id ? {
+          ...item,
+          patient_id: patient.id,
+          name: patient.name,
+          phone: patient.phone ?? "",
+          email: patient.email ?? "",
+        } : item));
         setPatientCards((current) => current.some((item) => item.id === patient.id) ? current : [...current, patient].sort((a, b) => a.name.localeCompare(b.name, "pl")));
-        setMessage(`Wizyta ${visit.name} jest połączona z kartą pacjenta.`);
+        setMessage(`Wizyta jest połączona z kartą ${patient.name}. Dane zostały ujednolicone.`);
       } catch (error) {
         setMessage(error instanceof Error ? error.message : "Nie udało się przypisać karty pacjenta.");
       }
@@ -99,7 +105,7 @@ export default function VisitOrganizer({ initialVisits, classificationAvailable,
 
   return <div className="space-y-6">
     <header className="rounded-3xl border border-[#E5E1D8] bg-white p-6 shadow-[0_12px_35px_rgba(45,71,57,0.06)] sm:p-8">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm text-gray-500">Porządek bez usuwania historii</p><h1 className="mt-1 text-3xl font-bold text-[#2D4739]">Wizyty</h1><p className="mt-2 text-gray-600">Oznacz wizyty testowe, uporządkuj statusy i zachowaj prawdziwą historię gabinetu.</p></div><div className="flex flex-col gap-2 sm:items-end"><Link href="/panel/visits/after-visit-preview" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><Printer size={18} />Podgląd karty po spotkaniu</Link><button type="button" onClick={() => setManualOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#2D4739] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę poza grafikiem</button><button type="button" onClick={() => setHistoryOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę historyczną</button></div></div>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm text-gray-500">Porządek bez usuwania historii</p><h1 className="mt-1 text-3xl font-bold text-[#2D4739]">Wizyty</h1><p className="mt-2 text-gray-600">Oznacz wizyty testowe, uporządkuj statusy i zachowaj prawdziwą historię gabinetu.</p></div><div className="flex flex-col gap-2 sm:items-end"><Link href="/panel/schedule" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#6D7A62] bg-[#F3F7F1] px-4 py-3 font-semibold text-[#2D4739]"><CalendarDays size={18} />Otwórz prosty terminarz</Link><Link href="/panel/visits/after-visit-preview" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D5DCCF] bg-white px-4 py-3 font-semibold text-[#2D4739]"><Printer size={18} />Podgląd karty po spotkaniu</Link><button type="button" onClick={() => setManualOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#2D4739] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę poza grafikiem</button><button type="button" onClick={() => setHistoryOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#6D7A62] px-4 py-3 font-semibold text-white"><Plus size={18} />Dodaj wizytę historyczną</button></div></div>
     </header>
     {!classificationAvailable && <p className="rounded-2xl border border-[#E8D39D] bg-[#FFF9E9] px-5 py-4 text-sm text-[#725C28]">Klasyfikacja „Prawdziwa / Testowa” czeka na uruchomienie przygotowanej migracji Supabase. Pozostałe dane są bezpieczne.</p>}
     {!financeAvailable && <p className="rounded-2xl border border-[#E8D39D] bg-[#FFF9E9] px-5 py-4 text-sm text-[#725C28]">Kwoty i podsumowania finansowe czekają na uruchomienie migracji <strong>add_booking_visit_fee.sql</strong>. Wizyty i pozostałe funkcje działają normalnie.</p>}

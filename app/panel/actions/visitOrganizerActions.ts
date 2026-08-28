@@ -52,6 +52,7 @@ export async function classifyVisitAction(id: number, recordKind: VisitRecordKin
   await updateVisitRecordKind(id, recordKind);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
 }
 
 export async function createHistoricalVisitAction(input: HistoricalVisitInput) {
@@ -62,6 +63,7 @@ export async function createHistoricalVisitAction(input: HistoricalVisitInput) {
   await createHistoricalVisit(input);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
 }
 
 export async function createManualVisitAction(input: ManualVisitInput) {
@@ -71,6 +73,7 @@ export async function createManualVisitAction(input: ManualVisitInput) {
   await createManualVisit(input);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
 }
 
 export async function rescheduleVisitAction(id: number, input: RescheduleVisitInput) {
@@ -80,6 +83,7 @@ export async function rescheduleVisitAction(id: number, input: RescheduleVisitIn
   const visit = await rescheduleVisit(id, input);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
   if (visit.patient_id) revalidatePath(`/panel/patients/${visit.patient_id}`);
   return visit;
 }
@@ -100,6 +104,7 @@ export async function updateVisitFeeAction(id: number, value: string) {
   const savedFee = await updateVisitFee(id, visitFee);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
   revalidatePath("/panel/statistics");
   return { id, visitFee: savedFee };
 }

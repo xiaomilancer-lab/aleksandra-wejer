@@ -43,6 +43,7 @@ export async function createPatientAction(input: CreatePatientCardInput) {
   revalidatePath("/panel");
   revalidatePath("/panel/patients");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
   revalidatePath(`/panel/patients/${patient.id}`);
   return { patient, supportInfoSaved, supportInfoRequested: Boolean(supportInfo) };
 }
@@ -60,6 +61,8 @@ export async function updatePatientAction(patientId: string, identity: PatientId
   const patient = await updatePatient(patientId, { name, phone, email });
   revalidatePath("/panel");
   revalidatePath("/panel/patients");
+  revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
   revalidatePath(`/panel/patients/${patientId}`);
   return patient;
 }
@@ -70,6 +73,7 @@ export async function assignVisitToPatientAction(visitId: number, patientId: str
   const patient = await assignVisitToPatient(visitId, patientId);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
   revalidatePath(`/panel/patients/${patient.id}`);
   return patient;
 }
@@ -80,6 +84,7 @@ export async function createPatientCardFromVisitAction(visitId: number) {
   const patient = await createOrMatchPatientFromVisit(visitId);
   revalidatePath("/panel");
   revalidatePath("/panel/visits");
+  revalidatePath("/panel/schedule");
   revalidatePath("/panel/patients");
   revalidatePath(`/panel/patients/${patient.id}`);
   return patient;

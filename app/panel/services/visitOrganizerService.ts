@@ -3,7 +3,7 @@ import "server-only";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { Visit, VisitRecordKind } from "../domain/booking";
 import { getBookingLocationName, isBookingLocationId } from "@/app/booking/locations";
-import { findOrCreatePatient, getPatientById, recordTimelineEvent } from "./patientService";
+import { findOrCreatePatient, getPatientById, recordTimelineEvent, syncPatientIdentityToLinkedVisits } from "./patientService";
 import type { Patient } from "../domain/patient";
 import type { HistoricalVisitInput, ManualVisitInput, RescheduleVisitInput } from "../actions/visitOrganizerActions";
 
@@ -54,6 +54,7 @@ export async function assignVisitToPatient(id: number, patientId: string): Promi
 
   const { error } = await supabaseAdmin.from("bookings").update({ patient_id: patient.id }).eq("id", id);
   if (error) throw error;
+  await syncPatientIdentityToLinkedVisits(patient.id, patient);
   await recordTimelineEvent({
     patientId: patient.id,
     visitId: id,
@@ -77,6 +78,7 @@ export async function createOrMatchPatientFromVisit(id: number): Promise<Patient
   if (!patient) throw new Error("Nie udało się utworzyć karty pacjenta.");
   const { error } = await supabaseAdmin.from("bookings").update({ patient_id: patient.id }).eq("id", id);
   if (error) throw error;
+  await syncPatientIdentityToLinkedVisits(patient.id, patient);
   await recordTimelineEvent({
     patientId: patient.id,
     visitId: id,

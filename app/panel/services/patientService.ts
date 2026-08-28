@@ -29,6 +29,18 @@ function isPatientsTableMissing(errorCode: string | undefined) {
   return errorCode === "42P01";
 }
 
+export async function syncPatientIdentityToLinkedVisits(patientId: string, identity: PatientIdentity): Promise<void> {
+  const { error } = await supabaseAdmin
+    .from("bookings")
+    .update({
+      name: identity.name.trim(),
+      phone: identity.phone?.trim() || "",
+      email: normalizeEmail(identity.email) || "",
+    })
+    .eq("patient_id", patientId);
+  if (error) throw error;
+}
+
 // These two cards came from the original production smoke test. They remain in
 // the database so existing test relations are not broken, but they are omitted
 // from every patient picker and patient list.
@@ -200,8 +212,8 @@ export async function createPatient(identity: PatientIdentity): Promise<Patient>
   return patient;
 }
 
-// Updates the contact identity stored on the patient card. Historical bookings
-// keep the contact snapshot that was captured when the visit was created.
+// The patient card is the canonical identity. Keep every linked visit in sync so
+// spelling corrections and updated contact details are consistent everywhere.
 export async function updatePatient(
   patientId: string,
   identity: PatientIdentity,
@@ -235,6 +247,8 @@ export async function updatePatient(
     .select("id, name, phone, email, created_at, updated_at")
     .single();
   if (error) throw error;
+
+  await syncPatientIdentityToLinkedVisits(patientId, identity);
 
   await recordTimelineEvent({
     patientId,

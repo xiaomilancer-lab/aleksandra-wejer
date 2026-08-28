@@ -8,6 +8,7 @@ import LogoutButton from "./LogoutButton";
 
 const navItems = [
   { href: "/panel", label: "Pulpit", icon: CalendarDays },
+  { href: "/panel/schedule", label: "Terminarz", icon: CalendarHeart },
   { href: "/panel/visits", label: "Wizyty", icon: ClipboardList },
   { href: "/panel/statistics", label: "Statystyki", icon: ChartNoAxesCombined },
   { href: "/panel/patients", label: "Pacjenci", icon: Users },
