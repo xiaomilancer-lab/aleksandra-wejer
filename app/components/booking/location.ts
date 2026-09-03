@@ -7,7 +7,6 @@ export const locations: Location[] = Object.entries(bookingLocationConfig).map((
   city: location.city,
   street: location.street,
   image: location.image,
-  availabilityLabel: location.availabilityLabel,
   active: true,
   available: true,
 }));

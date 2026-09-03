@@ -42,8 +42,8 @@ export default function MobilePsycholkaJourney() {
           </div>
         </div>
         <div className="mt-4 space-y-3 text-sm text-[#2D4739]">
-          <p className="flex items-start gap-2"><MapPin size={17} className="mt-0.5 shrink-0 text-[#6D7A62]" aria-hidden="true" /><span><strong>Centrum Zielińscy Premium</strong><br />Nowa Wieś Rzeczna<br /><span className="text-[#6D7A62]">Wszystkie dni poza wtorkiem</span></span></p>
-          <p className="flex items-start gap-2"><MapPin size={17} className="mt-0.5 shrink-0 text-[#6D7A62]" aria-hidden="true" /><span><strong>Arthro Cure Clinic</strong><br />Starogard Gdański<br /><span className="text-[#6D7A62]">Tylko we wtorki</span></span></p>
+          <p className="flex items-start gap-2"><MapPin size={17} className="mt-0.5 shrink-0 text-[#6D7A62]" aria-hidden="true" /><span><strong>Centrum Zielińscy Premium</strong><br />Nowa Wieś Rzeczna</span></p>
+          <p className="flex items-start gap-2"><MapPin size={17} className="mt-0.5 shrink-0 text-[#6D7A62]" aria-hidden="true" /><span><strong>Arthro Cure Clinic</strong><br />Starogard Gdański</span></p>
         </div>
       </section>
 

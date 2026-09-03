@@ -4,8 +4,8 @@ import { Bus, Car, Check, Copy, ExternalLink, MapPin, ShieldCheck, Smartphone } 
 import { useMemo, useState } from "react";
 
 const destinations = [
-  { id: "zielinscy", name: "Centrum Medyczno-Estetyczne Zielińscy Premium", address: "Kasztanowa 1, Nowa Wieś Rzeczna", availability: "Wszystkie dni poza wtorkiem" },
-  { id: "arthro", name: "Arthro Cure Clinic", address: "Al. Jana Pawła II 1/U9, Starogard Gdański", availability: "Tylko we wtorki" },
+  { id: "zielinscy", name: "Centrum Medyczno-Estetyczne Zielińscy Premium", address: "Kasztanowa 1, Nowa Wieś Rzeczna" },
+  { id: "arthro", name: "Arthro Cure Clinic", address: "Al. Jana Pawła II 1/U9, Starogard Gdański" },
 ] as const;
 
 type DestinationId = (typeof destinations)[number]["id"];
@@ -37,7 +37,6 @@ export default function TravelPlanner() {
             <button key={destination.id} type="button" onClick={() => setSelectedId(destination.id)} className={`rounded-2xl border p-4 text-left transition ${selectedId === destination.id ? "border-[#6D7A62] bg-[#EEF1EB]" : "border-[#E5E1D8] hover:bg-[#F8F5F0]"}`}>
               <span className="flex items-start justify-between gap-3"><strong>{destination.name}</strong>{selectedId === destination.id && <Check size={18} className="shrink-0" aria-hidden="true" />}</span>
               <span className="mt-2 block text-sm leading-6 text-gray-600">{destination.address}</span>
-              <span className="mt-2 block text-sm font-semibold text-[#55624D]">Przyjęcia: {destination.availability}</span>
             </button>
           ))}
         </div>

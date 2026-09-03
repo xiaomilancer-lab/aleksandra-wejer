@@ -4,7 +4,6 @@ export interface Location {
   city: string;
   street: string;
   image: string;
-  availabilityLabel: string;
   active: boolean;
   available: boolean;
 }

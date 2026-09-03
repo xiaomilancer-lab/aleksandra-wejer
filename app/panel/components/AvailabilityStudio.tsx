@@ -1,29 +1,279 @@
 "use client";
 
-import { CalendarClock, Coffee, Plus, Trash2 } from "lucide-react";
+import { CalendarClock, Coffee, Plus, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { bookingLocations, type BookingLocationId } from "@/app/booking/locations";
+import { supabase } from "@/lib/supabase";
 import PsycholkaWidget from "./PsychOLKAWidget";
 
-type Rule = { id: number; location_id: BookingLocationId; weekday: number; start_time: string; end_time: string; slot_duration_minutes: number; is_active: boolean };
-type Exception = { id: number; location_id: BookingLocationId; date: string; kind: "available" | "unavailable"; start_time: string | null; end_time: string | null; slot_duration_minutes: number | null; note: string | null };
+type Rule = {
+  id: number;
+  location_id: BookingLocationId;
+  weekday: number;
+  start_time: string;
+  end_time: string;
+  slot_duration_minutes: number;
+  is_active: boolean;
+};
+
+type Exception = {
+  id: number;
+  location_id: BookingLocationId;
+  date: string;
+  kind: "available" | "unavailable";
+  start_time: string | null;
+  end_time: string | null;
+  slot_duration_minutes: number | null;
+  note: string | null;
+};
+
+type AvailabilityResponse = {
+  state: "AVAILABLE" | "NO_SLOTS" | "NO_SCHEDULE" | "ERROR";
+  slots: Array<{ date: string; time: string }>;
+};
+
 const weekdays = ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
+const locationIds = Object.keys(bookingLocations) as BookingLocationId[];
 
 export default function AvailabilityStudio() {
-  const [rules, setRules] = useState<Rule[]>([]); const [exceptions, setExceptions] = useState<Exception[]>([]); const [migrationRequired, setMigrationRequired] = useState(false); const [message, setMessage] = useState(""); const [loading, setLoading] = useState(true); const [preview, setPreview] = useState<string[]>([]);
-  const request = useCallback(async (path: string, init?: RequestInit) => { const { data } = await supabase.auth.getSession(); const token = data.session?.access_token; const response = await fetch(path, { ...init, headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(init?.headers ?? {}) } }); const json = await response.json(); if (!response.ok) throw new Error(json.message ?? "Nie udało się wykonać operacji."); return json; }, []);
-  const load = useCallback(async () => { setLoading(true); try { const data = await request("/api/panel/availability"); setRules(data.rules); setExceptions(data.exceptions); setMigrationRequired(data.migrationRequired); } catch (error) { setMessage(error instanceof Error ? error.message : "Nie udało się pobrać grafiku."); } finally { setLoading(false); } }, [request]);
-  useEffect(() => { const timer = window.setTimeout(() => { void load(); }, 0); return () => window.clearTimeout(timer); }, [load]);
-  useEffect(() => { const from = new Date().toISOString().slice(0, 10); const to = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10); fetch(`/api/availability?locationId=nowa-wies-rzeczna&from=${from}&to=${to}`).then((response) => response.json()).then((data) => setPreview(data.state === "AVAILABLE" ? data.slots.slice(0, 8).map((slot: { date: string; time: string }) => `${slot.date} · ${slot.time}`) : [])).catch(() => setPreview([])); }, [rules, exceptions]);
+  const [rules, setRules] = useState<Rule[]>([]);
+  const [exceptions, setExceptions] = useState<Exception[]>([]);
+  const [migrationRequired, setMigrationRequired] = useState(false);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [preview, setPreview] = useState<string[]>([]);
+
+  const request = useCallback(async (path: string, init?: RequestInit) => {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    const response = await fetch(path, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(init?.headers ?? {}),
+      },
+    });
+    const json = await response.json();
+    if (!response.ok) throw new Error(json.message ?? "Nie udało się wykonać operacji.");
+    return json;
+  }, []);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await request("/api/panel/availability");
+      setRules(data.rules);
+      setExceptions(data.exceptions);
+      setMigrationRequired(data.migrationRequired);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Nie udało się pobrać grafiku.");
+    } finally {
+      setLoading(false);
+    }
+  }, [request]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(timer);
+  }, [load]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const from = new Date().toISOString().slice(0, 10);
+    const to = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10);
+
+    Promise.all(
+      locationIds.map(async (locationId) => {
+        const response = await fetch(
+          `/api/availability?locationId=${encodeURIComponent(locationId)}&from=${from}&to=${to}`,
+          { signal: controller.signal },
+        );
+        const data = (await response.json()) as AvailabilityResponse;
+        return data.state === "AVAILABLE" ? data.slots.map((slot) => ({ ...slot, locationId })) : [];
+      }),
+    )
+      .then((results) => {
+        const values = results
+          .flat()
+          .sort((left, right) => `${left.date}T${left.time}`.localeCompare(`${right.date}T${right.time}`))
+          .slice(0, 10)
+          .map((slot) => `${slot.date} · ${slot.time} · ${bookingLocations[slot.locationId]}`);
+        setPreview(values);
+      })
+      .catch((error) => {
+        if ((error as Error).name !== "AbortError") setPreview([]);
+      });
+
+    return () => controller.abort();
+  }, [rules, exceptions]);
+
   const hasRules = rules.length > 0;
-  const create = async (type: "rule" | "exception", data: object) => { try { await request("/api/panel/availability", { method: "POST", body: JSON.stringify({ type, data }) }); setMessage("Gotowe ❤️"); await load(); } catch (error) { setMessage(error instanceof Error ? error.message : "Nie udało się zapisać."); } };
-  const remove = async (type: "rule" | "exception", id: number) => { try { await request(`/api/panel/availability?type=${type}&id=${id}`, { method: "DELETE" }); await load(); } catch (error) { setMessage(error instanceof Error ? error.message : "Nie udało się usunąć."); } };
-  const toggle = async (rule: Rule) => { try { await request("/api/panel/availability", { method: "PATCH", body: JSON.stringify({ id: rule.id, isActive: !rule.is_active }) }); await load(); } catch (error) { setMessage(error instanceof Error ? error.message : "Nie udało się zmienić reguły."); } };
-  const grouped = useMemo(() => weekdays.map((label, weekday) => ({ label, weekday, rules: rules.filter((rule) => rule.weekday === weekday) })), [rules]);
-  return <div className="min-w-0 space-y-6"><header className="flex min-w-0 flex-col gap-4 overflow-hidden rounded-3xl border border-[#E5E1D8] bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6"><div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[.12em] text-[#6D7A62] sm:text-sm">Ustawienia rezerwacji</p><h1 className="mt-1 break-words text-2xl font-bold text-[#2D4739] sm:text-3xl">Grafik i dostępność</h1><p className="mt-2 text-sm text-gray-600">To źródło terminów dla kalendarza głównego i Centrum Zielińscy.</p></div><PsycholkaWidget context="dashboard" action={hasRules ? "wave" : "idle"} fallbackAction="greeting" message={hasRules ? "Gotowe ❤️" : "Ustawmy najpierw Twój grafik."} /></header>{migrationRequired && <p className="rounded-2xl bg-[#FFF9EE] p-4 text-sm text-[#7A6540] sm:p-5">Wymagana jest ręczna migracja `create_availability_engine.sql`. Panel nie zapisuje danych przed jej wykonaniem.</p>}{message && <p aria-live="polite" className="rounded-xl bg-[#EEF1EB] px-4 py-3 text-sm text-[#55624D]">{message}</p>}<div className="grid min-w-0 gap-6 xl:grid-cols-[1.15fr_.85fr]"><section className="min-w-0 rounded-3xl border border-[#E5E1D8] bg-white p-4 sm:p-6"><h2 className="font-bold text-[#2D4739]">Tygodniowy grafik</h2><div className="mt-5 space-y-3">{grouped.map(({ label, weekday, rules: dayRules }) => <article key={label} className="min-w-0 rounded-2xl bg-[#F8F5F0] p-3 sm:p-4"><div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold text-[#2D4739]">{label}</h3>{!dayRules.length && <span className="text-sm text-gray-500">Nie ustawiono</span>}</div>{dayRules.map((rule) => <div key={rule.id} className="mt-3 grid min-w-0 gap-2 rounded-xl bg-white p-3 text-sm sm:flex sm:flex-wrap sm:items-center"><span className="break-words font-medium">{bookingLocations[rule.location_id]}</span><span>{rule.start_time.slice(0, 5)} — {rule.end_time.slice(0, 5)} · {rule.slot_duration_minutes} min</span><div className="flex items-center gap-2 sm:ml-auto"><button onClick={() => toggle(rule)} className={`min-h-9 rounded-lg px-3 py-1 text-xs font-semibold ${rule.is_active ? "bg-[#DDE5D8] text-[#55624D]" : "bg-gray-200 text-gray-600"}`}>{rule.is_active ? "aktywny" : "nieaktywny"}</button><button onClick={() => remove("rule", rule.id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-red-50 hover:text-[#C76E76]" aria-label="Usuń regułę"><Trash2 size={15} /></button></div></div>)}{!dayRules.length && <RuleForm weekday={weekday} onCreate={(data) => create("rule", data)} />}</article>)}</div></section><aside className="min-w-0 space-y-6"><section className="min-w-0 rounded-3xl border border-[#E5E1D8] bg-white p-4 sm:p-6"><div className="flex items-start gap-2"><CalendarClock size={19} className="mt-0.5 shrink-0 text-[#6D7A62]" /><h2 className="font-bold text-[#2D4739]">Podgląd najbliższych wolnych terminów</h2></div>{preview.length ? <ul className="mt-4 space-y-2 text-sm text-[#55624D]">{preview.map((slot) => <li key={slot} className="rounded-xl bg-[#F8F5F0] px-3 py-2">{slot}</li>)}</ul> : <p className="mt-4 text-sm text-gray-600">Po zapisaniu aktywnych reguł wolne terminy pojawią się tutaj.</p>}</section><section className="min-w-0 rounded-3xl border border-[#E5E1D8] bg-white p-4 sm:p-6"><div className="flex items-center gap-2"><Coffee size={19} className="shrink-0 text-[#6D7A62]" /><h2 className="font-bold text-[#2D4739]">Wyjątki</h2></div><ExceptionForm onCreate={(data) => create("exception", data)} />{exceptions.length ? <div className="mt-4 space-y-2">{exceptions.map((exception) => <div key={exception.id} className="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-[#F8F5F0] px-3 py-2 text-sm"><span className="min-w-0 break-words">{exception.date} · {exception.kind === "unavailable" ? "dzień wolny / blokada" : "dodatkowe godziny"}</span><button onClick={() => remove("exception", exception.id)} className="inline-flex h-9 w-9 shrink-0 items-center justify-center" aria-label="Usuń wyjątek"><Trash2 size={15} /></button></div>)}</div> : <p className="mt-4 text-sm text-gray-600">Nie ustawiono wyjątków.</p>}</section></aside></div>{loading && <p className="text-sm text-gray-500">Wczytywanie grafiku…</p>}</div>;
+  const grouped = useMemo(
+    () => weekdays.map((label, weekday) => ({ label, weekday, rules: rules.filter((rule) => rule.weekday === weekday) })),
+    [rules],
+  );
+
+  const create = async (type: "rule" | "exception", data: object) => {
+    setMessage("");
+    try {
+      await request("/api/panel/availability", { method: "POST", body: JSON.stringify({ type, data }) });
+      setMessage(type === "rule" ? "Nowy przedział godzin został dodany ❤️" : "Wyjątek został zapisany ❤️");
+      await load();
+      return true;
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Nie udało się zapisać.");
+      return false;
+    }
+  };
+
+  const remove = async (type: "rule" | "exception", id: number) => {
+    try {
+      await request(`/api/panel/availability?type=${type}&id=${id}`, { method: "DELETE" });
+      setMessage("Pozycja została usunięta.");
+      await load();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Nie udało się usunąć.");
+    }
+  };
+
+  const toggle = async (rule: Rule) => {
+    try {
+      await request("/api/panel/availability", { method: "PATCH", body: JSON.stringify({ id: rule.id, isActive: !rule.is_active }) });
+      await load();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Nie udało się zmienić reguły.");
+    }
+  };
+
+  return (
+    <div className="min-w-0 space-y-6">
+      <header className="flex min-w-0 flex-col gap-4 overflow-hidden rounded-3xl border border-[#E5E1D8] bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[.12em] text-[#6D7A62] sm:text-sm">Ustawienia rezerwacji</p>
+          <h1 className="mt-1 break-words text-2xl font-bold text-[#2D4739] sm:text-3xl">Grafik i dostępność</h1>
+          <p className="mt-2 text-sm text-gray-600">Każdy dzień może mieć kilka przedziałów i różne gabinety.</p>
+        </div>
+        <PsycholkaWidget context="dashboard" action={hasRules ? "wave" : "idle"} fallbackAction="greeting" message={hasRules ? "Gotowe ❤️" : "Ustawmy najpierw Twój grafik."} />
+      </header>
+
+      {migrationRequired && <p className="rounded-2xl bg-[#FFF9EE] p-4 text-sm text-[#7A6540] sm:p-5">Wymagana jest ręczna migracja `create_availability_engine.sql`. Panel nie zapisuje danych przed jej wykonaniem.</p>}
+      {message && <p aria-live="polite" className="rounded-xl bg-[#EEF1EB] px-4 py-3 text-sm text-[#55624D]">{message}</p>}
+
+      <div className="grid min-w-0 gap-6 xl:grid-cols-[1.15fr_.85fr]">
+        <section className="min-w-0 rounded-3xl border border-[#E5E1D8] bg-white p-4 sm:p-6">
+          <h2 className="font-bold text-[#2D4739]">Tygodniowy grafik</h2>
+          <p className="mt-2 text-sm leading-6 text-gray-600">Dodaj osobny przedział dla każdego miejsca. Godziny Aleksandry nie mogą się nakładać.</p>
+          <div className="mt-5 space-y-3">
+            {grouped.map(({ label, weekday, rules: dayRules }) => (
+              <article key={label} className="min-w-0 rounded-2xl bg-[#F8F5F0] p-3 sm:p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-semibold text-[#2D4739]">{label}</h3>
+                  {!dayRules.length && <span className="text-sm text-gray-500">Nie ustawiono</span>}
+                </div>
+                {dayRules.map((rule) => (
+                  <div key={rule.id} className="mt-3 grid min-w-0 gap-2 rounded-xl bg-white p-3 text-sm sm:flex sm:flex-wrap sm:items-center">
+                    <span className="break-words font-medium">{bookingLocations[rule.location_id]}</span>
+                    <span>{rule.start_time.slice(0, 5)} — {rule.end_time.slice(0, 5)} · {rule.slot_duration_minutes} min</span>
+                    <div className="flex items-center gap-2 sm:ml-auto">
+                      <button type="button" onClick={() => void toggle(rule)} className={`min-h-9 rounded-lg px-3 py-1 text-xs font-semibold ${rule.is_active ? "bg-[#DDE5D8] text-[#55624D]" : "bg-gray-200 text-gray-600"}`}>
+                        {rule.is_active ? "aktywny" : "nieaktywny"}
+                      </button>
+                      <button type="button" onClick={() => void remove("rule", rule.id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-red-50 hover:text-[#C76E76]" aria-label="Usuń przedział"><Trash2 size={15} /></button>
+                    </div>
+                  </div>
+                ))}
+                <RuleForm weekday={weekday} hasExistingRules={dayRules.length > 0} onCreate={(data) => create("rule", data)} />
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <aside className="min-w-0 space-y-6">
+          <section className="min-w-0 rounded-3xl border border-[#E5E1D8] bg-white p-4 sm:p-6">
+            <div className="flex items-start gap-2"><CalendarClock size={19} className="mt-0.5 shrink-0 text-[#6D7A62]" /><h2 className="font-bold text-[#2D4739]">Najbliższe terminy w obu gabinetach</h2></div>
+            {preview.length ? <ul className="mt-4 space-y-2 text-sm text-[#55624D]">{preview.map((slot) => <li key={slot} className="rounded-xl bg-[#F8F5F0] px-3 py-2">{slot}</li>)}</ul> : <p className="mt-4 text-sm text-gray-600">Po zapisaniu aktywnych reguł wolne terminy pojawią się tutaj.</p>}
+          </section>
+          <section className="min-w-0 rounded-3xl border border-[#E5E1D8] bg-white p-4 sm:p-6">
+            <div className="flex items-center gap-2"><Coffee size={19} className="shrink-0 text-[#6D7A62]" /><h2 className="font-bold text-[#2D4739]">Wyjątki</h2></div>
+            <ExceptionForm onCreate={(data) => create("exception", data)} />
+            {exceptions.length ? <div className="mt-4 space-y-2">{exceptions.map((exception) => <div key={exception.id} className="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-[#F8F5F0] px-3 py-2 text-sm"><span className="min-w-0 break-words">{exception.date} · {exception.kind === "unavailable" ? "dzień wolny / blokada" : "dodatkowe godziny"}</span><button type="button" onClick={() => void remove("exception", exception.id)} className="inline-flex h-9 w-9 shrink-0 items-center justify-center" aria-label="Usuń wyjątek"><Trash2 size={15} /></button></div>)}</div> : <p className="mt-4 text-sm text-gray-600">Nie ustawiono wyjątków.</p>}
+          </section>
+        </aside>
+      </div>
+      {loading && <p className="text-sm text-gray-500">Wczytywanie grafiku…</p>}
+    </div>
+  );
 }
 
-function RuleForm({ weekday, onCreate }: { weekday: number; onCreate: (data: object) => void }) { const [locationId, setLocationId] = useState<BookingLocationId>("nowa-wies-rzeczna"); const [startTime, setStartTime] = useState(""); const [endTime, setEndTime] = useState(""); const [duration, setDuration] = useState(50); return <div className="mt-4 grid min-w-0 gap-3 border-t border-[#E5E1D8] pt-4 sm:grid-cols-2"><FieldLabel label="Lokalizacja" className="sm:col-span-2"><select value={locationId} onChange={(event) => setLocationId(event.target.value as BookingLocationId)} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm">{Object.entries(bookingLocations).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></FieldLabel><FieldLabel label="Od"><input type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Do"><input type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Czas wizyty (min)"><input type="number" min="5" max="240" value={duration} onChange={(event) => setDuration(Number(event.target.value))} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm" /></FieldLabel><button disabled={!startTime || !endTime} onClick={() => onCreate({ locationId, weekday, startTime, endTime, slotDurationMinutes: duration, isActive: true })} className="inline-flex min-h-11 items-center justify-center gap-1 self-end rounded-xl bg-[#6D7A62] px-3 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Plus size={14} />Dodaj godziny</button></div>; }
-function ExceptionForm({ onCreate }: { onCreate: (data: object) => void }) { const [locationId, setLocationId] = useState<BookingLocationId>("nowa-wies-rzeczna"); const [date, setDate] = useState(""); const [kind, setKind] = useState<"unavailable" | "available">("unavailable"); const [startTime, setStartTime] = useState(""); const [endTime, setEndTime] = useState(""); const [duration, setDuration] = useState(50); const canSave = Boolean(date) && (kind === "unavailable" || Boolean(startTime && endTime)); return <div className="mt-4 grid min-w-0 gap-3"><FieldLabel label="Lokalizacja"><select value={locationId} onChange={(event) => setLocationId(event.target.value as BookingLocationId)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm">{Object.entries(bookingLocations).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></FieldLabel><FieldLabel label="Data"><input type="date" value={date} onChange={(event) => setDate(event.target.value)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Rodzaj wyjątku"><select value={kind} onChange={(event) => setKind(event.target.value as "unavailable" | "available")} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm"><option value="unavailable">Dzień wolny / blokada</option><option value="available">Dodatkowe godziny</option></select></FieldLabel>{kind === "available" && <div className="grid min-w-0 gap-3 sm:grid-cols-2"><FieldLabel label="Od"><input type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Do"><input type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Czas wizyty (min)" className="sm:col-span-2"><input type="number" min="5" max="240" value={duration} onChange={(event) => setDuration(Number(event.target.value))} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel></div>}<button disabled={!canSave} onClick={() => onCreate({ locationId, date, kind, ...(kind === "available" ? { startTime, endTime, slotDurationMinutes: duration } : {}) })} className="min-h-11 rounded-xl border border-[#D5DCCF] px-3 py-2.5 text-sm font-semibold text-[#2D4739] disabled:opacity-50">Dodaj wyjątek</button></div>; }
-function FieldLabel({ label, className = "", children }: { label: string; className?: string; children: React.ReactNode }) { return <label className={`min-w-0 text-xs font-semibold text-[#55624D] ${className}`}>{label}<span className="mt-1.5 block min-w-0">{children}</span></label>; }
+function RuleForm({ weekday, hasExistingRules, onCreate }: { weekday: number; hasExistingRules: boolean; onCreate: (data: object) => Promise<boolean> }) {
+  const [open, setOpen] = useState(!hasExistingRules);
+  const [locationId, setLocationId] = useState<BookingLocationId>("nowa-wies-rzeczna");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [duration, setDuration] = useState(50);
+  const [saving, setSaving] = useState(false);
+
+  const isOpen = open || !hasExistingRules;
+
+  if (!isOpen) {
+    return <button type="button" onClick={() => setOpen(true)} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#AFC0AA] bg-white px-3 py-2 text-sm font-semibold text-[#2D4739]"><Plus size={16} aria-hidden="true" />Dodaj kolejny przedział</button>;
+  }
+
+  const save = async () => {
+    setSaving(true);
+    const saved = await onCreate({ locationId, weekday, startTime, endTime, slotDurationMinutes: duration, isActive: true });
+    setSaving(false);
+    if (saved) {
+      setStartTime("");
+      setEndTime("");
+      setDuration(50);
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div className="mt-4 grid min-w-0 gap-3 border-t border-[#E5E1D8] pt-4 sm:grid-cols-2">
+      <div className="flex items-center justify-between sm:col-span-2">
+        <p className="text-sm font-semibold text-[#2D4739]">{hasExistingRules ? "Nowy przedział" : "Pierwszy przedział"}</p>
+        {hasExistingRules && <button type="button" onClick={() => setOpen(false)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-white" aria-label="Anuluj dodawanie"><X size={17} aria-hidden="true" /></button>}
+      </div>
+      <FieldLabel label="Lokalizacja" className="sm:col-span-2"><select value={locationId} onChange={(event) => setLocationId(event.target.value as BookingLocationId)} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm">{Object.entries(bookingLocations).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></FieldLabel>
+      <FieldLabel label="Od"><input type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm" /></FieldLabel>
+      <FieldLabel label="Do"><input type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm" /></FieldLabel>
+      <FieldLabel label="Czas wizyty (min)"><input type="number" min="5" max="240" value={duration} onChange={(event) => setDuration(Number(event.target.value))} className="w-full min-w-0 rounded-xl border bg-white px-3 py-2.5 text-sm" /></FieldLabel>
+      <button type="button" disabled={!startTime || !endTime || saving} onClick={() => void save()} className="inline-flex min-h-11 items-center justify-center gap-1 self-end rounded-xl bg-[#6D7A62] px-3 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Plus size={14} />{saving ? "Zapisywanie…" : "Dodaj godziny"}</button>
+    </div>
+  );
+}
+
+function ExceptionForm({ onCreate }: { onCreate: (data: object) => Promise<boolean> }) {
+  const [locationId, setLocationId] = useState<BookingLocationId>("nowa-wies-rzeczna");
+  const [date, setDate] = useState("");
+  const [kind, setKind] = useState<"unavailable" | "available">("unavailable");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [duration, setDuration] = useState(50);
+  const [saving, setSaving] = useState(false);
+  const canSave = Boolean(date) && (kind === "unavailable" || Boolean(startTime && endTime));
+
+  const save = async () => {
+    setSaving(true);
+    await onCreate({ locationId, date, kind, ...(kind === "available" ? { startTime, endTime, slotDurationMinutes: duration } : {}) });
+    setSaving(false);
+  };
+
+  return (
+    <div className="mt-4 grid min-w-0 gap-3">
+      <FieldLabel label="Lokalizacja"><select value={locationId} onChange={(event) => setLocationId(event.target.value as BookingLocationId)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm">{Object.entries(bookingLocations).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></FieldLabel>
+      <FieldLabel label="Data"><input type="date" value={date} onChange={(event) => setDate(event.target.value)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel>
+      <FieldLabel label="Rodzaj wyjątku"><select value={kind} onChange={(event) => setKind(event.target.value as "unavailable" | "available")} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm"><option value="unavailable">Dzień wolny / blokada</option><option value="available">Dodatkowe godziny</option></select></FieldLabel>
+      {kind === "available" && <div className="grid min-w-0 gap-3 sm:grid-cols-2"><FieldLabel label="Od"><input type="time" value={startTime} onChange={(event) => setStartTime(event.target.value)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Do"><input type="time" value={endTime} onChange={(event) => setEndTime(event.target.value)} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel><FieldLabel label="Czas wizyty (min)" className="sm:col-span-2"><input type="number" min="5" max="240" value={duration} onChange={(event) => setDuration(Number(event.target.value))} className="w-full min-w-0 rounded-xl border px-3 py-2.5 text-sm" /></FieldLabel></div>}
+      <button type="button" disabled={!canSave || saving} onClick={() => void save()} className="min-h-11 rounded-xl border border-[#D5DCCF] px-3 py-2.5 text-sm font-semibold text-[#2D4739] disabled:opacity-50">{saving ? "Zapisywanie…" : "Dodaj wyjątek"}</button>
+    </div>
+  );
+}
+
+function FieldLabel({ label, className = "", children }: { label: string; className?: string; children: React.ReactNode }) {
+  return <label className={`min-w-0 text-xs font-semibold text-[#55624D] ${className}`}>{label}<span className="mt-1.5 block min-w-0">{children}</span></label>;
+}

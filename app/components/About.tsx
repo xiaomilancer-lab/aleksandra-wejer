@@ -137,9 +137,7 @@ export default function About() {
                     Zielińscy Premium
                   </p>
 
-                  <p className="text-xs md:text-sm text-gray-600">
-                    Nowa Wieś Rzeczna · wszystkie dni poza wtorkiem
-                  </p>
+                  <p className="text-xs md:text-sm text-gray-600">Nowa Wieś Rzeczna</p>
 
                   <a
                     href="tel:+48510777469"
@@ -156,9 +154,7 @@ export default function About() {
                     Arthro Cure Clinic
                   </p>
 
-                  <p className="text-xs md:text-sm text-gray-600">
-                    Starogard Gdański · tylko wtorki
-                  </p>
+                  <p className="text-xs md:text-sm text-gray-600">Starogard Gdański</p>
 
                   <a
                     href="tel:+48508439666"
@@ -198,9 +194,7 @@ export default function About() {
                     Zielińscy Premium
                   </p>
 
-                  <p className="text-sm text-gray-600">
-                    Nowa Wieś Rzeczna · wszystkie dni poza wtorkiem
-                  </p>
+                  <p className="text-sm text-gray-600">Nowa Wieś Rzeczna</p>
 
                   <a
                     href="tel:+48510777469"
@@ -217,9 +211,7 @@ export default function About() {
                     Arthro Cure Clinic
                   </p>
 
-                  <p className="text-sm text-gray-600">
-                    Starogard Gdański · tylko wtorki
-                  </p>
+                  <p className="text-sm text-gray-600">Starogard Gdański</p>
 
                   <a
                     href="tel:+48508439666"

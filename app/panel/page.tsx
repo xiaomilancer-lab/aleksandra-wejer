@@ -12,6 +12,7 @@ import DashboardPracticeStats from "./components/DashboardPracticeStats";
 import DashboardWeekSchedule from "./components/DashboardWeekSchedule";
 import PsycholkaGentleCelebration from "./components/PsycholkaGentleCelebration";
 import PsycholkaOnboarding from "./components/PsycholkaOnboarding";
+import PanelPwaInstallCard from "./components/PanelPwaInstallCard";
 import TodayQueue from "./components/TodayQueue";
 import WelcomeHeader from "./components/WelcomeHeader";
 import type { FollowupReminderAssignment, ImportantDateOccurrence } from "./domain";
@@ -79,6 +80,7 @@ export default async function PanelPage() {
           <PsycholkaGentleCelebration eventKey={`first-new-patient-${celebrationDate}`} enabled={(dashboardData.newPatientsToday ?? 0) > 0} />
         <div className="mx-auto max-w-7xl">
           <WelcomeHeader initialNow={now.toISOString()} celebrate={(dashboardData.newPatientsToday ?? 0) > 0} hasVisits={todayQueue.length > 0} />
+          <PanelPwaInstallCard />
           {loadError && <p className="mt-6 rounded-2xl border border-[#E5E1D8] bg-[#FFF9EE] px-5 py-4 text-sm text-[#7A6540]">Kalendarz chwilowo nie jest dostępny. Spróbuj odświeżyć stronę za moment.</p>}
           <div className="mt-6 grid gap-6 xl:grid-cols-2"><DashboardNextVisit visit={nextVisit} /><DashboardNewRequests requests={newRequests} /></div>
           <div className="mt-6"><TodayQueue visits={todayQueue} initialNow={now.toISOString()} /></div>
