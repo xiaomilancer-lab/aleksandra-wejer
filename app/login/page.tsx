@@ -148,15 +148,7 @@ export default function LoginPage() {
           {isSubmitting ? "Logowanie…" : "🌿 Zaloguj się"}
         </button>
 
-        <div className="mt-6 border-t border-[#E5E1D8] pt-6 text-center">
-          <p className="text-sm text-gray-600">Nie masz jeszcze konta?</p>
-          <Link
-            href="/register"
-            className="mt-3 inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#6D7A62] px-5 py-2.5 text-sm font-semibold text-[#2D4739] transition hover:bg-[#EEF1EB]"
-          >
-            ✨ Zarejestruj się
-          </Link>
-        </div>
+        <p className="mt-6 border-t border-[#E5E1D8] pt-6 text-center text-xs leading-5 text-gray-500">Logowanie jest przeznaczone dla Aleksandry i wcześniej utworzonych kont. Rejestracja nowych kont jest obecnie wyłączona.</p>
       </form>
     </div>
   );

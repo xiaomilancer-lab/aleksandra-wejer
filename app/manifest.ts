@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "PsychOLKA — Aleksandra Wejer",
     short_name: "PsychOLKA",
     description:
-      "Prywatny pokój pacjenta, wizyty, wiadomości od Aleksandry i bezpieczny Babyroom.",
+      "Strona Aleksandry Wejer, panel pracy psychologa i bezpieczny Babyroom PsychOLKI.",
     start_url: "/?source=pwa",
     scope: "/",
     display: "standalone",
@@ -37,10 +37,10 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
-        name: "Mój pokój",
-        short_name: "Pokój",
-        description: "Przejdź do prywatnego pokoju PsychOLKI",
-        url: "/room",
+        name: "Panel Aleksandry",
+        short_name: "Panel",
+        description: "Przejdź do panelu pracy psychologa",
+        url: "/panel",
         icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
       },
       {
@@ -61,7 +61,14 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Babyroom",
         short_name: "Babyroom",
         description: "Bezpieczne aktywności i mini-gry bez reklam",
-        url: "/room/babyroom?source=pwa-shortcut",
+        url: "/babyroom?source=pwa-shortcut",
+        icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
+      },
+      {
+        name: "Dojazd",
+        short_name: "Dojazd",
+        description: "Zaplanuj trasę do gabinetu",
+        url: "/dojazd?source=pwa-shortcut",
         icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
       },
     ],

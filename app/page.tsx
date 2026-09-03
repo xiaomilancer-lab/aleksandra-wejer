@@ -10,10 +10,10 @@ import LocalBusinessSchema from "./components/LocalBusinessSchema";
 import PublicPsycholkaWelcome from "./components/PublicPsycholkaWelcome";
 import PublicBookingAccess from "./components/PublicBookingAccess";
 import PublicWelcomeReplay from "./components/PublicWelcomeReplay";
-import PatientAccountTeaser from "./components/PatientAccountTeaser";
 import PublicGuidedJourneyEnd from "./components/PublicGuidedJourneyEnd";
 import MobilePsycholkaJourney from "./components/MobilePsycholkaJourney";
 import PublicCalmMinuteTeaser from "./components/PublicCalmMinuteTeaser";
+import PublicUsefulSpaces from "./components/PublicUsefulSpaces";
 
 export default function Home() {
   return (
@@ -25,6 +25,7 @@ export default function Home() {
       <PublicPsycholkaWelcome />
       <MobilePsycholkaJourney />
       <PublicCalmMinuteTeaser />
+      <PublicUsefulSpaces />
 
      <div className="hidden md:block"><Quote /></div>
 
@@ -33,8 +34,6 @@ export default function Home() {
       <div className="hidden md:block"><About /></div>
 
       <div className="hidden md:block"><Services /></div>
-
-      <div className="hidden md:block"><PatientAccountTeaser /></div>
 
       <Calendar />
       

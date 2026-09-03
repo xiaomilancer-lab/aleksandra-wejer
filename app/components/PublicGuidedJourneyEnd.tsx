@@ -1,6 +1,7 @@
 "use client";
 
-import { CalendarDays, Heart, Leaf, Mail } from "lucide-react";
+import { Baby, CalendarDays, Heart, Mail, MapPinned } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import PsycholkaWidget from "../panel/components/PsychOLKAWidget";
 import { PUBLIC_GUIDE_START_EVENT } from "./PublicPsycholkaGuide";
@@ -28,15 +29,13 @@ export default function PublicGuidedJourneyEnd() {
           <a href="#kontakt" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#D4DDD7] bg-white px-4 py-3 text-sm font-semibold text-[#31584F] transition hover:bg-[#EEF6F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2F6B5F] focus-visible:ring-offset-2"><Mail size={17} aria-hidden="true" />Wyślij wiadomość</a>
         </div>
         <div className="mt-8 border-t border-[#DCE8E2] pt-7">
-          <p className="mx-auto max-w-xl whitespace-pre-line text-sm leading-6 text-stone-600">{"Pssst... ❤️\nJeżeli kiedyś założysz konto, łatwiej będzie wrócić do wizyty, sprawdzić terminy, odebrać materiały i mieć wszystko w jednym miejscu."}</p>
-          <button type="button" disabled aria-disabled="true" className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#C9D9D2] bg-white px-4 py-2 text-sm font-semibold text-[#52766B] disabled:cursor-not-allowed"><Leaf size={16} aria-hidden="true" />Załóż konto (wkrótce)</button>
-          <p className="mt-2 text-xs text-stone-500">Konto pacjenta nie jest jeszcze dostępne — przycisk nie zbiera danych.</p>
+          <p className="mx-auto max-w-xl text-sm leading-6 text-stone-600">Bez konta możesz skorzystać z bezpiecznego kącika dziecięcego albo spokojnie zaplanować dojazd do gabinetu.</p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3"><Link href="/babyroom" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#C9D9D2] bg-white px-4 py-2 text-sm font-semibold text-[#52766B]"><Baby size={17} aria-hidden="true" />Kącik PsychOLKI</Link><Link href="/dojazd" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#C9D9D2] bg-white px-4 py-2 text-sm font-semibold text-[#52766B]"><MapPinned size={17} aria-hidden="true" />Dojazd</Link></div>
         </div>
         <div className="mt-8 border-t border-[#DCE8E2] pt-6">
           <PsycholkaWidget context="welcome" action="goodbye" fallbackAction="greeting" className="mx-auto public-psycholka-guide-end" />
           <p className="mt-2 text-sm font-medium text-[#31584F]">Do zobaczenia. ❤️</p>
         </div>
-        {/* TODO: Enable the account CTA only after Patient Auth, role checks and patient-specific RLS policies are ready. */}
       </div>
     </section>
   );
