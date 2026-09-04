@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, CalendarClock, ClipboardCheck, FolderKanban, Users, X, Zap } from "lucide-react";
+import { BookOpen, CalendarClock, ClipboardCheck, FolderKanban, NotebookPen, Users, X, Zap } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
@@ -8,6 +8,7 @@ import DashboardCard from "./DashboardCard";
 
 const actions = [
   { label: "Pacjenci", icon: Users, href: "/panel/patients" },
+  { label: "Wizytownik", icon: NotebookPen, href: "/wizytownik" },
   { label: "Grafik i dostępność", icon: CalendarClock, href: "/panel/availability" },
   { label: "Biblioteka", icon: BookOpen, href: "/panel/library" },
   { label: "Szablony", icon: FolderKanban, href: "/panel/templates" },

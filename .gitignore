@@ -37,6 +37,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Local packaging output for the private Windows journal app
+desktop/wizytownik/node_modules/
+desktop/wizytownik/release/
+tmp/npm-cache/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

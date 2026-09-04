@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Bot, CalendarClock, CalendarDays, CalendarHeart, ChartNoAxesCombined, CircleHelp, ClipboardList, Flower2, FolderKanban, House, Mail, Menu, Settings, UserRound, Users, X } from "lucide-react";
+import { BookOpen, Bot, CalendarClock, CalendarDays, CalendarHeart, ChartNoAxesCombined, CircleHelp, ClipboardList, Flower2, FolderKanban, House, Mail, Menu, NotebookPen, Settings, UserRound, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const primaryNavItems = [
   { href: "/panel/visits", label: "Wizyty", icon: ClipboardList },
   { href: "/panel/statistics", label: "Statystyki", icon: ChartNoAxesCombined },
   { href: "/panel/patients", label: "Pacjenci", icon: Users },
+  { href: "/wizytownik", label: "Wizytownik", icon: NotebookPen },
   { href: "/panel/users", label: "Użytkownicy", icon: UserRound },
   { href: "/panel/inbox", label: "Skrzynka", icon: Mail },
   { href: "/panel/availability", label: "Grafik i dostępność", icon: CalendarClock },

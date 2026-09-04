@@ -19,7 +19,14 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
-      ...["/panel/:path*", "/room/:path*", "/parent/:path*", "/login", "/register", "/review/:path*"].map((source) => ({ source, headers: privateHeaders })),
+      ...["/panel/:path*", "/wizytownik/:path*", "/room/:path*", "/parent/:path*", "/login", "/register", "/review/:path*"].map((source) => ({ source, headers: privateHeaders })),
+      {
+        source: "/wizytownik/:path*",
+        headers: [{
+          key: "Content-Security-Policy",
+          value: "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests",
+        }],
+      },
       {
         source: "/sw.js",
         headers: [
@@ -49,6 +56,10 @@ const nextConfig: NextConfig = {
             value: "public, max-age=0, must-revalidate",
           },
         ],
+      },
+      {
+        source: "/wizytownik.webmanifest",
+        headers: [{ key: "Cache-Control", value: "public, max-age=0, must-revalidate" }],
       },
     ];
   },

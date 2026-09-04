@@ -23,8 +23,11 @@ function clearCookie(response: NextResponse, name: string) {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => null) as { accessToken?: unknown } | null;
+  const body = await request.json().catch(() => null) as { accessToken?: unknown; next?: unknown } | null;
   const accessToken = typeof body?.accessToken === "string" ? body.accessToken : null;
+  const requestedDestination = typeof body?.next === "string" && /^\/(?:panel|wizytownik)(?:[/?#]|$)/.test(body.next)
+    ? body.next
+    : "/panel";
   if (!accessToken || accessToken.length > 8_192) return json({ message: "Brak uwierzytelnienia." }, { status: 401 });
 
   const { data, error } = await supabaseAdmin.auth.getUser(accessToken);
@@ -41,7 +44,7 @@ export async function POST(request: Request) {
   }
 
   if (profile.role === "psychologist") {
-    const response = json({ success: true, role: profile.role, destination: "/panel" });
+    const response = json({ success: true, role: profile.role, destination: requestedDestination });
     response.cookies.set(PANEL_SESSION_COOKIE, accessToken, cookieOptions);
     clearCookie(response, MEMBER_SESSION_COOKIE);
     return response;

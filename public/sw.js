@@ -1,6 +1,6 @@
 /* PsychOLKA PWA: cache contains only public assets. Never cache patient or panel data. */
 const CACHE_PREFIX = "psycholka-public-";
-const CACHE_NAME = `${CACHE_PREFIX}v3`;
+const CACHE_NAME = `${CACHE_PREFIX}v4`;
 const PUBLIC_ASSETS = [
   "/offline",
   "/chwila",
@@ -41,6 +41,7 @@ function isSensitivePath(pathname) {
   return (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/panel") ||
+    pathname.startsWith("/wizytownik") ||
     pathname.startsWith("/room") ||
     pathname.startsWith("/parent") ||
     pathname.startsWith("/login") ||

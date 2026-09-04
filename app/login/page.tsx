@@ -5,6 +5,25 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+function requestedDestination() {
+  const value = new URLSearchParams(window.location.search).get("next") ?? "";
+  return /^\/(?:panel|wizytownik)(?:[/?#]|$)/.test(value) ? value : null;
+}
+
+async function establishAppSession(accessToken: string) {
+  const response = await fetch("/api/auth/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({ accessToken, next: requestedDestination() }),
+  });
+  const body = await response.json().catch(() => null) as { destination?: string; message?: string } | null;
+  return {
+    ok: response.ok,
+    destination: body?.destination ?? null,
+    message: body?.message ?? "Nie udało się bezpiecznie rozpocząć sesji.",
+  };
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,21 +33,6 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function establishAppSession(accessToken: string) {
-    const response = await fetch("/api/auth/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      body: JSON.stringify({ accessToken }),
-    });
-    const body = await response.json().catch(() => null) as { destination?: string; message?: string } | null;
-    return {
-      ok: response.ok,
-      destination: body?.destination ?? null,
-      message: body?.message ?? "Nie udało się bezpiecznie rozpocząć sesji.",
-    };
-  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

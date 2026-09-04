@@ -49,11 +49,12 @@ export async function getPsychologistAuthorization(): Promise<PanelAuthorization
 }
 
 /** Protects App Router pages and Server Actions before any clinical query executes. */
-export async function requirePsychologist(): Promise<PsychologistIdentity> {
+export async function requirePsychologist(returnTo = "/panel"): Promise<PsychologistIdentity> {
   const result = await getPsychologistAuthorization();
   if (result.kind === "authorized") return result.identity;
 
-  redirect(result.kind === "unauthenticated" ? "/login?next=/panel" : "/login?error=forbidden");
+  const safeReturnTo = /^\/(?:panel|wizytownik)(?:[/?#]|$)/.test(returnTo) ? returnTo : "/panel";
+  redirect(result.kind === "unauthenticated" ? `/login?next=${encodeURIComponent(safeReturnTo)}` : "/login?error=forbidden");
 }
 
 /** API variant with explicit 401/403 semantics. Accepts a bearer token or the HttpOnly panel cookie. */
