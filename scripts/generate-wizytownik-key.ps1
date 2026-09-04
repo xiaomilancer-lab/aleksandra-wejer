@@ -1,5 +1,7 @@
 $keyBytes = New-Object byte[] 32
-[System.Security.Cryptography.RandomNumberGenerator]::Fill($keyBytes)
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+$rng.GetBytes($keyBytes)
+$rng.Dispose()
 $key = [Convert]::ToBase64String($keyBytes)
 
 Write-Host "Skopiuj poniższą wartość do Vercel jako WIZYTOWNIK_ENCRYPTION_KEY_V1:"
